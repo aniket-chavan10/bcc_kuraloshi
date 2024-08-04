@@ -6,7 +6,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(bodyParser.json());
