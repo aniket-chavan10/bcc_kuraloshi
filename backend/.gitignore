@@ -1,0 +1,4 @@
+#gitignore
+encodedServiceAccount.txt
+bcc-fullstack-firebase-adminsdk-hzovd-8785ba2959.json
+.env
