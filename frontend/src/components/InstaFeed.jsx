@@ -17,10 +17,10 @@ const InstaFeed = () => {
         );
         setPosts(imagePosts);
       } catch (error) {
-        console.error("Error fetching Instagram posts:", error.response ? error.response.data : error.message);
+        console.error("Error fetching Instagram posts:", error);
       }
     };
-    
+
     fetchInstagramPosts();
   }, []);
 
