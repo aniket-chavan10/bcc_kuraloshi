@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = 'https://bcc-kuraloshi.onrender.com';
+const BASE_URL = 'https://backend-bcc.onrender.com';
  // Replace with your backend base URL
 
 export async function fetchCarouselItems() {
@@ -57,7 +57,7 @@ export async function fetchPlayersData() {
 // api.js
 export const addPlayerData = async (data) => {
   try {
-    const response = await fetch("https://bcc-kuraloshi.onrender.com/players", {
+    const response = await fetch((`${BASE_URL}/players`), {
       method: "POST",
       body: data,
     });
