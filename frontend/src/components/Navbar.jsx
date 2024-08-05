@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBars, FaFacebookF, FaInstagram, FaYoutube, FaSearch, FaShoppingCart, FaWhatsapp } from "react-icons/fa";
+import { FaBars, FaFacebookF, FaInstagram, FaYoutube, FaSearch, FaShoppingCart, FaWhatsapp, FaTimes } from "react-icons/fa";
 import { fetchLatestInfo, fetchNewsData } from "../services/api";
 
 const Navbar = () => {
@@ -66,7 +66,7 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full z-10 bg-gradient-to-r from-orange-700 to-orange-600 text-white">
       <div className="flex items-center">
         {/* Logo */}
-        <div className="flex-shrink-0 w-28 h-full flex items-center md:border-r px-3">
+        <div className="flex-shrink-0 w-24 md:w-28 h-full flex items-center md:border-r px-3">
           {clubInfo.logo ? (
             <img
               src={clubInfo.logo}
@@ -150,16 +150,21 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="md:hidden flex flex-col items-center mt-2 space-y-2">
-          <NavLink to="/" className="font-montserrat font-semibold" onClick={closeMenu}>Home</NavLink>
-          <NavLink to="/team" className="font-montserrat font-semibold" onClick={closeMenu}>Team</NavLink>
-          <NavLink to="/schedule" className="font-montserrat font-semibold" onClick={closeMenu}>Schedule</NavLink>
-          <NavLink to="/gallery" className="font-montserrat font-bold" onClick={closeMenu}>Gallery</NavLink>
-          <NavLink to="/about" className="font-montserrat font-semibold" onClick={closeMenu}>About</NavLink>
-          <NavLink to="/contact-us" className="font-montserrat font-semibold" onClick={closeMenu}>Contact</NavLink>
-        </div>
-      )}
+      {/* Side Drawer Menu */}
+      <div className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeMenu}></div>
+      <div className={`fixed top-0 right-0 w-64 h-full bg-white  text-orange-600 shadow-lg transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <button className="text-2xl p-4 focus:outline-none" onClick={closeMenu}>
+          <FaTimes />
+        </button>
+        <nav className="flex flex-col mt-6 justify-center items-center">
+          <NavLink to="/" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Home</NavLink>
+          <NavLink to="/team" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Team</NavLink>
+          <NavLink to="/schedule" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Schedule</NavLink>
+          <NavLink to="/gallery" className="font-montserrat font-bold p-4" onClick={closeMenu}>Gallery</NavLink>
+          <NavLink to="/about" className="font-montserrat font-semibold p-4" onClick={closeMenu}>About</NavLink>
+          <NavLink to="/contact-us" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Contact</NavLink>
+        </nav>
+      </div>
     </nav>
   );
 };
