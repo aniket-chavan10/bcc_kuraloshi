@@ -39,10 +39,6 @@ const Navbar = () => {
     fetchData();
   }, []);
 
-  if (!clubInfo) {
-    return <div className="bg-red-500">Loading...</div>;
-  }
-
   const handleMenuClick = () => {
     setIsOpen(!isOpen);
   };
@@ -56,10 +52,10 @@ const Navbar = () => {
   };
 
   // Extract social links from clubInfo
-  const socialLinks = clubInfo.socialLinks || {};
+  const socialLinks = clubInfo?.socialLinks || {};
 
   // Log the logo URL to debug
-  const logoUrl = clubInfo.logo ? `http://localhost:4000${clubInfo.logo}` : "";
+  const logoUrl = clubInfo?.logo ? `http://localhost:4000${clubInfo.logo}` : "";
   console.log("Logo URL:", logoUrl);
 
   return (
@@ -67,7 +63,7 @@ const Navbar = () => {
       <div className="flex items-center">
         {/* Logo */}
         <div className="flex-shrink-0 w-24 md:w-28 h-full flex items-center md:border-r px-3">
-          {clubInfo.logo ? (
+          {clubInfo?.logo ? (
             <img
               src={clubInfo.logo}
               alt="Logo"
