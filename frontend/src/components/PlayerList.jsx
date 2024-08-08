@@ -62,21 +62,31 @@ const PlayersList = () => {
             </button>
             <div className="w-1/3 h-full">
               <img
-                src={`http://localhost:4000/${player.image}`}
+                src={player.image}
                 alt={player.name}
                 className="w-full h-full object-cover"
-                onError={(e) => e.target.src = 'path/to/placeholder-image.jpg'} // Fallback image
+                onError={(e) => (e.target.src = 'path/to/placeholder-image.jpg')} // Fallback image
               />
             </div>
             <div className="w-2/3 p-4">
               <h3 className="text-lg font-bold mb-2 text-orange-600 truncate">
                 {player.name}
               </h3>
-              <p className="text-sm mb-1 font-bold">Role: <span className="font-normal">{player.role}</span> </p>
-              <p className="text-sm mb-1 font-bold">Matches: <span className="font-normal">{player.matches}</span> </p>
-              <p className="text-sm mb-1 font-bold">Runs: <span className="font-normal">{player.runs}</span> </p>
-              <p className="text-sm mb-1 font-bold">Wickets: <span className="font-normal">{player.wickets}</span> </p>
-              <p className="text-sm mb-1 font-bold">Best Score: <span className="font-normal">{player.bestScore}</span> </p>
+              <p className="text-sm mb-1 font-bold">
+                Role: <span className="font-normal">{player.role}</span>
+              </p>
+              <p className="text-sm mb-1 font-bold">
+                Matches: <span className="font-normal">{player.matches}</span>
+              </p>
+              <p className="text-sm mb-1 font-bold">
+                Runs: <span className="font-normal">{player.runs}</span>
+              </p>
+              <p className="text-sm mb-1 font-bold">
+                Wickets: <span className="font-normal">{player.wickets}</span>
+              </p>
+              <p className="text-sm mb-1 font-bold">
+                Best Score: <span className="font-normal">{player.bestScore}</span>
+              </p>
             </div>
           </div>
         ))}

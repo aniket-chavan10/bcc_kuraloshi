@@ -47,8 +47,8 @@ function PlayerOfMonth() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="container mx-auto py-10 px-4 md:px-0">
-      <h2 className="text-2xl font-bold mb-4 text-center md:text-left">
+    <div className="container mx-auto py-2 px-4 md:px-0">
+      <h2 className="text-xl font-bold text-center md:text-left">
         Player Of The Month:{" "}
         <span className="text-orange-500 italic">"{currentMonth}"</span>
       </h2>
@@ -59,7 +59,7 @@ function PlayerOfMonth() {
 
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center">
           {/* Best Batsman */}
-          <div className="w-full md:w-1/2 bg-gradient-to-t from-slate-50 to-amber-300 rounded relative overflow-hidden">
+          <div className="w-full md:w-1/2 bg-gradient-to-t from-slate-50 to-amber-300 rounded relative overflow-hidden shadow-xl">
             <div className="flex flex-col md:flex-row h-full items-baseline">
               <div
                 className="w-full md:w-1/3 relative"
@@ -74,7 +74,7 @@ function PlayerOfMonth() {
                   }}
                 />
               </div>
-              <div className="flex flex-col mt-4 md:mt-auto p-4">
+              <div className="flex flex-col  md:mt-auto p-4 w-full md:w-auto">
                 <h1 className="text-orange-500 text-3xl md:text-7xl font-bold font-montserrat">
                   {bestBatsman?.runs}{" "}
                   <span className="text-zinc-600 text-lg">Most Runs</span>{" "}
@@ -82,7 +82,7 @@ function PlayerOfMonth() {
                 <p className="text-2xl md:text-4xl text-zinc-800 font-montserrat font-bold capitalize">
                   {bestBatsman?.name}
                 </p>
-                <div className="flex flex-wrap justify-center md:justify-start text-center py-2 gap-2 md:gap-4">
+                <div className="flex flex-wrap justify-center md:justify-start text-center py-2 gap-2 md:gap-4 ">
                   <p className="bg-orange-200 hover:bg-orange-300 flex flex-col px-3 py-1 rounded text-orange-500 font-black text-sm md:text-2xl capitalize">
                     {bestBatsman?.matches}
                     <span className="text-zinc-600 text-xs font-light">
@@ -107,7 +107,7 @@ function PlayerOfMonth() {
           </div>
 
           {/* Best Bowler */}
-          <div className="w-full md:w-1/2 bg-gradient-to-t from-slate-50 to-amber-300 rounded relative overflow-hidden">
+          <div className="w-full md:w-1/2 bg-gradient-to-t from-slate-50 to-amber-300 rounded relative overflow-hidden shadow-xl">
             <div className="flex flex-col md:flex-row h-full items-baseline">
               <div
                 className="w-full md:w-1/3 relative"

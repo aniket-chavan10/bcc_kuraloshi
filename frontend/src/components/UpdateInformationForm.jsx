@@ -16,6 +16,7 @@ const UpdateInformationForm = () => {
     twitter: "",
     instagram: "",
     youtube: "",
+    whatsapp:"",
   });
 
   useEffect(() => {
@@ -141,6 +142,7 @@ const UpdateInformationForm = () => {
               <li>Twitter: {latestData.socialLinks?.twitter}</li>
               <li>Instagram: {latestData.socialLinks?.instagram}</li>
               <li>Youtube: {latestData.socialLinks?.youtube}</li>
+              <li>Whatsapp: {latestData.socialLinks?.whatsapp}</li>
             </ul>
           </div>
           {latestData.teamImg && (
@@ -323,6 +325,18 @@ const UpdateInformationForm = () => {
                 type="text"
                 name="youtube"
                 value={socialLinks.youtube || ""}
+                onChange={handleSocialLinkChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="whatsapp">
+                WhatsApp URL
+              </label>
+              <input
+                type="text"
+                name="whatsapp"
+                value={socialLinks.whatsapp || ""}
                 onChange={handleSocialLinkChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
               />

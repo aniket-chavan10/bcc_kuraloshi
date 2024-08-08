@@ -10,6 +10,7 @@ import Gallery from './pages/Gallery';
 import GalleryDetails from './pages/GalleryDetails';
 import NewsDetails from './pages/NewsDetails';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import ContactUs from './pages/ContactUs';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/gallery/:id" element={<GalleryDetails />} />
         <Route path="/news/:id" element={<NewsDetails />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/contact-us" element={<ContactUs />} />
 
         {/* Protected Route for Admin Dashboard */}
         <Route element={<ProtectedRoute />}>

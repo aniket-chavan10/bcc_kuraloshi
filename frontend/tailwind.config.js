@@ -15,10 +15,18 @@ export default {
           '100%': { transform: 'translateX(-100%)' },
         },
       },
-    },
-    fontFamily: {
-      sans: ['Noto Sans TC', 'sans-serif'],
-      montserrat: ['Montserrat', 'sans-serif'],
+      colors: {
+        'custom-yellow': '#f9ce34',
+        'custom-pink': '#ee2a7b',
+        'custom-purple': '#6228d7',
+      },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(to bottom, #f9ce34, #ee2a7b, #6228d7)',
+      },
+      fontFamily: {
+        sans: ['Noto Sans TC', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+      },
     },
   },
   plugins: [],

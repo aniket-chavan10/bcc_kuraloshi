@@ -1,17 +1,18 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const PrivacyPolicy = () => {
   return (
     <>
-      <Navbar />
-      <div className="container mx-auto mt-12 p-8 bg-white rounded-lg shadow-md border border-gray-300 w-full">
+      <Navbar/>
+      <div className="container mx-auto my-36 p-8 bg-white shadow-lg border w-5/6">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
           Privacy Policy
         </h1>
         <div className="text-lg text-gray-700">
           <p className="mb-4">
-            At Bhairavnath Cricket Club Kuraloshi, we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This privacy policy outlines how we collect, use, and protect your information.
+            At Bhairavnath Cricket Club Kuraloshi (BCC Kuraloshi), we are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This privacy policy outlines how we collect, use, and protect your information.
           </p>
 
           <h2 className="text-2xl font-semibold mt-6 mb-4 text-gray-800">
@@ -68,16 +69,17 @@ const PrivacyPolicy = () => {
             If you have any questions regarding this privacy policy, you may contact us using the information below:
           </p>
           <p className="mb-4">
-            Bhairavnath Cricket Club Kuraloshi
+            Bhairavnath Cricket Club Kuraloshi (BCC Kuraloshi)
             <br />
             Jaoli Association
             <br />
             Maharashtra, India
             <br />
-            Email: contact@bcckuraloshi.com
+            Email: contact.bcckuraloshi@gmail.com
           </p>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

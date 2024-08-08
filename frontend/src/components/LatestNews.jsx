@@ -60,7 +60,7 @@ const LatestNews = () => {
   };
 
   return (
-    <div className="container mx-auto py-10 mt-20 px-4 md:px-0">
+    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <h2 className="text-2xl font-bold mb-4">Latest News</h2>
       {isLoading && <p>Loading news...</p>}
       {error && <p>Error fetching news: {error.message}</p>}

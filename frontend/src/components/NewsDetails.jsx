@@ -27,10 +27,16 @@ const NewsDetails = () => {
     const date = new Date(dateString);
     const day = date.getDate();
     const month = date.toLocaleString("default", { month: "long" });
-    return `${day} ${month}`;
+    return `${day} ${month} ${date.getFullYear()}`;
   };
 
-  if (isLoading) return <p className="text-center py-4">Loading...</p>;
+  const formatDescription = (text) => {
+    return text.split('\n').map((line, index) => (
+      <p key={index} className="mb-4">{line}</p>
+    ));
+  };
+
+  if (isLoading) return <p className="text-center py-4 text-gray-500">Loading...</p>;
   if (error) return <p className="text-center py-4 text-red-600">Error fetching news item: {error.message}</p>;
 
   return (
@@ -38,23 +44,25 @@ const NewsDetails = () => {
       {newsItem && (
         <div>
           {/* Title and Date */}
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold mb-2 text-gray-900">{newsItem.title}</h1>
-            <span className="text-sm text-gray-600">{formatDate(newsItem.createdAt)}</span>
+          <div className="mb-8">
+            <h1 className="text-4xl font-extrabold mb-3 text-gray-900 leading-tight">{newsItem.title}</h1>
+            <span className="text-base text-gray-600">{formatDate(newsItem.createdAt)}</span>
           </div>
+          
           {/* Main Image */}
-          <div className="relative w-full mb-6">
+          <div className="relative w-full mb-8">
             <div className="relative w-full h-0 pb-[56.25%]">
               <img
-                src={`http://localhost:4000/${newsItem.imageUrl}`}
+                src={newsItem.imageUrl}
                 alt={newsItem.title}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover shadow-md"
               />
             </div>
           </div>
-          {/* Caption Text */}
-          <div className="prose lg:prose-xl text-gray-800">
-            <p>{newsItem.description}</p>
+          
+          {/* Description */}
+          <div className="text-gray-800">
+            {formatDescription(newsItem.description)}
           </div>
         </div>
       )}

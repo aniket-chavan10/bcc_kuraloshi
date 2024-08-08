@@ -48,6 +48,9 @@ app.use("/api/fixtures", fixtureRoutes);
 const loginRoutes = require("./routes/login");
 app.use("/api/login", loginRoutes);
 
+const contactRoutes = require("./routes/contact");
+app.use("/api/contact", contactRoutes);
+
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Example app listening on port ${PORT}`);

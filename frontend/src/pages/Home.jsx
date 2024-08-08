@@ -13,7 +13,7 @@ import MainLayout from '../components/MainLayout';
 function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <MainLayout/>
       <LatestNews />
       <Players />

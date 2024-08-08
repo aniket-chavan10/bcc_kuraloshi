@@ -51,6 +51,10 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   // Extract social links from clubInfo
   const socialLinks = clubInfo?.socialLinks || {};
 
@@ -86,7 +90,10 @@ const Navbar = () => {
                     key={newsTitles[0].id}
                     to={`/news/${newsTitles[0].id}`}
                     className="inline-block mr-4"
-                    onClick={closeMenu}
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
                   >
                     {newsTitles[0].title}
                   </NavLink>
@@ -121,18 +128,39 @@ const Navbar = () => {
           {/* Main Navbar */}
           <div className="md:bg-gradient-to-r from-orange-700 to-orange-600 flex justify-between items-center py-2 px-5">
             <div className="hidden md:flex items-center space-x-6 text-zinc-200">
-              <NavLink to="/" className="font-montserrat font-semibold" onClick={closeMenu}>Home</NavLink>
-              <NavLink to="/team" className="font-montserrat font-semibold" onClick={closeMenu}>Team</NavLink>
-              <NavLink to="/schedule" className="font-montserrat font-semibold" onClick={closeMenu}>Schedule</NavLink>
-              <NavLink to="/gallery" className="font-montserrat font-bold" onClick={closeMenu}>Gallery</NavLink>
-              <NavLink to="/about" className="font-montserrat font-semibold" onClick={closeMenu}>About</NavLink>
-              <NavLink to="/contact-us" className="font-montserrat font-semibold" onClick={closeMenu}>Contact</NavLink>
+              <NavLink to="/" className="font-montserrat font-semibold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>Home</NavLink>
+              <NavLink to="/team" className="font-montserrat font-semibold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>Team</NavLink>
+              <NavLink to="/schedule" className="font-montserrat font-semibold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>Schedule</NavLink>
+              <NavLink to="/gallery" className="font-montserrat font-bold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>Gallery</NavLink>
+              <NavLink to="/about" className="font-montserrat font-semibold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>About</NavLink>
+              <NavLink to="/contact-us" className="font-montserrat font-semibold" onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}>Contact</NavLink>
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
               <FaSearch className="cursor-pointer" />
-              <FaShoppingCart className="cursor-pointer" />
-              <FaWhatsapp className="cursor-pointer" />
+              {socialLinks.whatsapp && (
+                <a href={socialLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="cursor-pointer text-xl">
+                  <FaWhatsapp />
+                </a>
+              )}
             </div>
 
             <div className="md:hidden flex items-center ml-auto">
@@ -148,17 +176,35 @@ const Navbar = () => {
 
       {/* Side Drawer Menu */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeMenu}></div>
-      <div className={`fixed top-0 right-0 w-64 h-full bg-white  text-orange-600 shadow-lg transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 w-64 h-full bg-white text-orange-600 shadow-lg transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <button className="text-2xl p-4 focus:outline-none" onClick={closeMenu}>
           <FaTimes />
         </button>
         <nav className="flex flex-col mt-6 justify-center items-center">
-          <NavLink to="/" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Home</NavLink>
-          <NavLink to="/team" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Team</NavLink>
-          <NavLink to="/schedule" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Schedule</NavLink>
-          <NavLink to="/gallery" className="font-montserrat font-bold p-4" onClick={closeMenu}>Gallery</NavLink>
-          <NavLink to="/about" className="font-montserrat font-semibold p-4" onClick={closeMenu}>About</NavLink>
-          <NavLink to="/contact-us" className="font-montserrat font-semibold p-4" onClick={closeMenu}>Contact</NavLink>
+          <NavLink to="/" className="font-montserrat font-semibold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>Home</NavLink>
+          <NavLink to="/team" className="font-montserrat font-semibold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>Team</NavLink>
+          <NavLink to="/schedule" className="font-montserrat font-semibold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>Schedule</NavLink>
+          <NavLink to="/gallery" className="font-montserrat font-bold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>Gallery</NavLink>
+          <NavLink to="/about" className="font-montserrat font-semibold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>About</NavLink>
+          <NavLink to="/contact-us" className="font-montserrat font-semibold p-4" onClick={() => {
+            closeMenu();
+            scrollToTop();
+          }}>Contact</NavLink>
         </nav>
       </div>
     </nav>

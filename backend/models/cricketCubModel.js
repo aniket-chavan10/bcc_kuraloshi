@@ -47,6 +47,15 @@ const CricketClubSchema = new Schema({
       type: String,
       required: false,
     },
+    youtube: {
+      type: String,
+      required: false,
+    },
+    whatsapp: {
+      type: String,
+      required: false,
+    },
+    
   },
   createdAt: {
     type: Date,

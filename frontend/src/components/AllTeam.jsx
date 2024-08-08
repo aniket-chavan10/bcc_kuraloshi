@@ -2,6 +2,27 @@ import React, { useEffect, useState } from "react";
 import { fetchPlayersData } from "../services/api"; // Adjust the import path as needed
 import playerBg from "../assets/images/team_player_bg.jpg";
 
+const ImageWithLoader = ({ src, alt }) => {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <div className="relative w-full h-auto">
+      {loading && (
+        <div className="absolute inset-10 flex items-center justify-center bg-white">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoading(false)}
+        style={{ display: loading ? 'none' : 'block' }}
+        className="w-full h-auto object-cover"
+      />
+    </div>
+  );
+};
+
 function AllTeam() {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +51,8 @@ function AllTeam() {
     getData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
   // Group players by role
   const batsmen = players.filter((player) => player.role === "Batsman");
@@ -40,20 +61,19 @@ function AllTeam() {
 
   const Card = ({ player }) => (
     <div
-      className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto sm:mx-2 xs:mx-1 xs:py-4 sm:py-2 sm:w-64 xs:w-full xs:h-72 sm:h-80"
+      className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64"
       style={{ backgroundImage: `url(${playerBg})` }}
     >
-      <img
+      <ImageWithLoader
         src={player.image}
         alt={player.name}
-        className="w-full h-full object-cover" // Ensure the image covers the card
       />
       <div className="absolute bottom-0 left-0 w-full bg-gray-900 bg-opacity-80 text-white px-2 py-1 rounded-t-lg transform translate-y-28 sm:translate-y-28 group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
-        <h3 className="text-xl sm:text-2xl font-semibold text-orange-600 capitalize">
+        <h3 className="text-2xl sm:text-2xl font-semibold text-orange-600 capitalize">
           {player.name}
         </h3>
         <hr className="border-t border-gray-50 opacity-40" />
-        <p className="text-gray-50 text-sm sm:text-base inline items-center">
+        <p className="text-gray-50 text-md sm:text-base inline items-center">
           {player.role}
           <span className="border-l border-white mx-3 h-4 opacity-40"></span>
           Kuraloshi
@@ -63,19 +83,19 @@ function AllTeam() {
           <div className="flex items-center pt-1">
             <div className="text-center flex flex-col bg-yellow-200 rounded bg-opacity-20 w-20 sm:w-16">
               <span className="block text-lg font-bold">{player.matches}</span>
-              <span className="text-xs sm:text-sm">Matches</span>
+              <span className="text-sm sm:text-sm">Matches</span>
             </div>
             <div className="border-l border-white mx-3 h-8 opacity-40"></div>
             <div className="text-center flex flex-col bg-yellow-200 rounded bg-opacity-20 w-20 sm:w-16">
               <span className="block text-lg font-bold">{player.runs}</span>
-              <span className="text-xs sm:text-sm">Runs</span>
+              <span className="text-sm sm:text-sm">Runs</span>
             </div>
             <div className="border-l border-white mx-3 h-8 opacity-40"></div>
             <div className="text-center flex flex-col bg-yellow-200 rounded bg-opacity-20 w-20 sm:w-16">
               <span className="block text-lg font-bold">
                 {player.role === "Batsman" ? "NA" : player.wickets || "-"}
               </span>
-              <span className="text-xs sm:text-sm">Wickets</span>
+              <span className="text-sm sm:text-sm">Wickets</span>
             </div>
           </div>
         </div>
@@ -92,7 +112,7 @@ function AllTeam() {
   );
 
   return (
-    <div className="container mx-auto py-10 mt-16 px-2 sm:px-4">
+    <div className="container mx-auto py-10 md:mt-16 mt-5 px-2 sm:px-4 ">
       {/* Batsmen Section */}
       {batsmen.length > 0 && (
         <div className="mb-8">

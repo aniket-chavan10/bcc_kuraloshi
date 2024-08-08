@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = 'https://backend-bcc.onrender.com/api';
+const BASE_URL = 'http://localhost:4000/api';
  // Replace with your backend base URL
 
 export async function fetchCarouselItems() {
@@ -382,5 +382,31 @@ export const login = async (email, password) => {
           message: error.message,
       });
       throw new Error(error.message || 'Something went wrong');
+  }
+};
+
+
+
+
+
+
+export const submitContactForm = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error submitting contact form data:", error);
+    throw error;
   }
 };

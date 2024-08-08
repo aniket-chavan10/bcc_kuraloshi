@@ -58,7 +58,7 @@ const About = () => {
             src={info.teamImg} // Ensure correct URL
             alt="Bhairavnath Cricket Club"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-50 rounded-lg"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-50 "></div>
         </div>
       </div>
       <div className="text-gray-800 space-y-8">
