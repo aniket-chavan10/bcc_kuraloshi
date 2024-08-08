@@ -44,7 +44,7 @@ const Carousel = () => {
   }
 
   return (
-    <div className="relative w-full max-w-full mx-auto overflow-hidden ">
+    <div className="relative w-full max-w-full mx-auto overflow-hidden">
       <div className="relative w-full">
         <div
           className="whitespace-nowrap transition-transform duration-1000 ease-in-out"
@@ -65,12 +65,12 @@ const Carousel = () => {
                   </div>
                 )}
               </div>
-              <div className="absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full md:w-full md:p-2 p-1 ">
+              <div className="absolute bottom-0 md:bottom-8 mb-1 left-2/4  transform -translate-x-1/2 w-full px-2  md:bg-transparent">
                 {item.caption.split('\n').map((line, i) => (
                   <span
                     key={i}
-                    className="bg-red-600 text-white p-1 font-bold text-wrap uppercase text-center text-xs md:text-base"
-                    style={{ display: 'inline', lineHeight: '1.7' }}
+                    className="bg-zinc-950 p-1 bg-opacity-80 text-white font-thin font-mono text-wrap uppercase text-center text-xs md:text-sm lg:text-base" // Adjust text size here
+                    style={{ display: 'inline', lineHeight: '1.7' }} // Default line-height for small screens
                   >
                     {line}
                   </span>

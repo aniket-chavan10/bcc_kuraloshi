@@ -66,12 +66,12 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full z-10 bg-gradient-to-r from-orange-700 to-orange-600 text-white">
       <div className="flex items-center">
         {/* Logo */}
-        <div className="flex-shrink-0 w-24 md:w-28 h-full flex items-center md:border-r px-3">
+        <div className="flex-shrink-0 w-20 md:w-28 h-full flex items-center md:border-r px-3">
           {clubInfo?.logo ? (
             <img
               src={clubInfo.logo}
               alt="Logo"
-              className="h-auto w-auto object-cover p-1 -mb-6"
+              className="h-auto w-auto object-cover p-1 md:-mb-6 -mb-4"
               onError={(e) => e.target.src = 'path/to/fallback-image.png'} // Fallback image
             />
           ) : (
