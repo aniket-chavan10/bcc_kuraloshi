@@ -4,7 +4,7 @@ import axios from "axios";
 const InstaFeed = () => {
   const [posts, setPosts] = useState([]);
   const [accessToken, setAccessToken] = useState(
-    "IGQWROT2g0eU1aMEtXNWcxWlJfdU41RXNkYnpYcTFuaUlaQUh5TVQ0WGZAqZAkJfb3ZABcDR6ckpZARVR4SFg0dV90RVZAaTEJjRFhxLUwwX216aXFpTm1UdnUxeTB4UjFaT0xSbm5aVEVINmgzdExDbTh0aUZAEUmo1ZA0UZD"
+    "IGQWRNeVpBOW5nSzhXUnRlY244VFBhY1JNMGxWcERickJDN0hfWlZAzQkJhYU9CNGZAoenR4ZA01jOGlGRVdYWFV6ZA05pYVhoN185ZA0R2MXNoVTVsSU82Q1BsU1p6QjNjeG9kTFNCTmdlSkphUno3eGZAqYVcxNXhhOE0ZD"
   );
 
   useEffect(() => {
