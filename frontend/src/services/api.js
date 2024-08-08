@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = 'https://bccfullstackapp.onrender.com';
+const BASE_URL = 'https://bccfullstackapp.onrender.com/api';
  // Replace with your backend base URL
 
 export async function fetchCarouselItems() {
