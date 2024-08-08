@@ -3,21 +3,13 @@ import axios from "axios";
 
 const InstaFeed = () => {
   const [posts, setPosts] = useState([]);
-  const [accessToken, setAccessToken] = useState(
-    "IGQWRNeVpBOW5nSzhXUnRlY244VFBhY1JNMGxWcERickJDN0hfWlZAzQkJhYU9CNGZAoenR4ZA01jOGlGRVdYWFV6ZA05pYVhoN185ZA0R2MXNoVTVsSU82Q1BsU1p6QjNjeG9kTFNCTmdlSkphUno3eGZAqYVcxNXhhOE0ZD"
-  );
 
   useEffect(() => {
     const fetchInstagramPosts = async () => {
       try {
+        // Call your backend API to fetch Instagram posts
         const response = await axios.get(
-          `https://graph.instagram.com/me/media`,
-          {
-            params: {
-              fields: "id,caption,media_url,media_type,permalink",
-              access_token: accessToken,
-            },
-          }
+          "https://bcc-backend-nue7.onrender.com/api/instafeed"
         );
         const imagePosts = response.data.data.filter(
           (post) => post.media_type === "IMAGE"
@@ -25,40 +17,11 @@ const InstaFeed = () => {
         setPosts(imagePosts);
       } catch (error) {
         console.error("Error fetching Instagram posts:", error);
-        if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          console.error("Response headers:", error.response.headers);
-        }
-      }
-    };
-
-    const refreshAccessToken = async () => {
-      try {
-        const response = await axios.get(
-          `https://graph.instagram.com/refresh_access_token`,
-          {
-            params: {
-              grant_type: "ig_refresh_token",
-              access_token: accessToken,
-            },
-          }
-        );
-        setAccessToken(response.data.access_token);
-      } catch (error) {
-        console.error("Error refreshing access token:", error);
       }
     };
 
     fetchInstagramPosts();
-
-    // Refresh the access token every 50 days to avoid expiration
-    const refreshInterval = setInterval(() => {
-      refreshAccessToken();
-    }, 50 * 24 * 60 * 60 * 1000);
-
-    return () => clearInterval(refreshInterval);
-  }, [accessToken]);
+  }, []);
 
   return (
     <div className="container mx-auto py-10">

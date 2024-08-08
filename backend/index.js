@@ -45,6 +45,9 @@ app.use("/api/gallery", galleryRoutes);
 const fixtureRoutes = require("./routes/fixture");
 app.use("/api/fixtures", fixtureRoutes);
 
+const instafeedRoutes = require("./routes/instafeeds");
+app.use("/api/instafeed", instafeedRoutes);
+
 const loginRoutes = require("./routes/login");
 app.use("/api/login", loginRoutes);
 
