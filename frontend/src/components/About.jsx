@@ -51,7 +51,7 @@ const About = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 mt-20 mb-10">
+    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <div className="mb-8">
         <div className="relative">
           <ImageWithLoader

@@ -49,7 +49,7 @@ function PlayerOfMonth() {
   if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
   return (
-    <div className="container mx-auto py-2 md:px-0">
+    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <h2 className="text-2xl font-bold ">
         Player Of The Month:{" "}
         <span className="text-orange-600 ">"{currentMonth}"</span>
