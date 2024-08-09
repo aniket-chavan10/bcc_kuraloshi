@@ -32,10 +32,13 @@ router.post('/add', upload.fields([
   try {
     const { caption } = req.body;
 
+    console.log('Received files:', req.files);
+
     // Upload thumbnail image and get the URL
     let thumbnailImageUrl = '';
     if (req.files['thumbnailImageUrl']) {
       thumbnailImageUrl = await uploadFileToFirebase(req.files['thumbnailImageUrl'][0]);
+      console.log('Thumbnail image URL:', thumbnailImageUrl);
     }
 
     // Upload additional images and get their URLs
@@ -43,12 +46,16 @@ router.post('/add', upload.fields([
       ? await Promise.all(req.files['imageUrls'].map(file => uploadFileToFirebase(file)))
       : [];
 
+    console.log('Additional image URLs:', imageUrls);
+
     // Create new gallery item
     const newGallery = new Gallery({
       thumbnailImageUrl,
       caption,
-      imageUrls,
+      imageUrls, // Ensure imageUrls is an array
     });
+
+    console.log('Saving gallery item:', newGallery);
 
     const savedGallery = await newGallery.save();
     res.status(201).json(savedGallery);
@@ -57,6 +64,7 @@ router.post('/add', upload.fields([
     res.status(500).json({ error: 'Failed to add gallery data' });
   }
 });
+
 
 // GET route to fetch all gallery items
 router.get('/', async (req, res) => {
@@ -76,11 +84,12 @@ router.get('/:id', async (req, res) => {
     if (!galleryItem) {
       return res.status(404).json({ message: 'Gallery item not found.' });
     }
-    res.json(galleryItem);
+    res.json(galleryItem); // Make sure imageUrls are included
   } catch (error) {
     console.error('Error retrieving gallery item:', error);
     res.status(500).json({ message: 'Error retrieving gallery item.' });
   }
 });
+
 
 module.exports = router;

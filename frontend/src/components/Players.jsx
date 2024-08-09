@@ -72,7 +72,7 @@ function Players() {
               </div>
               <hr className="w-full border-zinc-500 border-spacing-1" />
               <div className="text-center py-2">
-                <h2 className="text-xl text-orange-600 font-bold uppercase leading-tight">
+                <h2 className="text-xl text-orange-600 font-black uppercase leading-tight">
                   {player.name}
                 </h2>
                 <p className="text-zinc-800 uppercase font-extralight">
@@ -85,7 +85,7 @@ function Players() {
       </div>
       <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-3 items-center px-4 mb-4">
         <button
-          className={`bg-gray-950 text-orange-600 p-1 rounded-full ${
+          className={`bg-gray-950 text-orange-500 p-1 rounded-full ${
             currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={prevPage}
@@ -94,7 +94,7 @@ function Players() {
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
         <button
-          className={`bg-gray-950 text-orange-600 p-1 rounded-full ${
+          className={`bg-gray-950 text-orange-500 text-center p-1 rounded-full ${
             currentPage + playersPerPage >= playersData.length
               ? "opacity-50 cursor-not-allowed"
               : ""

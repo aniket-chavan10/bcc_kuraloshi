@@ -33,7 +33,7 @@ const RecentFixture = () => {
   }
 
   return (
-    <div className="bg-gray-950 text-orange-600 p-4 min-h-full flex flex-col">
+    <div className="bg-gray-950 text-orange-500 p-4 min-h-full flex flex-col">
       {fixtures.slice(0, 1).map((fixture) => {
         const date = new Date(fixture.date);
         const formattedDate = `${date.getDate()} ${date.toLocaleString(

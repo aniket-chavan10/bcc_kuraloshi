@@ -49,16 +49,12 @@ function PlayerOfMonth() {
 
   return (
     <div className="container mx-auto py-2 md:px-0">
-      <h2 className="text-xl font-bold text-center md:text-left">
+      <h2 className="text-2xl font-bold ">
         Player Of The Month:{" "}
-        <span className="text-orange-500 italic">"{currentMonth}"</span>
+        <span className="text-orange-600 ">"{currentMonth}"</span>
       </h2>
-      <div className="rounded-lg p-5">
-        <h2 className="text-lg font-bold mb-4 text-center text-white">
-          Players of the Month
-        </h2>
-
-        <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
+      
+        <div className="flex flex-col md:flex-row gap-8 justify-center items-center p-2 ">
           {/* Best Batsman */}
           <div className="w-full md:w-1/2 relative overflow-hidden shadow-xl" style={{ backgroundImage: `url(${playerBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="flex flex-col md:flex-row h-full items-baseline text-white">
@@ -150,7 +146,6 @@ function PlayerOfMonth() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

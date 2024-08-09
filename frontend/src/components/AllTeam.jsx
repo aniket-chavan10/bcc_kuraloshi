@@ -103,7 +103,7 @@ function AllTeam() {
           href={player.instaUrl} // Link to Instagram profile
           target="_blank" // Open in a new tab
           rel="noopener noreferrer" // Security feature for external links
-          className="mt-4 w-full block bg-orange-600 text-white px-2 sm:px-4 py-2 rounded hover:bg-orange-700 transition duration-300 text-center cursor-pointer"
+          className="mt-4 w-full block bg-gradient-to-r from-orange-600 to-orange-500  text-white px-2 sm:px-4 py-2 rounded hover:bg-gradient-to-b transition duration-300 text-center cursor-pointer"
         >
           View Profile
         </a>

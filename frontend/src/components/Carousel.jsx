@@ -65,11 +65,11 @@ const Carousel = () => {
                   </div>
                 )}
               </div>
-              <div className="absolute bottom-0 md:bottom-8 mb-1 left-2/4  transform -translate-x-1/2 w-full px-2  md:bg-transparent">
+              <div className="absolute bottom-0 md:bottom-8 mb-1 left-2/4  transform -translate-x-1/2 w-full px-1  md:bg-transparent">
                 {item.caption.split('\n').map((line, i) => (
                   <span
                     key={i}
-                    className="bg-zinc-950 p-1 bg-opacity-80 text-white font-thin font-mono text-wrap uppercase text-center text-xs md:text-sm lg:text-base" // Adjust text size here
+                    className="bg-zinc-950 p-1  text-orange-500 font-bold font-montserrat text-wrap uppercase text-xs md:text-sm lg:text-base" // Adjust text size here
                     style={{ display: 'inline', lineHeight: '1.7' }} // Default line-height for small screens
                   >
                     {line}
@@ -80,12 +80,12 @@ const Carousel = () => {
           ))}
         </div>
       </div>
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex flex-col space-y-2 bg-zinc-900 p-1 md:p-2 rounded">
+      <div className="absolute top-1/2 right-1 md:right-4 transform -translate-y-1/2 flex flex-col space-y-1 md:space-y-2 bg-zinc-900 bg-opacity-70 p-1 md:p-2 rounded">
         {carouselItems.map((_, index) => (
           <button
             key={index}
             onClick={() => handleDotClick(index)}
-            className={`w-3 h-3 rounded-full bg-gray-300 hover:bg-orange-600 transition-colors duration-300 ${
+            className={`md:w-3 md:h-3 w-2 h-2 rounded-full bg-gray-50 hover:bg-gradient-to-r from-orange-600 to-orange-500 transition-colors duration-300 ${
               index === currentIndex ? 'bg-orange-600' : ''
             }`}
           />

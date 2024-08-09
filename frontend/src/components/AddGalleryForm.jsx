@@ -25,15 +25,15 @@ const AddGalleryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Prepare the FormData object
     const formData = new FormData();
     formData.append('caption', caption);
     if (thumbnailImage) formData.append('thumbnailImageUrl', thumbnailImage);
-    images.forEach((image, index) => {
+    images.forEach((image) => {
       if (image) formData.append('imageUrls', image);
     });
-
+  
     try {
       await addGalleryData(formData);
       setSuccessMessage('Gallery item added successfully!');
@@ -47,6 +47,7 @@ const AddGalleryForm = () => {
       setErrorMessage('Failed to add gallery item. Please try again.');
     }
   };
+  
 
   return (
     <div className="container mx-auto mt-12 p-8 bg-gradient-to-br from-orange-50 to-orange-200 rounded-lg shadow-md border border-orange-300 max-w-lg">

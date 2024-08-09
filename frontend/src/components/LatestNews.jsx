@@ -81,7 +81,7 @@ const LatestNews = () => {
               >
                 Read More
               </Link>
-              <span className="absolute top-0 right-0 p-1 text-xs font-bold bg-orange-600 text-white">
+              <span className="absolute top-0 right-0 p-1 text-xs font-bold bg-gradient-to-r from-orange-600 to-orange-500 text-white">
                 {formatDate(newsData[0].createdAt)}
               </span>
             </div>

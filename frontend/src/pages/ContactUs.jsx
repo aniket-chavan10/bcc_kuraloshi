@@ -53,7 +53,7 @@ const ContactUs = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto md:mt-24 mt-16 mb-10 p-8 bg-gradient-to-br from-amber-500 to-orange-600 max-w-xl">
+      <div className="container mx-auto md:mt-24 mt-16 mb-10 p-8 bg-gradient-to-br from-amber-500 to-orange-600 max-w-xl shadow-md">
         <h1 className="text-3xl font-bold text-gray-50">
           Send a message
         </h1>
