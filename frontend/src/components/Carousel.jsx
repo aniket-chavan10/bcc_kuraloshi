@@ -80,7 +80,7 @@ const Carousel = () => {
           ))}
         </div>
       </div>
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex flex-col space-y-2 bg-zinc-900 p-2 rounded">
+      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 flex flex-col space-y-2 bg-zinc-900 p-1 md:p-2 rounded">
         {carouselItems.map((_, index) => (
           <button
             key={index}

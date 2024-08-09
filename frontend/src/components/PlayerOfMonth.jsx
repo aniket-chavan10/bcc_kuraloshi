@@ -72,7 +72,7 @@ function PlayerOfMonth() {
                   }}
                 />
               </div>
-              <div className="flex flex-col md:mt-auto py-2 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none">
+              <div className="flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none">
                 <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block">
                   {bestBatsman?.runs}{" "}
                   <span className="text-zinc-700 text-xl md:text-lg">Most Runs</span>{" "}
@@ -117,7 +117,7 @@ function PlayerOfMonth() {
                   }}
                 />
               </div>
-              <div className="flex flex-col md:mt-auto py-2 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none">
+              <div className="flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none">
                 <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block">
                   {bestBowler?.wickets}{" "}
                   <span className="text-zinc-700 text-xl md:text-lg">Most Wickets</span>{" "}
