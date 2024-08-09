@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
+import Loader from "./Loader"; // Adjust the import path as needed
 
 function PlayerOfMonth() {
   const [bestBatsman, setBestBatsman] = useState(null);
@@ -44,8 +45,8 @@ function PlayerOfMonth() {
     getData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <Loader />;
+  if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
   return (
     <div className="container mx-auto py-2 md:px-0">
