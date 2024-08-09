@@ -43,7 +43,7 @@ function Players() {
   };
 
   return (
-    <div className="relative overflow-hidden w-full mx-auto py-10 container">
+    <div className="relative overflow-hidden w-full mx-auto py-10 container px-4">
       <h2 className="text-2xl font-bold mb-4">Players</h2>
       <div
         className="flex transition-transform duration-500 ease-in-out"
