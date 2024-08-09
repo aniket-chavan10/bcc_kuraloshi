@@ -176,36 +176,53 @@ const Navbar = () => {
 
       {/* Side Drawer Menu */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeMenu}></div>
-      <div className={`fixed top-0 right-0 w-64 h-full bg-white text-orange-600 shadow-lg transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 w-64 h-full bg-gradient-to-r from-orange-700 to-orange-600 text-white shadow-lg transition-transform transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <button className="text-2xl p-4 focus:outline-none" onClick={closeMenu}>
           <FaTimes />
         </button>
         <nav className="flex flex-col mt-6 justify-center items-center">
-          <NavLink to="/" className="font-montserrat font-semibold p-4" onClick={() => {
+          <NavLink to="/" className={({ isActive }) => isActive ? "font-montserrat font-semibold p-4 text-orange-300" : "font-montserrat font-semibold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>Home</NavLink>
-          <NavLink to="/team" className="font-montserrat font-semibold p-4" onClick={() => {
+          <NavLink to="/team" className={({ isActive }) => isActive ? "font-montserrat font-semibold p-4 text-orange-300" : "font-montserrat font-semibold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>Team</NavLink>
-          <NavLink to="/schedule" className="font-montserrat font-semibold p-4" onClick={() => {
+          <NavLink to="/schedule" className={({ isActive }) => isActive ? "font-montserrat font-semibold p-4 text-orange-300" : "font-montserrat font-semibold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>Schedule</NavLink>
-          <NavLink to="/gallery" className="font-montserrat font-bold p-4" onClick={() => {
+          <NavLink to="/gallery" className={({ isActive }) => isActive ? "font-montserrat font-bold p-4 text-orange-300" : "font-montserrat font-bold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>Gallery</NavLink>
-          <NavLink to="/about" className="font-montserrat font-semibold p-4" onClick={() => {
+          <NavLink to="/about" className={({ isActive }) => isActive ? "font-montserrat font-semibold p-4 text-orange-300" : "font-montserrat font-semibold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>About</NavLink>
-          <NavLink to="/contact-us" className="font-montserrat font-semibold p-4" onClick={() => {
+          <NavLink to="/contact-us" className={({ isActive }) => isActive ? "font-montserrat font-semibold p-4 text-orange-300" : "font-montserrat font-semibold p-4 text-white"} onClick={() => {
             closeMenu();
             scrollToTop();
           }}>Contact</NavLink>
         </nav>
+        <div className="flex justify-center space-x-4 mt-auto mb-6">
+          {socialLinks.facebook && (
+            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="cursor-pointer text-xl">
+              <FaFacebookF />
+            </a>
+          )}
+          {socialLinks.instagram && (
+            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="cursor-pointer text-xl">
+              <FaInstagram />
+            </a>
+          )}
+          {socialLinks.youtube && (
+            <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="cursor-pointer text-xl">
+              <FaYoutube />
+            </a>
+          )}
+        </div>
       </div>
     </nav>
   );
