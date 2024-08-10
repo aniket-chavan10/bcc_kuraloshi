@@ -48,8 +48,8 @@ const InstaFeed = () => {
   }, [posts]);
 
   return (
-    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
-      <h2 className="text-2xl font-bold mb-4">Instagram Posts</h2>
+    <div className="container mx-auto py-10 mt-3 md:px-0">
+      <h2 className="text-2xl font-bold mb-4 px-4">Instagram Posts</h2>
       <div className="container mx-auto py-10 p-5 md:p-16 bg-custom-gradient">
         <div className="h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pr-5">
