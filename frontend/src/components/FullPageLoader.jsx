@@ -22,7 +22,7 @@ const FullPageLoader = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-orange-600 flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-orange-600 flex-col">
       {!videoLoaded && (
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white"></div>
@@ -34,7 +34,7 @@ const FullPageLoader = () => {
         autoPlay
         loop
         muted
-        className={`h-32 md:h-48 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`h-48 md:h-48 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         preload="auto"
       />
       <h1 className='text-2xl font-black text-white text-center mt-4'>BHAIRAVNATH CRICKET CLUB KURALOSHI</h1>
