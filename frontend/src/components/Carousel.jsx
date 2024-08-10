@@ -55,7 +55,7 @@ const Carousel = () => {
   }
 
   return (
-    <div className="relative w-full max-w-full mx-auto overflow-hidden">
+    <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-6">
       <div className="relative w-full">
         <div
           className="whitespace-nowrap transition-transform duration-1000 ease-in-out"

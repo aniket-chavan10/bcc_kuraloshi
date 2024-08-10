@@ -70,7 +70,7 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full z-10 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
       <div className="flex items-center">
         {/* Logo */}
-        <div className="flex-shrink-0 w-20 md:w-28 h-full flex items-center md:border-r px-3">
+        <div className="flex-shrink-0 w-24 md:w-28 h-full flex items-center md:border-r px-3">
           {clubInfo?.logo ? (
             <img
               src={clubInfo.logo}

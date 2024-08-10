@@ -19,7 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const minLoadingTime = 5000; // Minimum loader display time for small screens (5 seconds)
+    const minLoadingTime = 6000; // Minimum loader display time for small screens (5 seconds)
     const screenThreshold = 768; // Define small screen threshold (e.g., 768px)
     const start = Date.now();
 
