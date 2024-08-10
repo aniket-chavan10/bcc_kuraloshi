@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const FullPageLoader = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const textRef = useRef(null);
 
   useEffect(() => {
     const videoElement = document.getElementById('club-video');
 
     const handleLoadedData = () => {
       setVideoLoaded(true);
+
+      // Animate text after video is fully visible
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: 'power3.out' }
+      );
     };
 
     if (videoElement) {
@@ -29,12 +38,17 @@ const FullPageLoader = () => {
         autoPlay
         loop
         muted
-        className={`w-3/4 max-w-xs md:max-w-sm lg:max-w-md transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-48 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         preload="auto"
       />
-      <h1 className="text-lg md:text-2xl lg:text-3xl font-black text-white text-center mt-4 px-4">
-        BHAIRAVNATH CRICKET CLUB KURALOSHI
-      </h1>
+      {videoLoaded && (
+        <h1
+          ref={textRef}
+          className="text-lg md:text-2xl lg:text-3xl font-black text-white text-center mt-4 px-4"
+        >
+          BHAIRAVNATH CRICKET CLUB KURALOSHI
+        </h1>
+      )}
     </div>
   );
 };

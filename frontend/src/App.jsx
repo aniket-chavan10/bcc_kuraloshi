@@ -19,7 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const minLoadingTime = 5000; // Minimum loader display time (5 seconds)
+    const minLoadingTime = 3000; // Minimum loader display time (5 seconds)
     const start = Date.now();
 
     const handleLoad = () => {
