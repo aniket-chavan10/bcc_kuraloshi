@@ -38,7 +38,7 @@ const FullPageLoader = () => {
         autoPlay
         loop
         muted
-        className={`w-48 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-40 md:w-48 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         preload="auto"
       />
       {videoLoaded && (
