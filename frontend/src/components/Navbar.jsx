@@ -10,7 +10,6 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { fetchLatestInfo, fetchNewsData } from "../services/api";
-import logo from '../assets/images/logo.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
