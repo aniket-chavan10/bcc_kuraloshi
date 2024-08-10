@@ -7,7 +7,7 @@ const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const captionRef = useRef(null); // Reference for the caption element
+  const captionRef = useRef(null);
 
   useEffect(() => {
     const getCarouselItems = async () => {
@@ -27,19 +27,20 @@ const Carousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
-    }, 10000); // Change image every 10 seconds
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [carouselItems.length]);
 
   useEffect(() => {
-    // GSAP animation for the caption text
-    gsap.fromTo(
-      captionRef.current,
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
-    );
-  }, [currentIndex]); // Re-run the animation when the slide changes
+    if (captionRef.current) {
+      gsap.fromTo(
+        captionRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+      );
+    }
+  }, [currentIndex]); // Trigger animation on slide change
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
@@ -68,6 +69,15 @@ const Carousel = () => {
                     src={item.imageUrl}
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
+                    onLoad={() => {
+                      if (currentIndex === index) {
+                        gsap.fromTo(
+                          captionRef.current,
+                          { opacity: 0, y: 50 },
+                          { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+                        );
+                      }
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-200">
@@ -77,7 +87,7 @@ const Carousel = () => {
               </div>
               <div
                 className="absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full px-1 md:bg-transparent"
-                ref={captionRef} // Attach the ref to the caption container
+                ref={captionRef}
               >
                 {item.caption.split('\n').map((line, i) => (
                   <span

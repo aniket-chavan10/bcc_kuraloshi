@@ -5,8 +5,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ImageWithLoader = ({ src, alt }) => {
+const ImageWithLoader = ({ src, alt, onImageLoad }) => {
   const [loading, setLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    setLoading(false);
+    onImageLoad(); // Trigger the GSAP animation once the image is loaded
+  };
 
   return (
     <div className="relative w-full h-auto">
@@ -18,7 +23,7 @@ const ImageWithLoader = ({ src, alt }) => {
       <img
         src={src}
         alt={alt}
-        onLoad={() => setLoading(false)}
+        onLoad={handleImageLoad}
         style={{ display: loading ? 'none' : 'block' }}
         className="w-full h-full object-cover"
       />
@@ -30,6 +35,7 @@ const About = () => {
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -47,7 +53,7 @@ const About = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && !error) {
+    if (imageLoaded && !loading && !error) {
       gsap.from(".about-heading", {
         opacity: 0,
         y: 50,
@@ -82,7 +88,11 @@ const About = () => {
         },
       });
     }
-  }, [loading, error]);
+  }, [imageLoaded, loading, error]);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -99,6 +109,7 @@ const About = () => {
           <ImageWithLoader
             src={info.teamImg} // Ensure correct URL
             alt="Bhairavnath Cricket Club"
+            onImageLoad={handleImageLoad} // Pass the image load handler
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-50 "></div>
         </div>

@@ -1,5 +1,4 @@
-// src/App.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Team from './pages/Team';
@@ -14,30 +13,57 @@ import ContactUs from './pages/ContactUs';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import PlayersRanking from './pages/PlayersRanking';
+import FullPageLoader from './components/FullPageLoader';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/schedule" element={<Schedule />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/gallery/:id" element={<GalleryDetails />} />
-        <Route path="/news/:id" element={<NewsDetails />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/rankings" element={<PlayersRanking />} />
+  const [isLoading, setIsLoading] = useState(true);
 
-        {/* Protected Route for Admin Dashboard */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
-        </Route>
-      </Routes>
-    </Router>
+  useEffect(() => {
+    const minLoadingTime = 5000; // Minimum loader display time (5 seconds)
+    const start = Date.now();
+
+    const handleLoad = () => {
+      const elapsedTime = Date.now() - start;
+      const remainingTime = minLoadingTime - elapsedTime;
+
+      // Set a timeout to ensure the minimum loading time has passed
+      setTimeout(() => setIsLoading(false), Math.max(remainingTime, 0));
+    };
+
+    // Listen for the window load event (fires when the whole page, including all dependent resources, is fully loaded)
+    window.addEventListener('load', handleLoad);
+
+    return () => window.removeEventListener('load', handleLoad);
+  }, []);
+
+  return (
+    <>
+      {isLoading ? (
+        <FullPageLoader />
+      ) : (
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/gallery/:id" element={<GalleryDetails />} />
+            <Route path="/news/:id" element={<NewsDetails />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/rankings" element={<PlayersRanking />} />
+
+            {/* Protected Route for Admin Dashboard */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+            </Route>
+          </Routes>
+        </Router>
+      )}
+    </>
   );
 }
 

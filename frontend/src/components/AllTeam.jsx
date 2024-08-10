@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchPlayersData } from "../services/api"; // Adjust the import path as needed
+import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -20,7 +20,7 @@ const ImageWithLoader = ({ src, alt }) => {
         src={src}
         alt={alt}
         onLoad={() => setLoading(false)}
-        style={{ display: loading ? 'none' : 'block' }}
+        style={{ display: loading ? "none" : "block" }}
         className="w-full h-auto object-cover"
       />
     </div>
@@ -37,8 +37,8 @@ function AllTeam() {
   useEffect(() => {
     async function getData() {
       try {
-        const data = await fetchPlayersData(); // Fetch data from backend
-        console.log("Players data:", data); // Log players data to check structure
+        const data = await fetchPlayersData();
+        console.log("Players data:", data);
 
         if (data.length === 0) {
           setError("No players data found");
@@ -59,18 +59,22 @@ function AllTeam() {
 
   useEffect(() => {
     if (players.length > 0) {
-      gsap.from(cardRefs.current, {
-        opacity: 0,
-        y: 50,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: cardRefs.current,
-          start: "top 80%",
-          end: "bottom 60%",
-          toggleActions: "play none none reverse",
-        },
+      cardRefs.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
       });
     }
   }, [players]);
@@ -78,7 +82,6 @@ function AllTeam() {
   if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
-  // Group players by role
   const batsmen = players.filter((player) => player.role === "Batsman");
   const bowlers = players.filter((player) => player.role === "Bowler");
   const allRounders = players.filter((player) => player.role === "All-rounder");
@@ -89,10 +92,7 @@ function AllTeam() {
       className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64"
       style={{ backgroundImage: `url(${playerBg})` }}
     >
-      <ImageWithLoader
-        src={player.image}
-        alt={player.name}
-      />
+      <ImageWithLoader src={player.image} alt={player.name} />
       <div className="absolute bottom-0 left-0 w-full bg-gray-900 bg-opacity-80 text-white px-2 py-1 rounded-t-lg transform translate-y-28 sm:translate-y-28 group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
         <h3 className="text-2xl sm:text-2xl font-semibold text-orange-600 capitalize">
           {player.name}
@@ -125,10 +125,10 @@ function AllTeam() {
           </div>
         </div>
         <a
-          href={player.instaUrl} // Link to Instagram profile
-          target="_blank" // Open in a new tab
-          rel="noopener noreferrer" // Security feature for external links
-          className="mt-4 w-full block bg-gradient-to-r from-orange-600 to-orange-500  text-white px-2 sm:px-4 py-2 rounded hover:bg-gradient-to-b transition duration-300 text-center cursor-pointer"
+          href={player.instaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 w-full block bg-gradient-to-r from-orange-600 to-orange-500 text-white px-2 sm:px-4 py-2 rounded hover:bg-gradient-to-b transition duration-300 text-center cursor-pointer"
         >
           View Profile
         </a>
@@ -137,8 +137,7 @@ function AllTeam() {
   );
 
   return (
-    <div className="container mx-auto py-10 md:mt-16 mt-5 px-2 sm:px-4 ">
-      {/* Batsmen Section */}
+    <div className="container mx-auto py-10 md:mt-16 mt-5 px-2 sm:px-4">
       {batsmen.length > 0 && (
         <div className="mb-8">
           <div className="text-center relative my-6">
@@ -154,8 +153,6 @@ function AllTeam() {
           </div>
         </div>
       )}
-
-      {/* All-Rounders Section */}
       {allRounders.length > 0 && (
         <div className="mb-8">
           <div className="text-center relative mb-6">
@@ -171,8 +168,6 @@ function AllTeam() {
           </div>
         </div>
       )}
-
-      {/* Bowlers Section */}
       {bowlers.length > 0 && (
         <div>
           <div className="text-center relative mb-6">

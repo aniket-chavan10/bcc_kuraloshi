@@ -46,7 +46,7 @@ const LatestNews = () => {
           scrollTrigger: {
             trigger: newsContainerRef.current,
             start: "top 80%",
-            end: "bottom top",
+            end: "bottom 100%",
             scrub: 1,
             toggleActions: "play none none reset",
           },

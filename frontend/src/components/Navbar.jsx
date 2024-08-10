@@ -10,6 +10,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { fetchLatestInfo, fetchNewsData } from "../services/api";
+import logo from '../assets/images/logo.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +74,7 @@ const Navbar = () => {
         <div className="flex-shrink-0 w-20 md:w-28 h-full flex items-center md:border-r px-3">
           {clubInfo?.logo ? (
             <img
-              src={clubInfo.logo}
+              src={logo}
               alt="Logo"
               className="h-auto w-auto object-cover p-1 md:-mb-6 -mb-4"
               onError={(e) => (e.target.src = "path/to/fallback-image.png")} // Fallback image
