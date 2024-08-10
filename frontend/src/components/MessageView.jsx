@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { gsap } from "gsap";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { getContactFormSubmissions } from "../services/api";
-import moment from "moment"; // Import moment for date formatting
+
+const formatDate = (date) => {
+  const options = { day: '2-digit', month: 'short' };
+  return new Date(date).toLocaleDateString('en-GB', options);
+};
 
 const MessagesView = () => {
   const [messages, setMessages] = useState([]);
@@ -89,7 +91,7 @@ const MessagesView = () => {
                   <strong>Message:</strong> {message.message}
                 </p>
                 <p className="text-gray-500 text-sm mt-4">
-                  Submitted on: {moment(message.submittedAt).format("MMMM Do, YYYY, h:mm A")}
+                  Submitted on: {formatDate(message.submittedAt)}
                 </p>
               </li>
             ))}
