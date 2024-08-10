@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
 // GET route to retrieve all contact messages
 router.get('/', async (req, res) => {
   try {
-    // Fetch all contact messages from the database
-    const contacts = await ContactUs.find();
+    // Fetch all contact messages from the database, sorted by submission date (latest first)
+    const contacts = await ContactUs.find().sort({ submittedAt: -1 });
 
     // Send the contacts as a response
     res.status(200).json(contacts);
@@ -39,5 +39,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve messages. Please try again later.' });
   }
 });
+
 
 module.exports = router;
