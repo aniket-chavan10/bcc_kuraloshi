@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fetchPlayersData } from "../services/api"; // Adjust the import path as needed
 import playerBg from "../assets/images/team_player_bg.jpg";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ImageWithLoader = ({ src, alt }) => {
   const [loading, setLoading] = useState(true);
@@ -28,6 +32,8 @@ function AllTeam() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const cardRefs = useRef([]);
+
   useEffect(() => {
     async function getData() {
       try {
@@ -51,6 +57,24 @@ function AllTeam() {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (players.length > 0) {
+      gsap.from(cardRefs.current, {
+        opacity: 0,
+        y: 50,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cardRefs.current,
+          start: "top 80%",
+          end: "bottom 60%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+  }, [players]);
+
   if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
@@ -59,8 +83,9 @@ function AllTeam() {
   const bowlers = players.filter((player) => player.role === "Bowler");
   const allRounders = players.filter((player) => player.role === "All-rounder");
 
-  const Card = ({ player }) => (
+  const Card = ({ player, index }) => (
     <div
+      ref={(el) => (cardRefs.current[index] = el)}
       className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64"
       style={{ backgroundImage: `url(${playerBg})` }}
     >
@@ -123,8 +148,8 @@ function AllTeam() {
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {batsmen.map((player) => (
-              <Card key={player._id} player={player} />
+            {batsmen.map((player, index) => (
+              <Card key={player._id} player={player} index={index} />
             ))}
           </div>
         </div>
@@ -140,8 +165,8 @@ function AllTeam() {
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allRounders.map((player) => (
-              <Card key={player._id} player={player} />
+            {allRounders.map((player, index) => (
+              <Card key={player._id} player={player} index={index + batsmen.length} />
             ))}
           </div>
         </div>
@@ -157,8 +182,8 @@ function AllTeam() {
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {bowlers.map((player) => (
-              <Card key={player._id} player={player} />
+            {bowlers.map((player, index) => (
+              <Card key={player._id} player={player} index={index + batsmen.length + allRounders.length} />
             ))}
           </div>
         </div>

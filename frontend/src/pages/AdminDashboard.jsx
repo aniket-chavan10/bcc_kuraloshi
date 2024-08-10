@@ -3,13 +3,14 @@ import React from 'react';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import FixtureAddForm from '../components/FixtureAddForm';
 import UpdateFixtureForm from '../components/UpdateFixtureForm';
-import UpdateFixtures from '../components/UpdateFixtures'; // Import the new component
+import UpdateFixtures from '../components/UpdateFixtures';
 import PlayersForm from '../components/PlayersForm';
 import PlayersList from '../components/PlayerList';
 import NewsAddForm from '../components/NewsAddForm';
 import AddGalleryForm from '../components/AddGalleryForm';
 import AddCarouselForm from '../components/AddCarouselForm';
 import UpdateInformationForm from '../components/UpdateInformationForm';
+import MessageView from '../components/MessageView'; // Import the MessageView component
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-orange-100 to-orange-300">
-      <div className="bg-orange-600 text-white w-1/4 p-6 space-y-8">
+      <div className="bg-gradient-to-br from-orange-600 to-orange-500 text-white w-1/4 p-6 space-y-8">
         <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
         <nav>
           <ul className="space-y-4">
@@ -105,6 +106,14 @@ const AdminDashboard = () => {
                 Update Information
               </Link>
             </li>
+            <li>
+              <Link 
+                to="messages"  // Add link to messages
+                className="block py-2 px-4 rounded-md text-white hover:bg-orange-500 transition-colors"
+              >
+                View Messages
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="mt-8">
@@ -128,6 +137,7 @@ const AdminDashboard = () => {
           <Route path="add-gallery" element={<AddGalleryForm />} />
           <Route path="add-carousel" element={<AddCarouselForm onAdd={handleAddCarousel} />} />
           <Route path="update-info" element={<UpdateInformationForm clubId="your-club-id" />} />
+          <Route path="messages" element={<MessageView />} />  {/* Add route for MessageView */}
           <Route path="/" element={<h2 className="text-2xl font-bold">Welcome to the Admin Dashboard</h2>} />
         </Routes>
       </div>

@@ -194,6 +194,20 @@ const Navbar = () => {
                 Schedule
               </NavLink>
               <NavLink
+                to="/rankings"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold"
+                    : "text-white font-montserrat font-semibold"
+                }
+                onClick={() => {
+                  closeMenu();
+                  scrollToTop();
+                }}
+              >
+                Rankings
+              </NavLink>
+              <NavLink
                 to="/gallery"
                 className={({ isActive }) =>
                   isActive
@@ -273,20 +287,22 @@ const Navbar = () => {
         onClick={closeMenu}
       ></div>
       <div
-        className={`fixed top-0 right-0 w-64 h-screen bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg transition-transform transform ${
+        className={`fixed top-0 right-0 w-64 h-screen bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg transform transition-transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <button className="text-2xl p-4 focus:outline-none" onClick={closeMenu}>
-          <FaTimes />
-        </button>
-        <nav className="flex flex-col mt-6 uppercase">
+        <div className="flex items-center justify-between p-4">
+          <button onClick={handleMenuClick}>
+            <FaTimes className="text-2xl" />
+          </button>
+        </div>
+        <div className="flex flex-col p-4">
           <NavLink
             to="/"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -299,8 +315,8 @@ const Navbar = () => {
             to="/team"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -313,8 +329,8 @@ const Navbar = () => {
             to="/schedule"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -324,11 +340,25 @@ const Navbar = () => {
             Schedule
           </NavLink>
           <NavLink
+            to="/rankings"
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
+            }
+            onClick={() => {
+              closeMenu();
+              scrollToTop();
+            }}
+          >
+            Rankings
+          </NavLink>
+          <NavLink
             to="/gallery"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-bold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-bold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -341,8 +371,8 @@ const Navbar = () => {
             to="/about"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -355,8 +385,8 @@ const Navbar = () => {
             to="/contact-us"
             className={({ isActive }) =>
               isActive
-                ? "text-yellow-300 font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
-                : "text-white font-montserrat font-semibold py-3 px-6 border-b border-white border-opacity-20"
+                ? "text-yellow-300 font-montserrat font-semibold mb-3 pb-2 border-b border-white"
+                : "text-white font-montserrat font-semibold mb-3 pb-2 border-b border-transparent"
             }
             onClick={() => {
               closeMenu();
@@ -365,41 +395,55 @@ const Navbar = () => {
           >
             Contact
           </NavLink>
-        </nav>
-        <div className="flex flex-col items-center justify-center mt-20 gap-3">
-          <h3 className="text-xl uppercase font-mono">Follow us on </h3>
-          <div className="flex flex-row items-center justify-center gap-3">
-            {socialLinks.facebook && (
-              <a
-                href={socialLinks.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1 rounded-full border-2 border-white text-white text-xl mb-4"
-              >
-                <FaFacebookF />
-              </a>
-            )}
-            {socialLinks.instagram && (
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1 rounded-full border-2 border-white text-white text-xl mb-4"
-              >
-                <FaInstagram />
-              </a>
-            )}
-            {socialLinks.youtube && (
-              <a
-                href={socialLinks.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1 rounded-full border-2 border-white text-white text-xl mb-4"
-              >
-                <FaYoutube />
-              </a>
-            )}
-          </div>
+          <button
+            onClick={handleLoginClick}
+            className="mt-4 border border-white rounded-md py-2 px-4"
+          >
+            Login
+          </button>
+        </div>
+
+        <div className="flex space-x-4 justify-center mt-auto p-4">
+          {socialLinks.facebook && (
+            <a
+              href={socialLinks.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer p-2 rounded-full border border-white text-xl"
+            >
+              <FaFacebookF />
+            </a>
+          )}
+          {socialLinks.instagram && (
+            <a
+              href={socialLinks.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer p-2 rounded-full border border-white text-xl"
+            >
+              <FaInstagram />
+            </a>
+          )}
+          {socialLinks.youtube && (
+            <a
+              href={socialLinks.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer p-2 rounded-full border border-white text-xl"
+            >
+              <FaYoutube />
+            </a>
+          )}
+          {socialLinks.whatsapp && (
+            <a
+              href={socialLinks.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer p-2 rounded-full border border-white text-xl"
+            >
+              <FaWhatsapp />
+            </a>
+          )}
         </div>
       </div>
     </nav>

@@ -23,6 +23,10 @@ const NewsDetails = () => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    // Scroll to the top whenever the component is mounted or location changes
+    window.scrollTo(0, 0);
+  }, [location]);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -31,24 +35,36 @@ const NewsDetails = () => {
   };
 
   const formatDescription = (text) => {
-    return text.split('\n').map((line, index) => (
-      <p key={index} className="mb-4">{line}</p>
+    return text.split("\n").map((line, index) => (
+      <p key={index} className="mb-4">
+        {line}
+      </p>
     ));
   };
 
-  if (isLoading) return <p className="text-center py-4 text-gray-500">Loading...</p>;
-  if (error) return <p className="text-center py-4 text-red-600">Error fetching news item: {error.message}</p>;
+  if (isLoading)
+    return <p className="text-center py-4 text-gray-500">Loading...</p>;
+  if (error)
+    return (
+      <p className="text-center py-4 text-red-600">
+        Error fetching news item: {error.message}
+      </p>
+    );
 
   return (
-    <div className="container mx-auto py-10 mt-20 px-4 md:px-0">
+    <div className="container mx-auto py-0 md:py-8 mt-20 px-4 md:px-0">
       {newsItem && (
         <div>
           {/* Title and Date */}
           <div className="mb-8">
-            <h1 className="text-4xl font-extrabold mb-3 text-gray-900 leading-tight">{newsItem.title}</h1>
-            <span className="text-base text-gray-600">{formatDate(newsItem.createdAt)}</span>
+            <h1 className="text-4xl font-extrabold mb-3 text-gray-900 leading-tight">
+              {newsItem.title}
+            </h1>
+            <span className="text-base text-gray-600">
+              {formatDate(newsItem.createdAt)}
+            </span>
           </div>
-          
+
           {/* Main Image */}
           <div className="relative w-full mb-8">
             <div className="relative w-full h-0 pb-[56.25%]">
@@ -59,7 +75,7 @@ const NewsDetails = () => {
               />
             </div>
           </div>
-          
+
           {/* Description */}
           <div className="text-gray-800">
             {formatDescription(newsItem.description)}

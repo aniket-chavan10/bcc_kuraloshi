@@ -1,14 +1,17 @@
-// src/components/Gallery.js
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Gallery = () => {
   const [galleryData, setGalleryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleItemCount, setVisibleItemCount] = useState(8); // Adjust as per your design
+  const galleryItemRefs = useRef([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +32,29 @@ const Gallery = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    galleryItemRefs.current.forEach((item, index) => {
+      if (item) {
+        gsap.fromTo(
+          item,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 90%",
+              end: "top 70%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    });
+  }, [galleryData, visibleItemCount]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -48,7 +74,11 @@ const Gallery = () => {
       {galleryData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {galleryData.slice(0, visibleItemCount).map((item, index) => (
-            <div key={index} className="shadow-md overflow-hidden">
+            <div
+              key={index}
+              ref={(el) => (galleryItemRefs.current[index] = el)}
+              className="shadow-md overflow-hidden"
+            >
               <div className="w-full h-64 bg-black">
                 <img
                   src={item.thumbnailImageUrl}

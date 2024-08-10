@@ -410,3 +410,25 @@ export const submitContactForm = async (data) => {
     throw error;
   }
 };
+
+
+
+export const getContactFormSubmissions = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/contact`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching contact form submissions:", error);
+    throw error;
+  }
+};

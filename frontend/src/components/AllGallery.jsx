@@ -1,20 +1,22 @@
-// src/components/Gallery.js
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const AllGallery = () => {
   const [galleryData, setGalleryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleItemCount, setVisibleItemCount] = useState(8); // Adjust as per your design
+  const [visibleItemCount, setVisibleItemCount] = useState(8);
+  const galleryRefs = useRef([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchGalleryData();
-        // Ensure response is sorted by createdAt in descending order
         const sortedGallery = response.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
@@ -29,6 +31,35 @@ const AllGallery = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Scroll to the top whenever the component is mounted or location changes
+    window.scrollTo(0, 0);
+  }, [location]);
+  useEffect(() => {
+    if (galleryData.length > 0) {
+      gsap.fromTo(
+        galleryRefs.current,
+        {
+          opacity: 0,
+          y: 20, // Slight upward motion
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out", // Smooth easing
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: galleryRefs.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+  }, [galleryData, visibleItemCount]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -37,7 +68,7 @@ const AllGallery = () => {
   };
 
   const handleLoadMore = () => {
-    setVisibleItemCount((prevCount) => prevCount + 8); // Increase by 8 items
+    setVisibleItemCount((prevCount) => prevCount + 8);
   };
 
   return (
@@ -50,12 +81,13 @@ const AllGallery = () => {
           {galleryData.slice(0, visibleItemCount).map((item, index) => (
             <div
               key={index}
+              ref={(el) => (galleryRefs.current[index] = el)}
               className="break-inside-avoid shadow-md overflow-hidden mb-4"
             >
               <img
                 src={item.thumbnailImageUrl}
                 alt={item.caption}
-                className="w-full hover:scale-110 transition duration-1000 ease-in-out"
+                className="w-full hover:scale-105 transition duration-500 ease-in-out"
               />
               <div className="py-2 pr-10 relative">
                 <h3 className="text-sm font-bold mb-2">{item.caption}</h3>
@@ -78,7 +110,7 @@ const AllGallery = () => {
       {galleryData.length > visibleItemCount && (
         <button
           onClick={handleLoadMore}
-          className="bg-zinc-950  text-orange-600 font-bold py-1 px-4 rounded mt-4 mx-auto block"
+          className="bg-zinc-950 text-orange-600 font-bold py-1 px-4 rounded mt-4 mx-auto block"
         >
           Load More
         </button>

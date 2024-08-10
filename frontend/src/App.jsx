@@ -13,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContactUs from './pages/ContactUs';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import PlayersRanking from './pages/PlayersRanking';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/news/:id" element={<NewsDetails />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/rankings" element={<PlayersRanking />} />
 
         {/* Protected Route for Admin Dashboard */}
         <Route element={<ProtectedRoute />}>

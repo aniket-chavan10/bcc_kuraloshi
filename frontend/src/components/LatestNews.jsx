@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 const LatestNews = () => {
   const [newsData, setNewsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleNewsCount, setVisibleNewsCount] = useState(7);
+  
+  const newsContainerRef = useRef(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const fetchData = async () => {
       try {
         const response = await fetchNewsData();
-        // Ensure response is sorted by createdAt in descending order
         const sortedNews = response.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
@@ -27,6 +32,29 @@ const LatestNews = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (newsData.length > 0) {
+      gsap.fromTo(
+        newsContainerRef.current.querySelectorAll(".news-item"),
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: newsContainerRef.current,
+            start: "top 80%",
+            end: "bottom top",
+            scrub: 1,
+            toggleActions: "play none none reset",
+          },
+        }
+      );
+    }
+  }, [newsData, visibleNewsCount]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -35,7 +63,7 @@ const LatestNews = () => {
   };
 
   const handleLoadMore = () => {
-    setVisibleNewsCount((prevCount) => prevCount + 3); // Increase by 3 items
+    setVisibleNewsCount((prevCount) => prevCount + 3);
   };
 
   const ImageWithLoader = ({ src, alt }) => {
@@ -65,9 +93,9 @@ const LatestNews = () => {
       {isLoading && <p>Loading news...</p>}
       {error && <p>Error fetching news: {error.message}</p>}
       {newsData.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
           {/* Large news item */}
-          <div className="md:col-span-2 shadow-md overflow-hidden">
+          <div className="md:col-span-2 shadow-md overflow-hidden news-item">
             <ImageWithLoader
               src={newsData[0].imageUrl} // Direct URL to the image
               alt={newsData[0].title}
@@ -91,7 +119,7 @@ const LatestNews = () => {
           {newsData.slice(1, visibleNewsCount).map((newsItem) => (
             <div
               key={newsItem._id}
-              className="shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col"
+              className="shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item"
             >
               <ImageWithLoader
                 src={newsItem.imageUrl} // Direct URL to the image

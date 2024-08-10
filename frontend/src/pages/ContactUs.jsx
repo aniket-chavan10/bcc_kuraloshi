@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { submitContactForm } from "../services/api"; // Update this path based on where you place your API functions
@@ -15,6 +16,27 @@ const ContactUs = () => {
     type: "",
     message: ""
   });
+
+  useEffect(() => {
+    gsap.fromTo(
+      ".contact-container",
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+    );
+
+    gsap.fromTo(
+      ".form-element",
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.2,
+        delay: 0.2,
+      }
+    );
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -53,65 +75,67 @@ const ContactUs = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto md:mt-24 mt-16 mb-10 p-8 bg-gradient-to-br from-amber-500 to-orange-600 max-w-xl shadow-md">
-        <h1 className="text-3xl font-bold text-gray-50">
-          Send a message
+      <div className="container mx-auto md:mt-24 mt-16 mb-10 p-8 bg-white max-w-xl shadow-lg rounded-lg contact-container">
+        <h1 className="text-4xl font-bold text-gray-800 text-center mb-4 form-element">
+          Contact Us
         </h1>
-        <h2 className="text-gray-100">For all enquiries & feedback, please use the form below</h2>
-        <form onSubmit={handleSubmit} className="space-y-6 mt-6">
-          <div>
+        <h2 className="text-gray-600 text-center mb-6 form-element">We'd love to hear from you</h2>
+        <form onSubmit={handleSubmit} className="space-y-6 form-element">
+          <div className="form-element">
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="mt-1 block w-full p-1 bg-gray-50 outline-none"
-              placeholder="Name"
+              className="mt-1 block w-full p-3 bg-gray-100 outline-none rounded-lg"
+              placeholder="Your Name"
             />
           </div>
-          <div className="flex gap-3">
+          <div className="form-element">
             <input
               type="tel"
               name="mobile"
               value={formData.mobile}
               onChange={handleChange}
               required
-              className="mt-1 block w-full p-1 bg-gray-50 outline-none"
+              className="mt-1 block w-full p-3 bg-gray-100 outline-none rounded-lg"
               placeholder="Mobile Number"
             />
+          </div>
+          <div className="form-element">
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full p-1 bg-gray-50 outline-none"
+              className="mt-1 block w-full p-3 bg-gray-100 outline-none rounded-lg"
               placeholder="Email Address"
             />
           </div>
-          <div>
+          <div className="form-element">
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
               required
-              className="mt-1 block w-full p-1 bg-gray-50 outline-none"
-              rows="4"
+              className="mt-1 block w-full p-3 bg-gray-100 outline-none rounded-lg"
+              rows="5"
               placeholder="Your Message"
             ></textarea>
           </div>
-          <div className="text-center">
+          <div className="text-center form-element">
             <button
               type="submit"
-              className="w-1/2 py-2 px-4 bg-white text-orange-500 font-semibold rounded-md shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+              className="w-full py-3 px-4 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition duration-300"
             >
-              SUBMIT
+              Send Message
             </button>
           </div>
         </form>
         {statusMessage.message && (
-          <div className={`mt-6 text-center p-4 ${statusMessage.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} rounded-md`}>
+          <div className={`mt-6 text-center p-4 ${statusMessage.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} rounded-md form-element`}>
             {statusMessage.message}
           </div>
         )}

@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { fetchGalleryItemById } from "../services/api";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const GalleryDetail = () => {
   const { id } = useParams();
   const [galleryItem, setGalleryItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const imageRefs = useRef([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +28,35 @@ const GalleryDetail = () => {
 
     fetchData();
   }, [id]);
+  
+  useEffect(() => {
+    // Scroll to the top whenever the component is mounted or location changes
+    window.scrollTo(0, 0);
+  }, [location]);
+  useEffect(() => {
+    if (galleryItem) {
+      gsap.fromTo(
+        imageRefs.current,
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: imageRefs.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+  }, [galleryItem]);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching gallery item: {error.message}</p>;
@@ -41,7 +75,11 @@ const GalleryDetail = () => {
       {allImages.length > 0 && (
         <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {allImages.map((url, index) => (
-            <div key={index} className="relative w-full h-0 pb-[56.25%]">
+            <div
+              key={index}
+              ref={(el) => (imageRefs.current[index] = el)}
+              className="relative w-full h-0 pb-[56.25%]"
+            >
               <img
                 src={url}
                 alt={`Additional image ${index + 1}`}
@@ -53,14 +91,19 @@ const GalleryDetail = () => {
       )}
       {/* Photos Label */}
       <div className="mb-6">
-      <h2 className="text-2xl font-bold mb-4">Photos</h2>
+        <h2 className="text-2xl font-bold mb-4">Photos</h2>
       </div>
 
       {/* Main Content */}
       {galleryItem && (
         <div className="bg-white shadow-lg">
           {/* Main Thumbnail Image */}
-          <div className="w-full mb-10">
+          <div
+            className="w-full mb-10"
+            ref={(el) =>
+              (imageRefs.current[allImages.length] = el)
+            }
+          >
             <div className="relative w-full h-0 pb-[56.25%]">
               <img
                 src={galleryItem.thumbnailImageUrl}
@@ -72,15 +115,23 @@ const GalleryDetail = () => {
 
           {/* Large Additional Images */}
           <div className="w-full grid grid-cols-1 gap-16">
-            {[...imageUrls, ...additionalImageUrls].map((url, index) => (
-              <div key={index} className="relative w-full h-0 pb-[56.25%]">
-                <img
-                  src={url}
-                  alt={`Additional image ${index + 1}`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              </div>
-            ))}
+            {[...imageUrls, ...additionalImageUrls].map(
+              (url, index) => (
+                <div
+                  key={index}
+                  ref={(el) =>
+                    (imageRefs.current[allImages.length + 1 + index] = el)
+                  }
+                  className="relative w-full h-0 pb-[56.25%]"
+                >
+                  <img
+                    src={url}
+                    alt={`Additional image ${index + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
       )}

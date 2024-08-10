@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchPlayersData } from "../services/api";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 function Players() {
   const [playersData, setPlayersData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+  const cardsRef = useRef([]);
 
   const playersPerPage = isSmallScreen ? 1 : 4;
 
@@ -30,6 +35,27 @@ function Players() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    cardsRef.current.forEach((card, index) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            end: "top 70%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+  }, [playersData]);
+
   const nextPage = () => {
     if (currentPage + playersPerPage < playersData.length) {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -53,6 +79,7 @@ function Players() {
       >
         {playersData.map((player, index) => (
           <div
+            ref={(el) => (cardsRef.current[index] = el)}
             key={index}
             className={`bg-zinc-50 ${
               isSmallScreen ? "w-full" : "w-1/4"

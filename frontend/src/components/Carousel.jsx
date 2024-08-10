@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchCarouselItems } from '../services/api';
+import gsap from 'gsap';
 
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const captionRef = useRef(null); // Reference for the caption element
 
   useEffect(() => {
     const getCarouselItems = async () => {
       try {
         const data = await fetchCarouselItems();
-        // Slice the data to include only the latest 4 items
         setCarouselItems(data.slice(-4));
       } catch (error) {
         setError(error);
@@ -30,6 +31,15 @@ const Carousel = () => {
 
     return () => clearInterval(interval);
   }, [carouselItems.length]);
+
+  useEffect(() => {
+    // GSAP animation for the caption text
+    gsap.fromTo(
+      captionRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+    );
+  }, [currentIndex]); // Re-run the animation when the slide changes
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
@@ -55,7 +65,7 @@ const Carousel = () => {
               <div className="relative pb-[56.25%] overflow-hidden">
                 {item.imageUrl ? (
                   <img
-                    src={item.imageUrl} // Use Firebase Storage URL directly
+                    src={item.imageUrl}
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
@@ -65,12 +75,15 @@ const Carousel = () => {
                   </div>
                 )}
               </div>
-              <div className="absolute bottom-0 md:bottom-8 mb-1 left-2/4  transform -translate-x-1/2 w-full px-1  md:bg-transparent">
+              <div
+                className="absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full px-1 md:bg-transparent"
+                ref={captionRef} // Attach the ref to the caption container
+              >
                 {item.caption.split('\n').map((line, i) => (
                   <span
                     key={i}
-                    className="bg-zinc-950 p-1  text-orange-500 font-bold font-montserrat text-wrap uppercase text-xs md:text-sm lg:text-base" // Adjust text size here
-                    style={{ display: 'inline', lineHeight: '1.7' }} // Default line-height for small screens
+                    className="bg-zinc-950 p-1 text-orange-500 font-bold font-montserrat text-wrap uppercase text-xs md:text-sm lg:text-base"
+                    style={{ display: 'inline', lineHeight: '1.7' }}
                   >
                     {line}
                   </span>

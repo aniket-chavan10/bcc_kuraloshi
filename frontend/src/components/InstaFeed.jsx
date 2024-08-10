@@ -24,7 +24,7 @@ const InstaFeed = () => {
   }, []);
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 px-4">
       <h2 className="text-2xl font-bold mb-4">Instagram Posts</h2>
       <div className="container mx-auto py-10 p-10 md:p-16 bg-custom-gradient">
         <div className="h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-100">
