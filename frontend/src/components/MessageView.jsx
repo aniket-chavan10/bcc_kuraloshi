@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getContactFormSubmissions } from "../services/api";
+import { format } from "date-fns"; // Import date-fns for date formatting
 
 const MessagesView = () => {
   const [messages, setMessages] = useState([]);
@@ -14,9 +15,12 @@ const MessagesView = () => {
     const fetchMessages = async () => {
       try {
         const fetchedMessages = await getContactFormSubmissions();
-        setMessages(fetchedMessages);
+        const sortedMessages = fetchedMessages.sort(
+          (a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)
+        ); // Sort messages by date in descending order
+        setMessages(sortedMessages);
         setLoading(false);
-        if (fetchedMessages.length <= visibleCount) {
+        if (sortedMessages.length <= visibleCount) {
           setAllLoaded(true);
         }
       } catch (error) {
@@ -87,6 +91,9 @@ const MessagesView = () => {
                   </p>
                   <p className="text-gray-700 mt-2">
                     <strong>Message:</strong> {message.message}
+                  </p>
+                  <p className="text-gray-500 mt-4 text-sm">
+                    <strong>Date:</strong> {format(new Date(message.submittedAt), "d MMMM")}
                   </p>
                 </li>
               ))}
