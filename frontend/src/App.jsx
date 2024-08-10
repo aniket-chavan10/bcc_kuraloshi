@@ -19,7 +19,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const minLoadingTime = 3000; // Minimum loader display time (5 seconds)
+    const minLoadingTime = 5000; // Minimum loader display time for small screens (5 seconds)
+    const screenThreshold = 768; // Define small screen threshold (e.g., 768px)
     const start = Date.now();
 
     const handleLoad = () => {
@@ -30,8 +31,13 @@ function App() {
       setTimeout(() => setIsLoading(false), Math.max(remainingTime, 0));
     };
 
-    // Listen for the window load event (fires when the whole page, including all dependent resources, is fully loaded)
-    window.addEventListener('load', handleLoad);
+    if (window.innerWidth <= screenThreshold) {
+      // Small screen, always display loader for 5 seconds
+      setTimeout(() => setIsLoading(false), minLoadingTime);
+    } else {
+      // Listen for the window load event on larger screens
+      window.addEventListener('load', handleLoad);
+    }
 
     return () => window.removeEventListener('load', handleLoad);
   }, []);
