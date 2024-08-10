@@ -70,7 +70,7 @@ function PlayerOfMonth() {
           duration: 1,
           scrollTrigger: {
             trigger: batsmanRef.current,
-            start: "top 90%", // Start animation when the card is fully visible
+            start: "top 60%", // Start animation when the card is fully visible
             end: "top 70%", // End animation when the top of the card is 70% down the viewport
             scrub: 1,
           },
@@ -92,7 +92,7 @@ function PlayerOfMonth() {
           duration: 1,
           scrollTrigger: {
             trigger: bowlerRef.current,
-            start: "top 90%", // Same start point as batsman
+            start: "top 60%", // Same start point as batsman
             end: "top 70%", // Same end point as batsman
             scrub: 1,
           },
