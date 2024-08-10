@@ -10,6 +10,7 @@ import AddGalleryForm from '../components/AddGalleryForm';
 import AddCarouselForm from '../components/AddCarouselForm';
 import UpdateInformationForm from '../components/UpdateInformationForm';
 import MessageView from '../components/MessageView'; // Import the MessageView component
+import { FaBars, FaTimes } from 'react-icons/fa'; // Import Font Awesome icons for hamburger menu
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -43,7 +44,7 @@ const AdminDashboard = () => {
         className="md:hidden p-4 text-white bg-orange-600 fixed top-0 left-0 z-20"
         onClick={() => setSidebarOpen(!isSidebarOpen)}
       >
-        <span className="text-lg">{isSidebarOpen ? 'Close Menu' : 'Open Menu'}</span>
+        {isSidebarOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
       </button>
 
       {/* Sidebar */}
