@@ -114,7 +114,7 @@ const PlayerRanking = () => {
                       className="w-16 h-16 ml-4 object-cover object-top rounded-full"
                     />
                     <div className="ml-4">
-                      <div className="font-semibold">{player.name}</div>
+                      <div className="font-semibold capitalize">{player.name}</div>
                       <div className="text-sm text-gray-600">{player.role}</div>
                     </div>
                   </div>

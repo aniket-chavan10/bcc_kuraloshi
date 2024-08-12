@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
-import Loader from "./Loader"; // Adjust the import path as needed
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 
@@ -99,7 +98,7 @@ function PlayerOfMonth() {
     }
   }, [bestBatsman, bestBowler]);
 
-  if (loading) return <Loader />;
+  if (loading) return <p>Loading...</p>;
   if (error)
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
