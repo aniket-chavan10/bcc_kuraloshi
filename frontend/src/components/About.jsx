@@ -95,7 +95,9 @@ const About = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return  <div className="absolute inset-0 flex items-center justify-center bg-white">
+    <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+  </div>;
   }
 
   if (error) {
@@ -114,35 +116,37 @@ const About = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-50 "></div>
         </div>
       </div>
-      <div className="text-gray-800 space-y-8">
-        <div>
-          <h2 className="text-3xl font-bold mb-4 about-heading">About {info.clubName}</h2>
-          <p className="mb-4 text-lg about-text">{info.description}</p>
-          <p className="mb-4 text-lg italic about-text">{info.tagline}</p>
-          <div className="flex flex-col md:flex-row md:space-x-4 text-lg about-text">
-            <p>Email: <span className="font-semibold">{info.email}</span></p>
-            <p>Contact Number: <span className="font-semibold">{info.contactNumber}</span></p>
+      {imageLoaded && (
+        <div className="text-gray-800 space-y-8">
+          <div>
+            <h2 className="text-3xl font-bold mb-4 about-heading">About {info.clubName}</h2>
+            <p className="mb-4 text-lg about-text">{info.description}</p>
+            <p className="mb-4 text-lg italic about-text">{info.tagline}</p>
+            <div className="flex flex-col md:flex-row md:space-x-4 text-lg about-text">
+              <p>Email: <span className="font-semibold">{info.email}</span></p>
+              <p>Contact Number: <span className="font-semibold">{info.contactNumber}</span></p>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold mb-4 about-heading">About Jaoli Cricket Association</h2>
+            <p className="mb-4 text-lg about-text">
+              The Jaoli Cricket Association provides a platform for teams like ours. 
+              They organize matches in Mumbai and villages to provide opportunities for players and cricket enthusiasts 
+              who are located in Mumbai for work purposes and those in villages.
+            </p>
+            <p className="mb-4 text-lg about-text">
+              The association plays a crucial role in the development of cricket in our region. 
+              By hosting tournaments and training camps, they ensure that players have the resources and support needed to excel in the sport.
+              Their efforts have led to the discovery of many talented cricketers who have gone on to represent higher leagues and teams.
+            </p>
+            <p className="text-lg about-text">
+              Additionally, the Jaoli Cricket Association fosters a sense of community among cricket lovers. 
+              They bring together players, coaches, and fans, creating a vibrant and supportive cricketing environment.
+              Their initiatives not only promote physical fitness but also encourage a love for the game among the youth.
+            </p>
           </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold mb-4 about-heading">About Jaoli Cricket Association</h2>
-          <p className="mb-4 text-lg about-text">
-            The Jaoli Cricket Association provides a platform for teams like ours. 
-            They organize matches in Mumbai and villages to provide opportunities for players and cricket enthusiasts 
-            who are located in Mumbai for work purposes and those in villages.
-          </p>
-          <p className="mb-4 text-lg about-text">
-            The association plays a crucial role in the development of cricket in our region. 
-            By hosting tournaments and training camps, they ensure that players have the resources and support needed to excel in the sport.
-            Their efforts have led to the discovery of many talented cricketers who have gone on to represent higher leagues and teams.
-          </p>
-          <p className="text-lg about-text">
-            Additionally, the Jaoli Cricket Association fosters a sense of community among cricket lovers. 
-            They bring together players, coaches, and fans, creating a vibrant and supportive cricketing environment.
-            Their initiatives not only promote physical fitness but also encourage a love for the game among the youth.
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

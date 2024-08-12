@@ -79,7 +79,9 @@ function AllTeam() {
     }
   }, [players]);
 
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  if (loading) return  <div className="absolute inset-0 flex items-center justify-center bg-white">
+  <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+</div>;
   if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
 
   const batsmen = players.filter((player) => player.role === "Batsman");
@@ -137,13 +139,13 @@ function AllTeam() {
   );
 
   return (
-    <div className="container mx-auto py-10 md:mt-16 mt-5 px-2 sm:px-4">
+    <div className="container mx-auto py-10 md:mt-16 mt-1 px-2 sm:px-4">
       {batsmen.length > 0 && (
         <div className="mb-8">
           <div className="text-center relative my-6">
             <hr className="styled-hr absolute left-0 right-0 mx-auto top-3 border-1 border-orange-400 -z-10" />
             <h3 className="font-bold inline-block bg-orange-600 text-white px-3 rounded-2xl text-base sm:text-lg capitalize">
-              Batsman
+              BATSMEN'S
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -158,7 +160,7 @@ function AllTeam() {
           <div className="text-center relative mb-6">
             <hr className="styled-hr absolute left-0 right-0 mx-auto top-3 border-1 border-orange-400 -z-10" />
             <h3 className="font-bold inline-block bg-orange-600 text-white px-3 rounded-2xl text-base sm:text-lg capitalize">
-              All-rounder
+              ALL-ROUNDER'S
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -173,7 +175,7 @@ function AllTeam() {
           <div className="text-center relative mb-6">
             <hr className="styled-hr absolute left-0 right-0 mx-auto top-3 border-1 border-orange-400 -z-10" />
             <h3 className="font-bold inline-block bg-orange-600 text-white px-3 rounded-2xl text-base sm:text-lg capitalize">
-              Bowler
+              BOWLER'S
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

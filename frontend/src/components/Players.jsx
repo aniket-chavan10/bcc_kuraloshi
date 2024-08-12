@@ -36,25 +36,36 @@ function Players() {
   }, []);
 
   useEffect(() => {
-    cardsRef.current.forEach((card, index) => {
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            end: "top 70%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+    // Clear existing ScrollTriggers to avoid duplication
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+    cardsRef.current.forEach((card) => {
+      if (card) {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 100%",
+              end: "bottom 0%",
+              toggleActions: "play reverse play reverse",
+              // markers: true, // Uncomment this line to see the trigger markers for debugging
+            },
+          }
+        );
+      }
     });
-  }, [playersData]);
+
+    // Cleanup function to kill all ScrollTriggers when component unmounts
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [playersData, isSmallScreen]);
 
   const nextPage = () => {
     if (currentPage + playersPerPage < playersData.length) {

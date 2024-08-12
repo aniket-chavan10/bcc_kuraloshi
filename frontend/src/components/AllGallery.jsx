@@ -73,8 +73,9 @@ const AllGallery = () => {
 
   return (
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
-      <h2 className="text-2xl font-bold mb-4">Gallery</h2>
-      {isLoading && <p>Loading gallery...</p>}
+      {isLoading &&  <div className="absolute inset-0 flex items-center justify-center bg-white">
+            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+          </div>}
       {error && <p>Error fetching gallery: {error.message}</p>}
       {galleryData.length > 0 && (
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">

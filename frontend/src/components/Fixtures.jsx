@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fetchFixtures } from "../services/api";
+import { gsap } from "gsap";
 
 const defaultLogo = "/default-image.jpg"; // Path to your default image
 
@@ -7,6 +8,7 @@ const Fixtures = () => {
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const fixtureRefs = useRef([]); // To hold refs for each fixture card
 
   useEffect(() => {
     const getFixtures = async () => {
@@ -24,8 +26,28 @@ const Fixtures = () => {
     getFixtures();
   }, []);
 
+  useEffect(() => {
+    if (fixtures.length > 0) {
+      gsap.fromTo(
+        fixtureRefs.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+        }
+      );
+    }
+  }, [fixtures]);
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -33,12 +55,12 @@ const Fixtures = () => {
   }
 
   return (
-    <div className="mt-24 mb-10 px-4">
+    <div className="mt-16 md:mt-24 mb-10 px-4">
       <ul>
         {fixtures.length === 0 ? (
           <li>No fixtures available</li>
         ) : (
-          fixtures.map((fixture) => {
+          fixtures.map((fixture, index) => {
             const date = new Date(fixture.date);
             const formattedDate = `${date.getDate()} ${date.toLocaleString(
               "default",
@@ -49,14 +71,18 @@ const Fixtures = () => {
             });
 
             return (
-              <li key={fixture._id} className="mb-4">
+              <li
+                key={fixture._id}
+                ref={(el) => (fixtureRefs.current[index] = el)}
+                className="mb-4"
+              >
                 <div className="w-full h-10 bg-orange-500 flex items-center px-4 py-1">
                   <span className="text-white font-bold">
                     {formattedDate} |{" "}
                     <span className="font-thin">{formattedDay}</span>
                   </span>
                 </div>
-                <div className="shadow-md p-3">
+                <div className="shadow-lg p-3">
                   <div className="flex flex-col md:flex-row mb-4 md:items-center md:space-x-4">
                     <div className="flex flex-col items-center mb-4 md:mb-0 flex-wrap">
                       <h1 className="font-black text-zinc-900 text-xl md:text-2xl">

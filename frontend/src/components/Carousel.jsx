@@ -40,14 +40,18 @@ const Carousel = () => {
         { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
       );
     }
-  }, [currentIndex]); // Trigger animation on slide change
+  }, [currentIndex]);
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -55,7 +59,7 @@ const Carousel = () => {
   }
 
   return (
-    <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-6">
+    <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-2">
       <div className="relative w-full">
         <div
           className="whitespace-nowrap transition-transform duration-1000 ease-in-out"
