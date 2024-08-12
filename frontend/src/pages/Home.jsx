@@ -60,29 +60,31 @@ function Home() {
   }
 
   return (
-    <div className="relative" ref={mainRef}>
+    <div className="relative">
       <Navbar /> {/* Always render Navbar */}
-      <Suspense fallback={<Loader />}>
-        <MainLayout />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <LatestNews />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <Players />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <Gallery />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <PlayerOfMonth />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <InstaFeed />
-      </Suspense>
-      <Suspense fallback={<Loader />}>
-        <Footer />
-      </Suspense>
+      <div ref={mainRef}> {/* Only animate components inside mainRef */}
+        <Suspense fallback={<Loader />}>
+          <MainLayout />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <LatestNews />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <Players />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <Gallery />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <PlayerOfMonth />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <InstaFeed />
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <Footer />
+        </Suspense>
+      </div>
     </div>
   );
 }

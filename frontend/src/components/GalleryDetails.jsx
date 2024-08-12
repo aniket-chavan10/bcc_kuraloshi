@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchGalleryItemById } from "../services/api";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const GalleryDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [galleryItem, setGalleryItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,11 +30,12 @@ const GalleryDetail = () => {
 
     fetchData();
   }, [id]);
-  
+
   useEffect(() => {
     // Scroll to the top whenever the component is mounted or location changes
     window.scrollTo(0, 0);
   }, [location]);
+
   useEffect(() => {
     if (galleryItem) {
       gsap.fromTo(
@@ -58,6 +61,10 @@ const GalleryDetail = () => {
     }
   }, [galleryItem]);
 
+  const handleGoBack = () => {
+    navigate(-1); // This will navigate back to the previous page
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching gallery item: {error.message}</p>;
 
@@ -70,7 +77,16 @@ const GalleryDetail = () => {
   ].filter(Boolean); // Combine and filter out any null/undefined values
 
   return (
-    <div className="container mx-auto py-10 mt-20 mb-10 max-w-8xl">
+    <div className="container mx-auto py-10 md:mt-20 mt-10 mb-10 max-w-8xl">
+      {/* Go Back Button */}
+      <button
+        onClick={handleGoBack}
+        className="flex items-center text-orange-600 hover:text-orange-800 mb-4"
+      >
+        <ArrowLeftIcon className="w-5 h-5 mr-2" />
+        Go Back
+      </button>
+
       {/* Small Images Grid including Thumbnail */}
       {allImages.length > 0 && (
         <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
