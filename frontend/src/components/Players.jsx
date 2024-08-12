@@ -52,7 +52,7 @@ function Players() {
             scrollTrigger: {
               trigger: card,
               start: "top 100%",
-              end: "bottom 0%",
+              end: "bottom 50%",
               toggleActions: "play reverse play reverse",
               // markers: true, // Uncomment this line to see the trigger markers for debugging
             },
