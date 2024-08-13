@@ -77,7 +77,7 @@ const PlayerRanking = () => {
               <img
                 src={sortedPlayers[0].image}
                 alt={sortedPlayers[0].name}
-                className="w-24 h-full md:w-40 md:h-full absolute top-0 left-0 rounded-full object-cover"
+                className="w-24 h-full md:w-32 md:h-full absolute top-0 left-0  object-cover ml-5 "
               />
               <div className="md:ml-40 ml-24">
                 <div className="md:text-6xl text-3xl font-bold">

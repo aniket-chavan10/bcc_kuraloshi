@@ -10,7 +10,7 @@ const ImageWithLoader = ({ src, alt }) => {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className="relative w-full h-auto">
+    <div className="relative w-full h-full">
       {loading && (
         <div className="absolute inset-10 flex items-center justify-center bg-white">
           <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
@@ -21,7 +21,7 @@ const ImageWithLoader = ({ src, alt }) => {
         alt={alt}
         onLoad={() => setLoading(false)}
         style={{ display: loading ? "none" : "block" }}
-        className="w-full h-auto object-cover"
+        className="w-full h-full object-contain"
       />
     </div>
   );
@@ -79,14 +79,24 @@ function AllTeam() {
     }
   }, [players]);
 
-  if (loading) return  <div className="absolute inset-0 flex items-center justify-center bg-white">
-  <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
-</div>;
-  if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+  if (loading)
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        {error}
+      </div>
+    );
 
   const batsmen = players.filter((player) => player.role === "Batsman");
   const bowlers = players.filter((player) => player.role === "Bowler");
-  const allRounders = players.filter((player) => player.role === "All-rounder");
+  const allRounders = players.filter(
+    (player) => player.role === "All-rounder"
+  );
 
   const Card = ({ player, index }) => (
     <div
@@ -94,7 +104,9 @@ function AllTeam() {
       className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64"
       style={{ backgroundImage: `url(${playerBg})` }}
     >
-      <ImageWithLoader src={player.image} alt={player.name} />
+      <div className="h-full">
+        <ImageWithLoader src={player.image} alt={player.name} />
+      </div>
       <div className="absolute bottom-0 left-0 w-full bg-gray-900 bg-opacity-80 text-white px-2 py-1 rounded-t-lg transform translate-y-28 sm:translate-y-28 group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
         <h3 className="text-2xl sm:text-2xl font-semibold text-orange-600 capitalize">
           {player.name}
@@ -165,7 +177,11 @@ function AllTeam() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allRounders.map((player, index) => (
-              <Card key={player._id} player={player} index={index + batsmen.length} />
+              <Card
+                key={player._id}
+                player={player}
+                index={index + batsmen.length}
+              />
             ))}
           </div>
         </div>
@@ -180,7 +196,11 @@ function AllTeam() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {bowlers.map((player, index) => (
-              <Card key={player._id} player={player} index={index + batsmen.length + allRounders.length} />
+              <Card
+                key={player._id}
+                player={player}
+                index={index + batsmen.length + allRounders.length}
+              />
             ))}
           </div>
         </div>

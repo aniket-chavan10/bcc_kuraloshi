@@ -91,7 +91,7 @@ function Players() {
                 <img
                   src={player.image ? player.image : "/default-image.jpg"}
                   alt={player.name}
-                  className="object-contain max-h-full max-w-full"
+                  className="object-cover max-h-full max-w-full"
                   onError={(e) => {
                     e.target.src = "/default-image.jpg"; // Fallback to default image if there's an error
                   }}

@@ -72,7 +72,7 @@ const AllGallery = () => {
   };
 
   return (
-    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
+    <div className="container mx-auto py-10 mt-3 md:mt-16 px-4 md:px-0">
       {isLoading &&  <div className="absolute inset-0 flex items-center justify-center bg-white">
             <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
           </div>}

@@ -58,7 +58,7 @@ const LatestNews = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "long" });
+    const month = date.toLocaleString("default", { month: "short" });
     return `${day} ${month}`;
   };
 
@@ -101,15 +101,17 @@ const LatestNews = () => {
             <div className="py-2 relative">
               <h3 className="text-lg font-bold mb-2">{newsData[0].title}</h3>
               <p className="text-gray-700 truncate overflow-hidden">{newsData[0].description}</p>
-              <Link
-                to={`/news/${newsData[0]._id}`}
-                className="inline-block mt-2 text-sm font-bold text-black hover:text-orange-600 cursor-pointer"
-              >
-                Read More
-              </Link>
-              <span className="absolute top-0 right-0 p-1 text-xs font-bold bg-gradient-to-r from-orange-600 to-orange-500 text-white">
-                {formatDate(newsData[0].createdAt)}
-              </span>
+              <div className="flex justify-between items-center mt-2">
+                <Link
+                  to={`/news/${newsData[0]._id}`}
+                  className="text-sm font-bold text-black hover:text-orange-600 cursor-pointer"
+                >
+                  Read More
+                </Link>
+                <span className="text-sm font-bold text-black px-2 py-1">
+                  {formatDate(newsData[0].createdAt)}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -123,18 +125,20 @@ const LatestNews = () => {
                 src={newsItem.imageUrl} // Direct URL to the image
                 alt={newsItem.title}
               />
-              <div className="py-2 pr-10 relative flex flex-col">
+              <div className="py-2 relative flex flex-col">
                 <h3 className="text-sm font-bold mb-2">{newsItem.title}</h3>
                 <p className="text-gray-700 truncate overflow-hidden text-xs">{newsItem.description}</p>
-                <Link
-                  to={`/news/${newsItem._id}`}
-                  className="inline-block mt-2 text-sm font-bold text-black hover:text-orange-600 cursor-pointer"
-                >
-                  Read More
-                </Link>
-                <span className="absolute top-0 right-0 p-1 text-xs font-bold bg-orange-600 text-white">
-                  {formatDate(newsItem.createdAt)}
-                </span>
+                <div className="flex justify-between items-center mt-2">
+                  <Link
+                    to={`/news/${newsItem._id}`}
+                    className="text-sm font-bold text-black hover:text-orange-600 cursor-pointer"
+                  >
+                    Read More
+                  </Link>
+                  <span className="text-sm font-bold text-black px-2 py-1">
+                    {formatDate(newsItem.createdAt)}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
