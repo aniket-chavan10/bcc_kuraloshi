@@ -10,6 +10,7 @@ function Players() {
   const [playersData, setPlayersData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+  const [isLoaded, setIsLoaded] = useState(false); // New loading state
   const cardsRef = useRef([]);
 
   const playersPerPage = isSmallScreen ? 1 : 4;
@@ -19,8 +20,10 @@ function Players() {
       try {
         const data = await fetchPlayersData();
         setPlayersData(data);
+        setIsLoaded(true); // Set to true when data is loaded
       } catch (error) {
         console.error("Error fetching player data:", error);
+        setIsLoaded(true); // Ensure component is marked as loaded even if there's an error
       }
     }
     fetchData();
@@ -36,25 +39,27 @@ function Players() {
   }, []);
 
   useEffect(() => {
-    cardsRef.current.forEach((card, index) => {
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            end: "top 70%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    });
-  }, [playersData]);
+    if (isLoaded) {
+      cardsRef.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              end: "top 70%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      });
+    }
+  }, [playersData, isLoaded]);
 
   const nextPage = () => {
     if (currentPage + playersPerPage < playersData.length) {
@@ -67,6 +72,14 @@ function Players() {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
+
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <p>Loading...</p> {/* You can replace this with a more sophisticated loader */}
+      </div>
+    );
+  }
 
   return (
     <div className="relative overflow-hidden w-full mx-auto py-10 container px-4">

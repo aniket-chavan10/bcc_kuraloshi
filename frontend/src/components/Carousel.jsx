@@ -48,7 +48,7 @@ const Carousel = () => {
 
   if (isLoading) {
     return (
-      <p>Loading...</p>
+      <p></p>
     );
   }
 

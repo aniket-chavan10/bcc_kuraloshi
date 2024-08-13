@@ -71,9 +71,6 @@ const LatestNews = () => {
 
     return (
       <div className="relative w-full h-80">
-        {loading && (
-          <p>Loading...</p>
-        )}
         <img
           src={src}
           alt={alt}
@@ -88,7 +85,6 @@ const LatestNews = () => {
   return (
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <h2 className="text-2xl font-bold mb-4">Latest News</h2>
-      {isLoading && <p>Loading news...</p>}
       {error && <p>Error fetching news: {error.message}</p>}
       {newsData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
