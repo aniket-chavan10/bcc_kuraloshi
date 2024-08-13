@@ -9,7 +9,7 @@ const LatestNews = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleNewsCount, setVisibleNewsCount] = useState(7);
-  
+
   const newsContainerRef = useRef(null);
 
   useEffect(() => {
@@ -50,6 +50,7 @@ const LatestNews = () => {
             scrub: 1,
             toggleActions: "play none none reset",
           },
+          onComplete: () => setIsLoading(false), // Set isLoading to false after animation completes
         }
       );
     }
@@ -75,12 +76,20 @@ const LatestNews = () => {
           src={src}
           alt={alt}
           onLoad={() => setLoading(false)}
-          style={{ display: loading ? 'none' : 'block' }}
+          style={{ display: loading ? "none" : "block" }}
           className="w-full h-full object-cover"
         />
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
