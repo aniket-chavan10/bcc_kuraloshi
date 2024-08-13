@@ -43,8 +43,8 @@ function Home() {
   }, [isLoading]);
 
   const Loader = () => (
-    <div className="flex items-center justify-center w-full h-full py-8">
-      <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-300 rounded-full"></div>
+    <div className="flex items-center justify-center w-full h-full absolute top-0 left-0 bg-white z-50">
+      <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
     </div>
   );
 
@@ -52,9 +52,7 @@ function Home() {
     return (
       <div className="relative w-full h-screen flex items-center justify-center bg-white z-50">
         <Navbar /> {/* Always render Navbar */}
-        <div className="absolute inset-0 flex items-center justify-center bg-white">
-          <Loader />
-        </div>
+        <Loader />
       </div>
     );
   }
