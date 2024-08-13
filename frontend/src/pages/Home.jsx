@@ -44,7 +44,7 @@ function Home() {
 
   const Loader = () => (
     <div className="flex items-center justify-center w-full h-full py-8">
-      <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-300 rounded-full"></div>
     </div>
   );
 
