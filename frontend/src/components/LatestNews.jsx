@@ -34,25 +34,28 @@ const LatestNews = () => {
 
   useEffect(() => {
     if (newsData.length > 0) {
-      gsap.fromTo(
-        newsContainerRef.current.querySelectorAll(".news-item"),
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: newsContainerRef.current,
-            start: "top 80%",
-            end: "bottom 100%",
-            scrub: 1,
-            toggleActions: "play none none reset",
-          },
-          onComplete: () => setIsLoading(false), // Set isLoading to false after animation completes
-        }
-      );
+      newsData.forEach((_, index) => {
+        const newsItemRef = newsContainerRef.current.querySelector(
+          `.news-item-${index}`
+        );
+        
+        gsap.fromTo(
+          newsItemRef,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: newsItemRef,
+              start: "top 80%",
+              end: "bottom 100%",
+              toggleActions: "play none none reset",
+            },
+          }
+        );
+      });
     }
   }, [newsData, visibleNewsCount]);
 
@@ -98,7 +101,7 @@ const LatestNews = () => {
       {newsData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
           {/* Large news item */}
-          <div className="md:col-span-2 shadow-md overflow-hidden news-item">
+          <div className="md:col-span-2 shadow-md overflow-hidden news-item news-item-0">
             <ImageWithLoader
               src={newsData[0].imageUrl} // Direct URL to the image
               alt={newsData[0].title}
@@ -121,10 +124,10 @@ const LatestNews = () => {
           </div>
 
           {/* Smaller news items */}
-          {newsData.slice(1, visibleNewsCount).map((newsItem) => (
+          {newsData.slice(1, visibleNewsCount).map((newsItem, index) => (
             <div
               key={newsItem._id}
-              className="shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item"
+              className={`shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item news-item-${index + 1}`}
             >
               <ImageWithLoader
                 src={newsItem.imageUrl} // Direct URL to the image

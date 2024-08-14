@@ -37,11 +37,12 @@ const Gallery = () => {
       if (item) {
         gsap.fromTo(
           item,
-          { opacity: 0, y: 50 },
+          { opacity: 0, scale: 0.9, y: 50 },
           {
             opacity: 1,
+            scale: 1,
             y: 0,
-            duration: 1,
+            duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
               trigger: item,
@@ -58,7 +59,7 @@ const Gallery = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "long" });
+    const month = date.toLocaleString("default", { month: "short" });
     return `${day} ${month}`;
   };
 
@@ -88,15 +89,17 @@ const Gallery = () => {
 
               <div className="py-2 pr-10 relative">
                 <h3 className="text-sm font-bold mb-2">{item.caption}</h3>
-                <Link
-                  to={`/gallery/${item._id}`}
-                  className="inline-block mt-2 text-sm font-bold text-zinc-800 hover:text-orange-600 cursor-pointer"
-                >
-                  View More
-                </Link>
-                <span className="absolute top-0 right-0 p-1 text-xs font-bold bg-gradient-to-r from-orange-600 to-orange-500 text-white">
-                  {formatDate(item.createdAt)}
-                </span>
+                <div className="flex justify-between items-center mt-2">
+                  <Link
+                    to={`/gallery/${item._id}`}
+                    className="inline-block mt-2 text-sm font-bold text-zinc-800 hover:text-orange-600 cursor-pointer"
+                  >
+                    View More
+                  </Link>
+                  <span className="text-sm font-bold text-black px-2 py-1">
+                    {formatDate(item.createdAt)}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
