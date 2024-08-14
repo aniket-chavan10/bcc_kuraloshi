@@ -23,12 +23,22 @@ function Home() {
     // Scroll to the top whenever the component is mounted or location changes
     window.scrollTo(0, 0);
 
-    // Simulate loading delay for demonstration, remove this in production
-    const loadTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000); // Adjust the timeout duration based on actual loading time
+    // Create a list of promises for all lazy-loaded components
+    const componentPromises = [
+      import("../components/LatestNews"),
+      import("../components/Gallery"),
+      import("../components/InstaFeed"),
+      import("../components/Players"),
+      import("../components/PlayerOfMonth"),
+      import("../components/Footer"),
+      import("../components/MainLayout"),
+    ];
 
-    return () => clearTimeout(loadTimeout);
+    // Wait for all components to load before setting isLoading to false
+    Promise.all(componentPromises).then(() => {
+      setIsLoading(false);
+    });
+
   }, [location]);
 
   useEffect(() => {
