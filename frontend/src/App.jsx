@@ -7,7 +7,7 @@ import Schedule from './pages/Schedule';
 import AboutUs from './pages/AboutUs';
 import Gallery from './pages/Gallery';
 import GalleryDetails from './pages/GalleryDetails';
-import NewsDetails from './pages/NewsDetails';
+import NewsPage from './pages/NewsPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContactUs from './pages/ContactUs';
 import Login from './components/Login';
@@ -57,7 +57,7 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/gallery/:id" element={<GalleryDetails />} />
-            <Route path="/news/:id" element={<NewsDetails />} />
+            <Route path="/news/:id" element={<NewsPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/rankings" element={<PlayersRanking />} />

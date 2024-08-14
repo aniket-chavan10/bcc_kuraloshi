@@ -7,7 +7,9 @@ function SignUpPage() {
   return (
     <>
       <Navbar/>
+      <div className="min-h-screen">
       <SignUp/>
+      </div>
       <Footer/>
     </>
   )

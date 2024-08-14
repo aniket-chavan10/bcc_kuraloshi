@@ -7,7 +7,9 @@ function LoginPage() {
   return (
     <>
       <Navbar/>
+      <div className="min-h-screen">
       <Login/>
+      </div>
       <Footer/>
     </>
   )

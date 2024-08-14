@@ -3,14 +3,16 @@ import Navbar from "../components/Navbar";
 import NewsDetails from "../components/NewsDetails";
 import Footer from "../components/Footer";
 
-function Gallery() {
+function NewsPage() {
   return (
     <>
       <Navbar />
-      <NewsDetails />
+      <div className="min-h-screen"> {/* Ensure the content takes up the full height */}
+        <NewsDetails />
+      </div>
       <Footer />
     </>
   );
 }
 
-export default Gallery;
+export default NewsPage;

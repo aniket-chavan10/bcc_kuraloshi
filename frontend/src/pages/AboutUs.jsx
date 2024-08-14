@@ -6,7 +6,9 @@ function AboutUs() {
   return (
     <>
       <Navbar/>
+      <div className="min-h-screen">
       <About/>
+      </div>
       <Footer/>
     </>
   )

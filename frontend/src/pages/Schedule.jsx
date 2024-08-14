@@ -7,7 +7,9 @@ function Schedule() {
   return (
     <>
       <Navbar />
+      <div className="min-h-screen">
       <Fixtures />
+      </div>
       <Footer />
     </>
   );

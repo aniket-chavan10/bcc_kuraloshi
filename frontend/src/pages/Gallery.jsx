@@ -7,7 +7,9 @@ function Gallery() {
   return (
     <>
       <Navbar />
-      <AllGallery />
+      <div className="min-h-screen">
+        <AllGallery />
+      </div>
       <Footer />
     </>
   );
