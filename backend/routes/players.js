@@ -114,4 +114,34 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
+router.put("/:id/stats", async (req, res) => {
+  try {
+    const playerId = req.params.id;
+    const { runs, wickets } = req.body;
+
+    const player = await Player.findById(playerId);
+    if (!player) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+
+    const currentMonth = moment().format('YYYY-MM'); // e.g., "2024-08"
+    const existingMonth = player.monthlyStats.find(stat => stat.month === currentMonth);
+
+    if (existingMonth) {
+      // Update existing month's stats
+      existingMonth.runs += runs;
+      existingMonth.wickets += wickets;
+    } else {
+      // Add new month's stats
+      player.monthlyStats.push({ month: currentMonth, runs, wickets });
+    }
+
+    await player.save();
+    res.json({ message: "Player stats updated successfully", player });
+  } catch (error) {
+    console.error("Error updating player stats:", error);
+    res.status(500).json({ message: "Failed to update player stats", error });
+  }
+});
+
 module.exports = router;

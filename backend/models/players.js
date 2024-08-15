@@ -1,5 +1,20 @@
 const mongoose = require("mongoose");
 
+const MonthlyStatsSchema = new mongoose.Schema({
+  month: {
+    type: String, // Format: "YYYY-MM"
+    required: true,
+  },
+  runs: {
+    type: Number,
+    default: 0,
+  },
+  wickets: {
+    type: Number,
+    default: 0,
+  }
+});
+
 const PlayerSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -44,7 +59,8 @@ const PlayerSchema = new mongoose.Schema({
   instaUrl:{
     type: String,
     required: false
-  }
+  },
+  monthlyStats: [MonthlyStatsSchema]
 });
 
 module.exports = mongoose.model("playersModel", PlayerSchema);
