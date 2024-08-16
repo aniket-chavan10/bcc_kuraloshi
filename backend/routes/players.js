@@ -78,7 +78,7 @@ router.get('/', async (req, res) => {
 });
 
 // PUT endpoint for updating a player
-router.put("/:id", upload.single("image"), async (req, res) => {
+router.put("/:id/profile", upload.single("image"), async (req, res) => {
   try {
     const playerId = req.params.id;
     let imageUrl = req.body.image; // Use existing image if not updated
@@ -119,20 +119,22 @@ router.put("/:id/stats", async (req, res) => {
     const playerId = req.params.id;
     const { runs, wickets } = req.body;
 
+    if (typeof runs !== 'number' || typeof wickets !== 'number') {
+      return res.status(400).json({ message: 'Invalid data types for runs or wickets' });
+    }
+
     const player = await Player.findById(playerId);
     if (!player) {
       return res.status(404).json({ message: "Player not found" });
     }
 
-    const currentMonth = moment().format('YYYY-MM'); // e.g., "2024-08"
-    const existingMonth = player.monthlyStats.find(stat => stat.month === currentMonth);
+    const currentMonth = moment().format('YYYY-MM');
+    let existingMonth = player.monthlyStats.find(stat => stat.month === currentMonth);
 
     if (existingMonth) {
-      // Update existing month's stats
       existingMonth.runs += runs;
       existingMonth.wickets += wickets;
     } else {
-      // Add new month's stats
       player.monthlyStats.push({ month: currentMonth, runs, wickets });
     }
 
@@ -140,8 +142,15 @@ router.put("/:id/stats", async (req, res) => {
     res.json({ message: "Player stats updated successfully", player });
   } catch (error) {
     console.error("Error updating player stats:", error);
-    res.status(500).json({ message: "Failed to update player stats", error });
+    res.status(500).json({
+      message: "Failed to update player stats",
+      error: error.message, // Include error message for debugging
+      stack: error.stack // Include stack trace for more context
+    });
   }
 });
+
+
+
 
 module.exports = router;

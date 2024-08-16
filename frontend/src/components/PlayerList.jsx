@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import PlayerEditForm from "../components/PlayerEditForm";
-import { fetchPlayersData, updatePlayerData } from "../services/api";
+import PlayerProfileForm from "../components/PlayerProfileForm";
+import PlayerStatsForm from "../components/PlayerStatsForm";
+import { fetchPlayersData, updatePlayerProfile, updatePlayerStats } from "../services/api";
 
 const PlayersList = () => {
   const [playersData, setPlayersData] = useState([]);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [editType, setEditType] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +21,19 @@ const PlayersList = () => {
     fetchData();
   }, []);
 
-  const handleEditClick = (player) => {
+  const handleEditClick = (player, type) => {
     setSelectedPlayer(player);
+    setEditType(type);
   };
 
   const handleSave = async (updatedPlayer) => {
     try {
-      await updatePlayerData(selectedPlayer._id, updatedPlayer);
+      if (editType === "profile") {
+        await updatePlayerProfile(selectedPlayer._id, updatedPlayer);
+      } else if (editType === "stats") {
+        await updatePlayerStats(selectedPlayer._id, updatedPlayer);
+      }
+
       setPlayersData((prevData) =>
         prevData.map((player) =>
           player._id === selectedPlayer._id
@@ -34,6 +42,7 @@ const PlayersList = () => {
         )
       );
       setSelectedPlayer(null);
+      setEditType("");
     } catch (error) {
       console.error("Failed to update player:", error);
     }
@@ -41,58 +50,54 @@ const PlayersList = () => {
 
   const handleCancel = () => {
     setSelectedPlayer(null);
+    setEditType("");
   };
 
   return (
-    <div className="container mx-auto mt-12 p-8 bg-gradient-to-br from-orange-50 to-orange-200 rounded-lg shadow-md border border-orange-300">
-      <h2 className="text-3xl font-bold mb-8 text-center text-orange-600">
-        Edit Players
+    <div className="container mx-auto mt-8 p-4 bg-gray-50 rounded-lg shadow-lg max-w-screen-lg">
+      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-700">
+        Manage Players
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
         {playersData.map((player) => (
           <div
             key={player._id}
-            className="relative flex bg-white rounded-lg shadow-md overflow-hidden"
+            className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
           >
-            <button
-              onClick={() => handleEditClick(player)}
-              className="absolute top-2 right-2 bg-orange-600 text-white px-3 py-1 rounded hover:bg-orange-700 transition duration-300"
-            >
-              Edit
-            </button>
-            <div className="w-1/3 h-full">
-              <img
-                src={player.image}
-                alt={player.name}
-                className="w-full h-full object-cover"
-                onError={(e) => (e.target.src = 'path/to/placeholder-image.jpg')} // Fallback image
-              />
-            </div>
-            <div className="w-2/3 p-4">
-              <h3 className="text-lg font-bold mb-2 text-orange-600 truncate">
-                {player.name}
-              </h3>
-              <p className="text-sm mb-1 font-bold">
-                Role: <span className="font-normal">{player.role}</span>
-              </p>
-              <p className="text-sm mb-1 font-bold">
-                Matches: <span className="font-normal">{player.matches}</span>
-              </p>
-              <p className="text-sm mb-1 font-bold">
-                Runs: <span className="font-normal">{player.runs}</span>
-              </p>
-              <p className="text-sm mb-1 font-bold">
-                Wickets: <span className="font-normal">{player.wickets}</span>
-              </p>
-              <p className="text-sm mb-1 font-bold">
-                Best Score: <span className="font-normal">{player.bestScore}</span>
-              </p>
+            <img
+              src={player.image || "path/to/placeholder-image.jpg"}
+              alt={player.name}
+              className="rounded-t-lg w-full h-44 object-cover"
+            />
+            <div className="flex flex-col items-center justify-center p-4">
+              <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => handleEditClick(player, "profile")}
+                  className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
+                >
+                  Edit Profile
+                </button>
+                <button
+                  onClick={() => handleEditClick(player, "stats")}
+                  className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
+                >
+                  Edit Stats
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      {selectedPlayer && (
-        <PlayerEditForm
+      {selectedPlayer && editType === "profile" && (
+        <PlayerProfileForm
+          player={selectedPlayer}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
+      {selectedPlayer && editType === "stats" && (
+        <PlayerStatsForm
           player={selectedPlayer}
           onSave={handleSave}
           onCancel={handleCancel}

@@ -73,15 +73,14 @@ export const addPlayerData = async (data) => {
   }
 };
 
-
-export async function updatePlayerData(playerId, playerData) {
+export async function updatePlayerProfile(playerId, playerData) {
   try {
     const formData = new FormData();
     Object.keys(playerData).forEach(key => {
       formData.append(key, playerData[key]);
     });
 
-    const response = await fetch(`${BASE_URL}/players/${playerId}`, {
+    const response = await fetch(`${BASE_URL}/players/${playerId}/profile`, {
       method: 'PUT',
       body: formData,
     });
@@ -89,16 +88,42 @@ export async function updatePlayerData(playerId, playerData) {
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Error response from server:', errorData);
-      throw new Error("Failed to update player data");
+      throw new Error("Failed to update player profile");
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error updating player data:", error);
+    console.error("Error updating player profile:", error);
     throw error;
   }
 }
+
+export async function updatePlayerStats(playerId, statsData) {
+  try {
+    const response = await fetch(`${BASE_URL}/players/${playerId}/stats`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(statsData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error response from server:', errorData);
+      throw new Error(`Failed to update player stats: ${errorData.message}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error updating player stats:", error);
+    throw error;
+  }
+}
+
+
 
 
 // Function to fetch news data

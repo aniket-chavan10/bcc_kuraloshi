@@ -17,7 +17,6 @@ function PlayerOfMonth() {
   const bowlerRef = useRef(null);
 
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
-  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     async function getData() {
@@ -30,28 +29,13 @@ function PlayerOfMonth() {
           return;
         }
 
-        // Filter players' stats for the current month
-        const filteredPlayers = players.map((player) => {
-          const monthlyStats = player.stats.filter(
-            (stat) =>
-              new Date(stat.date).getMonth() === new Date().getMonth() &&
-              new Date(stat.date).getFullYear() === currentYear
-          );
-
-          return {
-            ...player,
-            runs: monthlyStats.reduce((sum, stat) => sum + stat.runs, 0),
-            wickets: monthlyStats.reduce((sum, stat) => sum + stat.wickets, 0),
-          };
-        });
-
         // Calculate best batsman
-        const batsman = filteredPlayers.reduce((best, player) =>
+        const batsman = players.reduce((best, player) =>
           player.runs > (best.runs || 0) ? player : best
         );
 
         // Calculate best bowler
-        const bowler = filteredPlayers.reduce((best, player) =>
+        const bowler = players.reduce((best, player) =>
           player.wickets > (best.wickets || 0) ? player : best
         );
 
@@ -66,7 +50,7 @@ function PlayerOfMonth() {
     }
 
     getData();
-  }, [currentYear]);
+  }, []);
 
   useEffect(() => {
     if (bestBatsman && bestBowler) {
@@ -229,13 +213,13 @@ function PlayerOfMonth() {
                     Matches
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBowler?.wickets}{" "}
                   <span className="text-zinc-100 md:text-xs text-sm font-light">
                     Wickets
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBowler?.bestScore}{" "}
                   <span className="text-zinc-100 md:text-xs text-sm font-light">
                     Best Figure
