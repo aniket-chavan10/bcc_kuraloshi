@@ -7,6 +7,72 @@ import ScrollTrigger from "gsap/dist/ScrollTrigger";
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+function PlayerCard({ player, title, stat1, stat2, stat3, imageRef, label }) {
+  return (
+    <div
+      ref={imageRef}
+      className="w-full md:w-1/2 relative overflow-hidden shadow-xl transform-gpu"
+      style={{
+        backgroundImage: `url(${playerBg})`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="absolute top-0 right-2 py-1 px-2 bg-gradient-to-br  from-amber-500 via-yellow-300 to-yellow-400  text-gray-50 font-bold text-sm rounded-b-xl shadow shadow-gray-400 z-20">
+        {label}
+      </div>
+      <div className="flex flex-col md:flex-row h-full items-baseline text-white">
+        <div
+          className="w-full md:w-1/3 relative"
+          style={{ aspectRatio: "3 / 4" }}
+        >
+          <img
+            src={player?.image}
+            alt={player?.name || "Default Image"}
+            className="object-cover w-full h-full absolute inset-0"
+            onError={(e) => {
+              e.target.src = "/default-image.jpg"; // Fallback to default image if there's an error
+            }}
+          />
+        </div>
+        <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none animate-detail">
+          {window.innerWidth < 768 && (
+            <div
+              className="absolute inset-0 z-0 bg-gradient-to-r from-amber-500 to-orange-500 bg-opacity-45"
+            ></div>
+          )}
+          <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail z-10">
+            {stat1.value}{" "}
+            <span className="text-zinc-700 text-xl md:text-lg">{title}</span>
+          </h1>
+          <p className="text-4xl md:text-4xl text-white md:text-gray-800 font-montserrat font-bold capitalize animate-detail z-10">
+            {player?.name}
+          </p>
+          <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail z-10">
+            <p className="bg-black bg-opacity-60 flex flex-col py-1 rounded text-orange-500 font-black text-lg md:text-2xl capitalize w-1/3 animate-detail shadow-lg">
+              {stat1.value}
+              <span className="text-zinc-50 md:text-xs text-sm font-light">
+                {stat1.label}
+              </span>
+            </p>
+            <p className="bg-black bg-opacity-60 flex flex-col py-1 rounded text-orange-500 font-black text-lg md:text-2xl capitalize w-1/3 animate-detail shadow-lg">
+              {stat2.value}{" "}
+              <span className="text-zinc-50 md:text-xs text-sm font-light">
+                {stat2.label}
+              </span>
+            </p>
+            <p className="bg-black bg-opacity-60 flex flex-col py-1 rounded text-orange-500 font-black text-lg md:text-2xl capitalize w-1/3 animate-detail shadow-lg">
+              {stat3.value}{" "}
+              <span className="text-zinc-50 md:text-xs text-sm font-light">
+                {stat3.label}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PlayerOfMonth() {
   const [bestBatsman, setBestBatsman] = useState(null);
   const [bestBowler, setBestBowler] = useState(null);
@@ -115,140 +181,26 @@ function PlayerOfMonth() {
 
       <div className="flex flex-col md:flex-row gap-8 justify-center items-center p-2">
         {/* Best Batsman */}
-        <div
-          ref={batsmanRef}
-          className="w-full md:w-1/2 relative overflow-hidden shadow-xl transform-gpu"
-          style={{
-            backgroundImage: `url(${playerBg})`,
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="flex flex-col md:flex-row h-full items-baseline text-white">
-            <div
-              className="w-full md:w-1/3 relative"
-              style={{ aspectRatio: "3 / 4" }}
-            >
-              <img
-                src={bestBatsman?.image}
-                alt={bestBatsman?.name || "Default Image"}
-                className="object-cover w-full h-full absolute inset-0"
-                onError={(e) => {
-                  e.target.src = "/default-image.jpg"; // Fallback to default image if there's an error
-                }}
-              />
-            </div>
-            <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none animate-detail">
-              {window.innerWidth < 768 && (
-                <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${playerBg})`,
-                    zIndex: -1, // Ensure it stays behind the content
-                    filter: "blur(2px)", // Apply blur effect
-                  }}
-                ></div>
-              )}
-              <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail">
-                {bestBatsman?.runs}{" "}
-                <span className="text-zinc-700 text-xl md:text-lg">
-                  Most Runs
-                </span>
-              </h1>
-              <p className="text-4xl md:text-4xl text-gray-800 font-montserrat font-bold capitalize animate-detail z-10">
-                {bestBatsman?.name}
-              </p>
-              <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail">
-              <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBatsman?.matches}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Matches
-                  </span>
-                </p>
-                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBatsman?.runs}{" "}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Runs
-                  </span>
-                </p>
-                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBatsman?.bestScore}{" "}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Best Score
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlayerCard
+          player={bestBatsman}
+          title="Most Runs"
+          stat1={{ value: bestBatsman?.runs, label: "Runs" }}
+          stat2={{ value: bestBatsman?.matches, label: "Matches" }}
+          stat3={{ value: bestBatsman?.bestScore, label: "Best Score" }}
+          imageRef={batsmanRef}
+          label="Best Batsman"
+        />
 
         {/* Best Bowler */}
-        <div
-          ref={bowlerRef}
-          className="w-full md:w-1/2 relative overflow-hidden shadow-xl transform-gpu"
-          style={{
-            backgroundImage: `url(${playerBg})`,
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="flex flex-col md:flex-row h-full items-baseline text-white">
-            <div
-              className="w-full md:w-1/3 relative"
-              style={{ aspectRatio: "3 / 4" }}
-            >
-              <img
-                src={bestBowler?.image}
-                alt={bestBowler?.name || "Default Image"}
-                className="object-cover w-full h-full absolute inset-0"
-                onError={(e) => {
-                  e.target.src = "/default-image.jpg"; // Fallback to default image if there's an error
-                }}
-              />
-            </div>
-            <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none animate-detail">
-              {window.innerWidth < 768 && (
-                <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${playerBg})`,
-                    zIndex: -1, // Ensure it stays behind the content
-                    filter: "blur(2px)", // Apply blur effect
-                  }}
-                ></div>
-              )}
-
-              {/* Content */}
-              <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail z-10">
-                {bestBowler?.wickets}{" "}
-                <span className="text-zinc-700 text-xl md:text-lg">
-                  Most Wickets
-                </span>
-              </h1>
-              <p className="text-4xl md:text-4xl text-gray-800 font-montserrat font-bold capitalize animate-detail z-10">
-                {bestBowler?.name}
-              </p>
-              <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail z-10">
-                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBowler?.matches}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Matches
-                  </span>
-                </p>
-                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBowler?.wickets}{" "}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Wickets
-                  </span>
-                </p>
-                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
-                  {bestBowler?.bestScore}{" "}
-                  <span className="text-zinc-700 md:text-xs text-sm font-light">
-                    Best Figure
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlayerCard
+          player={bestBowler}
+          title="Most Wickets"
+          stat1={{ value: bestBowler?.wickets, label: "Wickets" }}
+          stat2={{ value: bestBowler?.matches, label: "Matches" }}
+          stat3={{ value: bestBowler?.bestScore, label: "Best Figure" }}
+          imageRef={bowlerRef}
+          label="Best Bowler"
+        />
       </div>
     </div>
   );
