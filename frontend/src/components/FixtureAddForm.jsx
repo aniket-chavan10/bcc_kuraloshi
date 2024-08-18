@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { addFixtureData } from '../services/api'; // Adjust path as per your project structure
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { addFixtureData } from '../services/api';
 
 const FixtureAddForm = () => {
   const [fixtureData, setFixtureData] = useState({
     date: '',
     matchNumber: '',
-    matchStatus: 'upcoming', // Default match status
-    team1: {
-      name: '',
-      score: '0/0', // Default score
-      logo: null, // File object for logo
-    },
-    team2: {
-      name: '',
-      score: '0/0', // Default score
-      logo: null, // File object for logo
-    },
-    matchResult: 'Match is yet to begin', // Default match result
+    matchStatus: 'upcoming',
+    team1Name: '',
+    team1Score: '0/0',
+    team1Logo: null,
+    team2Name: '',
+    team2Score: '0/0',
+    team2Logo: null,
+    matchResult: 'Match is yet to begin',
     venue: '',
     matchTime: '',
   });
@@ -24,6 +21,8 @@ const FixtureAddForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -38,16 +37,12 @@ const FixtureAddForm = () => {
         date: '',
         matchNumber: '',
         matchStatus: 'upcoming',
-        team1: {
-          name: '',
-          score: '0/0',
-          logo: null,
-        },
-        team2: {
-          name: '',
-          score: '0/0',
-          logo: null,
-        },
+        team1Name: '',
+        team1Score: '0/0',
+        team1Logo: null,
+        team2Name: '',
+        team2Score: '0/0',
+        team2Logo: null,
         matchResult: 'Match is yet to begin',
         venue: '',
         matchTime: '',
@@ -56,6 +51,7 @@ const FixtureAddForm = () => {
       console.error('Error adding fixture:', error);
       setErrorMessage('Failed to add fixture. Please try again.');
       setSuccessMessage('');
+      setTimeout(() => navigate(-1), 2000); // Redirect to a specific path
     } finally {
       setSubmitting(false);
     }
@@ -64,23 +60,10 @@ const FixtureAddForm = () => {
   const handleInputChange = (event) => {
     const { name, value, files } = event.target;
 
-    if (name === 'team1.logo' || name === 'team2.logo') {
-      const [team, field] = name.split('.');
+    if (name === 'team1Logo' || name === 'team2Logo') {
       setFixtureData({
         ...fixtureData,
-        [team]: {
-          ...fixtureData[team],
-          [field]: files[0], // Assuming single file upload per field
-        },
-      });
-    } else if (name.includes('team1.') || name.includes('team2.')) {
-      const [team, field] = name.split('.');
-      setFixtureData({
-        ...fixtureData,
-        [team]: {
-          ...fixtureData[team],
-          [field]: value,
-        },
+        [name]: files[0],
       });
     } else {
       setFixtureData({
@@ -90,230 +73,194 @@ const FixtureAddForm = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
-    <div className="container mx-auto mt-6 p-6 bg-gradient-to-br from-orange-50 to-orange-200 rounded-lg shadow-md border border-orange-300 max-w-xl">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-orange-700">
-        Add New Fixture
-      </h2>
-      {successMessage && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-          <strong className="font-bold">Success!</strong>
-          <span className="block sm:inline"> {successMessage}</span>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-          <strong className="font-bold">Error!</strong>
-          <span className="block sm:inline"> {errorMessage}</span>
-        </div>
-      )}
-      <form onSubmit={handleFormSubmit} className="space-y-6">
-        {/* Date */}
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-800">
-            Date
-          </label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={fixtureData.date}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Match Number */}
-        <div>
-          <label htmlFor="matchNumber" className="block text-sm font-medium text-gray-800">
-            Match Number
-          </label>
-          <input
-            type="text"
-            id="matchNumber"
-            name="matchNumber"
-            value={fixtureData.matchNumber}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Match Status */}
-        <div>
-          <label htmlFor="matchStatus" className="block text-sm font-medium text-gray-800">
-            Match Status
-          </label>
-          <select
-            id="matchStatus"
-            name="matchStatus"
-            value={fixtureData.matchStatus}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          >
-            <option value="upcoming">Upcoming</option>
-            <option value="completed">Completed</option>
-            <option value="ongoing">Ongoing</option>
-          </select>
-        </div>
-
-        {/* Team 1 Name */}
-        <div>
-          <label htmlFor="team1.name" className="block text-sm font-medium text-gray-800">
-            Team 1 Name
-          </label>
-          <input
-            type="text"
-            id="team1.name"
-            name="team1.name"
-            value={fixtureData.team1.name}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Team 1 Score */}
-        <div>
-          <label htmlFor="team1.score" className="block text-sm font-medium text-gray-800">
-            Team 1 Score
-          </label>
-          <input
-            type="text"
-            id="team1.score"
-            name="team1.score"
-            value={fixtureData.team1.score}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Team 1 Logo */}
-        <div>
-          <label htmlFor="team1.logo" className="block text-sm font-medium text-gray-800">
-            Team 1 Logo
-          </label>
-          <input
-            type="file"
-            id="team1.logo"
-            name="team1.logo"
-            onChange={handleInputChange}
-            required
-            accept="image/*"
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Team 2 Name */}
-        <div>
-          <label htmlFor="team2.name" className="block text-sm font-medium text-gray-800">
-            Team 2 Name
-          </label>
-          <input
-            type="text"
-            id="team2.name"
-            name="team2.name"
-            value={fixtureData.team2.name}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Team 2 Score */}
-        <div>
-          <label htmlFor="team2.score" className="block text-sm font-medium text-gray-800">
-            Team 2 Score
-          </label>
-          <input
-            type="text"
-            id="team2.score"
-            name="team2.score"
-            value={fixtureData.team2.score}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Team 2 Logo */}
-        <div>
-          <label htmlFor="team2.logo" className="block text-sm font-medium text-gray-800">
-            Team 2 Logo
-          </label>
-          <input
-            type="file"
-            id="team2.logo"
-            name="team2.logo"
-            onChange={handleInputChange}
-            required
-            accept="image/*"
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Match Result */}
-        <div>
-          <label htmlFor="matchResult" className="block text-sm font-medium text-gray-800">
-            Match Result
-          </label>
-          <textarea
-            id="matchResult"
-            name="matchResult"
-            value={fixtureData.matchResult}
-            onChange={handleInputChange}
-            rows="3"
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          ></textarea>
-        </div>
-
-        {/* Venue */}
-        <div>
-          <label htmlFor="venue" className="block text-sm font-medium text-gray-800">
-            Venue
-          </label>
-          <input
-            type="text"
-            id="venue"
-            name="venue"
-            value={fixtureData.venue}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Match Time */}
-        <div>
-          <label htmlFor="matchTime" className="block text-sm font-medium text-gray-800">
-            Match Time
-          </label>
-          <input
-            type="time"
-            id="matchTime"
-            name="matchTime"
-            value={fixtureData.matchTime}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="text-center">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="bg-orange-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-200 transition duration-150"
-          >
-            {submitting ? 'Submitting...' : 'Add Fixture'}
-          </button>
-        </div>
-      </form>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-4 overflow-auto max-h-[90vh]">
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-4">Add New Fixture</h2>
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mb-3" role="alert">
+            <strong className="font-bold">Success!</strong>
+            <span className="block sm:inline"> {successMessage}</span>
+          </div>
+        )}
+        {errorMessage && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded relative mb-3" role="alert">
+            <strong className="font-bold">Error!</strong>
+            <span className="block sm:inline"> {errorMessage}</span>
+          </div>
+        )}
+        <form onSubmit={handleFormSubmit} className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="date" className="block text-gray-700">Date:</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={fixtureData.date}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="matchNumber" className="block text-gray-700">Match Number:</label>
+              <input
+                type="text"
+                id="matchNumber"
+                name="matchNumber"
+                value={fixtureData.matchNumber}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="matchStatus" className="block text-gray-700">Match Status:</label>
+              <select
+                id="matchStatus"
+                name="matchStatus"
+                value={fixtureData.matchStatus}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              >
+                <option value="upcoming">Upcoming</option>
+                <option value="completed">Completed</option>
+                <option value="ongoing">Ongoing</option>
+              </select>
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team1Name" className="block text-gray-700">Team 1 Name:</label>
+              <input
+                type="text"
+                id="team1Name"
+                name="team1Name"
+                value={fixtureData.team1Name}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team1Score" className="block text-gray-700">Team 1 Score:</label>
+              <input
+                type="text"
+                id="team1Score"
+                name="team1Score"
+                value={fixtureData.team1Score}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team1Logo" className="block text-gray-700">Team 1 Logo:</label>
+              <input
+                type="file"
+                id="team1Logo"
+                name="team1Logo"
+                onChange={handleInputChange}
+                required
+                accept="image/*"
+                className="w-full border border-gray-300 rounded p-1 file:border-none file:bg-blue-500 file:text-white file:py-1 file:px-3 file:rounded"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team2Name" className="block text-gray-700">Team 2 Name:</label>
+              <input
+                type="text"
+                id="team2Name"
+                name="team2Name"
+                value={fixtureData.team2Name}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team2Score" className="block text-gray-700">Team 2 Score:</label>
+              <input
+                type="text"
+                id="team2Score"
+                name="team2Score"
+                value={fixtureData.team2Score}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="team2Logo" className="block text-gray-700">Team 2 Logo:</label>
+              <input
+                type="file"
+                id="team2Logo"
+                name="team2Logo"
+                onChange={handleInputChange}
+                required
+                accept="image/*"
+                className="w-full border border-gray-300 rounded p-1 file:border-none file:bg-blue-500 file:text-white file:py-1 file:px-3 file:rounded"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="matchResult" className="block text-gray-700">Match Result:</label>
+              <textarea
+                id="matchResult"
+                name="matchResult"
+                value={fixtureData.matchResult}
+                onChange={handleInputChange}
+                rows="3"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              ></textarea>
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="venue" className="block text-gray-700">Venue:</label>
+              <input
+                type="text"
+                id="venue"
+                name="venue"
+                value={fixtureData.venue}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            <div className="p-3 rounded border border-gray-300">
+              <label htmlFor="matchTime" className="block text-gray-700">Match Time:</label>
+              <input
+                type="time"
+                id="matchTime"
+                name="matchTime"
+                value={fixtureData.matchTime}
+                onChange={handleInputChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+          </div>
+          <div className="text-center mt-4 flex justify-center gap-4">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            >
+              {submitting ? 'Submitting...' : 'Add Fixture'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -12,14 +12,17 @@ const PlayersList = () => {
     const fetchData = async () => {
       try {
         const data = await fetchPlayersData();
+        console.log('Fetched players data:', data); // Debugging line
         setPlayersData(data);
       } catch (error) {
         console.error("Failed to fetch players:", error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
+  
 
   const handleEditClick = (player, type) => {
     setSelectedPlayer(player);
@@ -58,37 +61,41 @@ const PlayersList = () => {
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-700">
         Manage Players
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-        {playersData.map((player) => (
-          <div
-            key={player._id}
-            className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
-          >
-            <img
-              src={player.image || "path/to/placeholder-image.jpg"}
-              alt={player.name}
-              className="rounded-t-lg w-full h-44 object-cover"
-            />
-            <div className="flex flex-col items-center justify-center p-4">
-              <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => handleEditClick(player, "profile")}
-                  className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
-                >
-                  Edit Profile
-                </button>
-                <button
-                  onClick={() => handleEditClick(player, "stats")}
-                  className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
-                >
-                  Edit Stats
-                </button>
+      {playersData.length === 0 ? (
+        <p className="text-center text-gray-600">No players available. Please add some players.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+          {playersData.map((player) => (
+            <div
+              key={player._id}
+              className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
+            >
+              <img
+                src={player.image || "path/to/placeholder-image.jpg"}
+                alt={player.name}
+                className="rounded-t-lg w-full h-44 object-cover"
+              />
+              <div className="flex flex-col items-center justify-center p-4">
+                <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => handleEditClick(player, "profile")}
+                    className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => handleEditClick(player, "stats")}
+                    className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
+                  >
+                    Edit Stats
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       {selectedPlayer && editType === "profile" && (
         <PlayerProfileForm
           player={selectedPlayer}
@@ -105,6 +112,8 @@ const PlayersList = () => {
       )}
     </div>
   );
+  
+  
 };
 
 export default PlayersList;

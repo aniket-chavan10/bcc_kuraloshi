@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = 'https://bcc-backend-nue7.onrender.com/api';
+const BASE_URL = 'http://localhost:4000/api';
  // Replace with your backend base URL
 
 export async function fetchCarouselItems() {
@@ -42,17 +42,17 @@ export const addCarouselData = async (formData) => {
 // Function to fetch players data
 export async function fetchPlayersData() {
   try {
-    const response = await fetch(`${BASE_URL}/players`);
+    const response = await fetch(`${BASE_URL}/players`); 
     if (!response.ok) {
-      throw new Error("Failed to fetch players data");
+      throw new Error(`Failed to fetch players: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching players data:", error);
     throw error;
   }
 }
+
 
 // api.js
 export const addPlayerData = async (data) => {
@@ -241,6 +241,7 @@ export async function fetchGalleryItemById(id) {
 //
 //
 //
+// Fetch all fixtures
 export async function fetchFixtures() {
   try {
     const response = await fetch(`${BASE_URL}/fixtures`);
@@ -277,12 +278,12 @@ export async function addFixtureData(fixtureData) {
     formData.append('date', fixtureData.date);
     formData.append('matchNumber', fixtureData.matchNumber);
     formData.append('matchStatus', fixtureData.matchStatus);
-    formData.append('team1Name', fixtureData.team1.name);
-    formData.append('team1Score', fixtureData.team1.score);
-    formData.append('team1Logo', fixtureData.team1.logo); // Match field name
-    formData.append('team2Name', fixtureData.team2.name);
-    formData.append('team2Score', fixtureData.team2.score);
-    formData.append('team2Logo', fixtureData.team2.logo); // Match field name
+    formData.append('team1Name', fixtureData.team1Name); // Directly reference keys based on new model
+    formData.append('team1Score', fixtureData.team1Score);
+    formData.append('team1Logo', fixtureData.team1Logo);
+    formData.append('team2Name', fixtureData.team2Name);
+    formData.append('team2Score', fixtureData.team2Score);
+    formData.append('team2Logo', fixtureData.team2Logo);
     formData.append('matchResult', fixtureData.matchResult);
     formData.append('venue', fixtureData.venue);
     formData.append('matchTime', fixtureData.matchTime);
@@ -304,27 +305,31 @@ export async function addFixtureData(fixtureData) {
   }
 }
 
-
 // Update a fixture
-export const updateFixture = async (id, fixtureData) => {
+// Update a fixture by ID
+export async function updateFixtureData(id, updateData) {
   try {
     const response = await fetch(`${BASE_URL}/fixtures/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(fixtureData),
+      body: JSON.stringify(updateData),
     });
+
     if (!response.ok) {
       throw new Error(`Failed to update fixture: ${response.status} ${response.statusText}`);
     }
+
     const data = await response.json();
     return data;
   } catch (error) {
     console.error('Error updating fixture:', error);
     throw error;
   }
-};
+}
+
+
 
 
 

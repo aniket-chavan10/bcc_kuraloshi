@@ -1,20 +1,5 @@
 const mongoose = require("mongoose");
 
-const teamSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  logo: {
-    type: String,
-    required: true,
-  },
-  score: {
-    type: String,
-    required: true,
-  }
-});
-
 const fixtureSchema = new mongoose.Schema({
   date: {
     type: String,
@@ -29,12 +14,28 @@ const fixtureSchema = new mongoose.Schema({
     enum: ['completed', 'upcoming'],
     required: true,
   },
-  team1: {
-    type: teamSchema,
+  team1Name: {
+    type: String,
     required: true,
   },
-  team2: {
-    type: teamSchema,
+  team1Logo: {
+    type: String,
+    required: true,
+  },
+  team1Score: {
+    type: String,
+    required: true,
+  },
+  team2Name: {
+    type: String,
+    required: true,
+  },
+  team2Logo: {
+    type: String,
+    required: true,
+  },
+  team2Score: {
+    type: String,
     required: true,
   },
   matchResult: {

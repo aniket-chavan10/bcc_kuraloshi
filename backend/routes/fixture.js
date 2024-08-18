@@ -34,16 +34,12 @@ router.post('/', upload.fields([{ name: 'team1Logo', maxCount: 1 }, { name: 'tea
       date: req.body.date,
       matchNumber: req.body.matchNumber,
       matchStatus: req.body.matchStatus,
-      team1: {
-        name: req.body.team1Name,
-        score: req.body.team1Score,
-        logo: team1LogoUrl,
-      },
-      team2: {
-        name: req.body.team2Name,
-        score: req.body.team2Score,
-        logo: team2LogoUrl,
-      },
+      team1Name: req.body.team1Name,
+      team1Score: req.body.team1Score,
+      team1Logo: team1LogoUrl,
+      team2Name: req.body.team2Name,
+      team2Score: req.body.team2Score,
+      team2Logo: team2LogoUrl,
       matchResult: req.body.matchResult,
       venue: req.body.venue,
       matchTime: req.body.matchTime,
@@ -58,7 +54,6 @@ router.post('/', upload.fields([{ name: 'team1Logo', maxCount: 1 }, { name: 'tea
 });
 
 // GET endpoint to fetch all fixtures
-// GET endpoint to fetch all fixtures
 router.get('/', async (req, res) => {
   try {
     const fixtures = await Fixture.find({});
@@ -68,7 +63,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch fixtures', error });
   }
 });
-
 
 // GET endpoint to fetch a fixture by ID
 router.get('/:id', async (req, res) => {
@@ -85,42 +79,53 @@ router.get('/:id', async (req, res) => {
 });
 
 // PUT endpoint to update a fixture by ID
-router.put('/:id', upload.fields([{ name: 'team1Logo', maxCount: 1 }, { name: 'team2Logo', maxCount: 1 }]), async (req, res) => {
+// PUT endpoint to update a fixture by ID
+// PUT endpoint to update a fixture by ID
+router.put('/:id', async (req, res) => {
   try {
-    const fixture = await Fixture.findById(req.params.id);
+    const {
+      matchStatus,
+      team1Score,
+      team2Score,
+      matchResult,
+      date,
+      matchNumber,
+      team1Name,
+      team2Name,
+      venue,
+      matchTime
+    } = req.body;
+
+    const fixture = await Fixture.findByIdAndUpdate(
+      req.params.id,
+      {
+        matchStatus,
+        team1Score,
+        team2Score,
+        matchResult,
+        date,
+        matchNumber,
+        team1Name,
+        team2Name,
+        venue,
+        matchTime
+      },
+      { new: true }
+    );
+
     if (!fixture) {
-      return res.status(404).json({ message: 'Fixture not found' });
+      return res.status(404).json({ error: 'Fixture not found' });
     }
 
-    const team1LogoUrl = req.files['team1Logo'] ? await uploadFileToFirebase(req.files['team1Logo'][0]) : fixture.team1.logo;
-    const team2LogoUrl = req.files['team2Logo'] ? await uploadFileToFirebase(req.files['team2Logo'][0]) : fixture.team2.logo;
-
-    const updates = {
-      date: req.body.date,
-      matchNumber: req.body.matchNumber,
-      matchStatus: req.body.matchStatus,
-      team1: {
-        name: req.body.team1Name,
-        score: req.body.team1Score,
-        logo: team1LogoUrl,
-      },
-      team2: {
-        name: req.body.team2Name,
-        score: req.body.team2Score,
-        logo: team2LogoUrl,
-      },
-      matchResult: req.body.matchResult,
-      venue: req.body.venue,
-      matchTime: req.body.matchTime,
-    };
-
-    Object.assign(fixture, updates);
-    await fixture.save();
-    res.json({ message: 'Fixture updated successfully', fixture });
+    res.json(fixture);
   } catch (error) {
-    console.error('Error updating fixture:', error);
-    res.status(500).json({ message: 'Failed to update fixture', error });
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+
+
 
 module.exports = router;

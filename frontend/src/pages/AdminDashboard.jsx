@@ -1,6 +1,6 @@
-// src/pages/AdminDashboard.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
 import FixtureAddForm from '../components/FixtureAddForm';
 import UpdateFixtureForm from '../components/UpdateFixtureForm';
 import UpdateFixtures from '../components/UpdateFixtures';
@@ -14,6 +14,14 @@ import MessageView from '../components/MessageView'; // Import the MessageView c
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // GSAP animation for the welcome message
+    gsap.fromTo('.welcome-message', 
+      { opacity: 0, y: 100 }, 
+      { opacity: 1, y: 0, duration: 2.0, ease: 'power2.out' }
+    );
+  }, []);
 
   const handleAddFixture = async (newFixture) => {
     navigate('/admin-dashboard/fixtures');
@@ -108,7 +116,7 @@ const AdminDashboard = () => {
             </li>
             <li>
               <Link 
-                to="messages"  // Add link to messages
+                to="messages"  
                 className="block py-2 px-4 rounded-md text-white hover:bg-orange-500 transition-colors"
               >
                 View Messages
@@ -137,8 +145,8 @@ const AdminDashboard = () => {
           <Route path="add-gallery" element={<AddGalleryForm />} />
           <Route path="add-carousel" element={<AddCarouselForm onAdd={handleAddCarousel} />} />
           <Route path="update-info" element={<UpdateInformationForm clubId="your-club-id" />} />
-          <Route path="messages" element={<MessageView />} />  {/* Add route for MessageView */}
-          <Route path="/" element={<h2 className="text-2xl font-bold">Welcome to the Admin Dashboard</h2>} />
+          <Route path="messages" element={<MessageView />} />
+          <Route path="/" element={<h2 className="text-5xl text-center mt-48 font-bold text-gray-800 welcome-message">Welcome to the Admin Dashboard</h2>} />
         </Routes>
       </div>
     </div>

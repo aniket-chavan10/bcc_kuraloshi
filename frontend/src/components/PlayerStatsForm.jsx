@@ -8,92 +8,80 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
     wickets: 0,
     monthlyRuns: 0,
     monthlyWickets: 0,
-    newRuns: 0,
-    newWickets: 0,
+    newRuns: '',
+    newWickets: '',
     bestScore: 0,
   });
 
   useEffect(() => {
-    // Calculate monthly stats and initialize state
-    const currentMonth = new Date().getMonth();
-    const storedMonth = localStorage.getItem("currentMonth");
-    let monthlyRuns = 0;
-    let monthlyWickets = 0;
+    const fetchStats = () => {
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-    if (storedMonth == null || parseInt(storedMonth) !== currentMonth) {
-      localStorage.setItem("currentMonth", currentMonth);
-    } else {
-      monthlyRuns = player.runsLog
-        ? player.runsLog.reduce((total, log) => {
-            const logDate = new Date(log.date);
-            const logMonth = logDate.getMonth();
-            if (logMonth === currentMonth) {
-              return total + log.runs;
-            }
-            return total;
-          }, 0)
-        : 0;
+      // Find stats for the current month
+      const currentMonthStats = player.monthlyStats?.find(stat => stat.month === currentMonth) || { runs: 0, wickets: 0 };
 
-      monthlyWickets = player.wicketsLog
-        ? player.wicketsLog.reduce((total, log) => {
-            const logDate = new Date(log.date);
-            const logMonth = logDate.getMonth();
-            if (logMonth === currentMonth) {
-              return total + log.wickets;
-            }
-            return total;
-          }, 0)
-        : 0;
-    }
+      setStatsData({
+        matches: player.matches || 0,
+        runs: player.runs || 0,
+        wickets: player.wickets || 0,
+        monthlyRuns: currentMonthStats.runs || 0,  // Initialize with current month's runs
+        monthlyWickets: currentMonthStats.wickets || 0, // Initialize with current month's wickets
+        newRuns: '',
+        newWickets: '',
+        bestScore: player.bestScore || 0,
+      });
+    };
 
-    const bestScore = player.runsLog
-      ? Math.max(...player.runsLog.map((log) => log.runs), 0)
-      : 0;
-
-    setStatsData({
-      matches: player.matches || 0,
-      runs: player.runs || 0,
-      wickets: player.wickets || 0,
-      monthlyRuns,
-      monthlyWickets,
-      newRuns: 0,
-      newWickets: 0,
-      bestScore,
-    });
+    fetchStats();
   }, [player]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setStatsData({
-      ...statsData,
-      [name]: parseInt(value) || 0, // Ensure value is a number
+    const newValue = value === '' ? '' : parseInt(value, 10) || 0; // Ensure value is parsed as integer or empty string
+
+    setStatsData((prevStatsData) => {
+      console.log(`Updating ${name} to ${newValue}`); // Debugging log
+      return { ...prevStatsData, [name]: newValue };
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare the updated stats object
+    // Calculate updated monthly runs and wickets
+    const updatedMonthlyRuns = statsData.monthlyRuns + (parseInt(statsData.newRuns, 10) || 0) - statsData.monthlyRuns;
+    const updatedMonthlyWickets = statsData.monthlyWickets + (parseInt(statsData.newWickets, 10) || 0) - statsData.monthlyWickets;
+
+    // Update best score based on new runs or wickets
+    let updatedBestScore = Math.max(statsData.bestScore, parseInt(statsData.newRuns, 10) || 0);
+
+    if ((parseInt(statsData.newWickets, 10) || 0) > 3) {
+      updatedBestScore = `${parseInt(statsData.newWickets, 10) || 0} Wickets`;
+    }
+
     const currentDate = new Date();
     const updatedRunsLog = [
       ...(player.runsLog || []),
-      { date: currentDate.toISOString(), runs: statsData.newRuns },
+      { date: currentDate.toISOString(), runs: parseInt(statsData.newRuns, 10) || 0 },
     ];
     const updatedWicketsLog = [
       ...(player.wicketsLog || []),
-      { date: currentDate.toISOString(), wickets: statsData.newWickets },
+      { date: currentDate.toISOString(), wickets: parseInt(statsData.newWickets, 10) || 0 },
     ];
 
     const updatedStats = {
       matches: statsData.matches + 1,
-      runs: statsData.runs + statsData.newRuns,
-      wickets: statsData.wickets + statsData.newWickets,
+      runs: statsData.runs + (parseInt(statsData.newRuns, 10) || 0),
+      wickets: statsData.wickets + (parseInt(statsData.newWickets, 10) || 0),
       runsLog: updatedRunsLog,
       wicketsLog: updatedWicketsLog,
+      monthlyStats: [
+        ...player.monthlyStats.filter(stat => stat.month !== currentDate.toISOString().slice(0, 7)),
+        { month: currentDate.toISOString().slice(0, 7), runs: updatedMonthlyRuns, wickets: updatedMonthlyWickets },
+      ],
+      bestScore: updatedBestScore,
     };
-
-    // Update best score
-    updatedStats.bestScore = Math.max(updatedStats.bestScore, statsData.newRuns);
 
     try {
       await updatePlayerStats(player._id, updatedStats); // Call the API to update player stats
@@ -105,11 +93,12 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 overflow-auto flex items-center justify-center p-4 h-screen">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 overflow-auto">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">Edit Player Stats</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            {/* Non-editable fields */}
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
               <label htmlFor="matches" className="block text-gray-700">Matches Played:</label>
               <input
                 type="number"
@@ -117,10 +106,10 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 name="matches"
                 value={statsData.matches}
                 readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
               <label htmlFor="runs" className="block text-gray-700">Total Runs:</label>
               <input
                 type="number"
@@ -128,10 +117,10 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 name="runs"
                 value={statsData.runs}
                 readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
               <label htmlFor="wickets" className="block text-gray-700">Total Wickets:</label>
               <input
                 type="number"
@@ -139,10 +128,10 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 name="wickets"
                 value={statsData.wickets}
                 readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
               <label htmlFor="monthlyRuns" className="block text-gray-700">Runs This Month:</label>
               <input
                 type="number"
@@ -150,10 +139,10 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 name="monthlyRuns"
                 value={statsData.monthlyRuns}
                 readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
               <label htmlFor="monthlyWickets" className="block text-gray-700">Wickets This Month:</label>
               <input
                 type="number"
@@ -161,10 +150,22 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 name="monthlyWickets"
                 value={statsData.monthlyWickets}
                 readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="bg-gray-100 p-4 rounded border border-gray-300">
+              <label htmlFor="bestScore" className="block text-gray-700">Best Score:</label>
+              <input
+                type="text"
+                id="bestScore"
+                name="bestScore"
+                value={statsData.bestScore}
+                readOnly
+                className="w-full p-2 bg-gray-200 border border-gray-300 rounded outline-none"
+              />
+            </div>
+            {/* Editable fields */}
+            <div className="p-4 rounded border border-orange-300 bg-blue-50">
               <label htmlFor="newRuns" className="block text-gray-700">New Runs:</label>
               <input
                 type="number"
@@ -173,10 +174,10 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 value={statsData.newRuns}
                 onChange={handleChange}
                 placeholder="Enter new runs"
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-blue-300 rounded outline-none"
               />
             </div>
-            <div>
+            <div className="p-4 rounded border border-orange-300 bg-green-50">
               <label htmlFor="newWickets" className="block text-gray-700">New Wickets:</label>
               <input
                 type="number"
@@ -185,18 +186,7 @@ const PlayerStatsForm = ({ player, onSave, onCancel }) => {
                 value={statsData.newWickets}
                 onChange={handleChange}
                 placeholder="Enter new wickets"
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label htmlFor="bestScore" className="block text-gray-700">Best Score:</label>
-              <input
-                type="number"
-                id="bestScore"
-                name="bestScore"
-                value={statsData.bestScore}
-                readOnly
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-green-300 rounded outline-none"
               />
             </div>
           </div>

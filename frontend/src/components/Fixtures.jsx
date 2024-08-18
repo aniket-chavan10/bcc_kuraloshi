@@ -70,11 +70,14 @@ const Fixtures = () => {
               weekday: "long",
             });
 
+            // Determine background color based on matchStatus
+            const cardBgColor = fixture.matchStatus === 'completed' ? 'bg-green-100' : 'bg-white';
+
             return (
               <li
                 key={fixture._id}
                 ref={(el) => (fixtureRefs.current[index] = el)}
-                className="mb-4"
+                className={`mb-4  p-4 rounded-lg shadow-md`} // Applied background color to card
               >
                 <div className="w-full h-10 bg-orange-500 flex items-center px-4 py-1">
                   <span className="text-white font-bold">
@@ -82,7 +85,7 @@ const Fixtures = () => {
                     <span className="font-thin">{formattedDay}</span>
                   </span>
                 </div>
-                <div className="shadow-lg p-3">
+                <div className={`shadow-lg p-3 ${cardBgColor}`}>
                   <div className="flex flex-col md:flex-row mb-4 md:items-center md:space-x-4">
                     <div className="flex flex-col items-center mb-4 md:mb-0 flex-wrap">
                       <h1 className="font-black text-zinc-900 text-xl md:text-2xl">
@@ -95,20 +98,20 @@ const Fixtures = () => {
                     <div className="flex items-center justify-evenly w-full md:w-auto md:flex-grow">
                       <div className="flex flex-col items-center mx-1 md:mx-4">
                         <img
-                          src={fixture.team1.logo}
-                          alt={`${fixture.team1.name} logo`}
+                          src={fixture.team1Logo}
+                          alt={`${fixture.team1Name} logo`}
                           className="max-h-10 md:max-h-16"
                           onError={(e) => {
                             e.target.src = defaultLogo; // Fallback to default image if there's an error
                           }}
                         />
                         <h4 className="font-black text-zinc-900 uppercase text-xs md:text-sm mt-1 leading-tight text-center">
-                          {fixture.team1.name}
+                          {fixture.team1Name}
                         </h4>
                       </div>
                       <div className="flex items-center mx-1 md:mx-4">
                         <h4 className="font-black text-zinc-900 text-md md:text-xl ml-1 md:ml-2">
-                          {fixture.team1.score}
+                          {fixture.team1Score}
                         </h4>
                       </div>
                       <h1 className="bg-orange-600 text-white h-fit py-1 px-2 mx-1 md:mx-4 text-xs md:text-lg">
@@ -116,20 +119,20 @@ const Fixtures = () => {
                       </h1>
                       <div className="flex items-center mx-1 md:mx-4">
                         <h4 className="font-black text-zinc-900 text-md md:text-xl mr-1 md:mr-2">
-                          {fixture.team2.score}
+                          {fixture.team2Score}
                         </h4>
                       </div>
                       <div className="flex flex-col items-center mx-1 md:mx-4">
                         <img
-                          src={fixture.team2.logo}
-                          alt={`${fixture.team2.name} logo`}
+                          src={fixture.team2Logo}
+                          alt={`${fixture.team2Name} logo`}
                           className="max-h-10 md:max-h-16"
                           onError={(e) => {
                             e.target.src = defaultLogo; // Fallback to default image if there's an error
                           }}
                         />
                         <h4 className="font-black text-zinc-900 uppercase text-xs md:text-sm mt-1 leading-tight text-center">
-                          {fixture.team2.name}
+                          {fixture.team2Name}
                         </h4>
                       </div>
                     </div>

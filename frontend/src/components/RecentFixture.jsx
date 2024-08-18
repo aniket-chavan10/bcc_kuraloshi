@@ -23,7 +23,7 @@ const RecentFixture = () => {
   }, []);
 
   if (loading) {
-    return <p></p>;
+    return <p>Loading...</p>;
   }
 
   if (error) {
@@ -58,11 +58,11 @@ const RecentFixture = () => {
                 <div className="flex items-center gap-1">
                   <img
                     className="w-10 h-auto sm:w-12 sm:h-14 object-contain"
-                    src={fixture.team1.logo}
-                    alt={`${fixture.team1.name} logo`}
+                    src={fixture.team1Logo || '/default-logo.png'}
+                    alt={`${fixture.team1Name || 'Team 1'} logo`}
                   />
                   <p className="text-xs sm:text-xl bg-gradient-to-tr from-slate-800 p-1 sm:p-2 bg-slate-900 text-white">
-                    {fixture.team1.score}
+                    {fixture.team1Score || 'N/A'}
                   </p>
                 </div>
                 <div className="text-center p-1 sm:p-1">
@@ -70,19 +70,19 @@ const RecentFixture = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <p className="text-xs sm:text-xl bg-gradient-to-tr from-slate-800 p-1 sm:p-2 bg-slate-900 text-white">
-                    {fixture.team2.score}
+                    {fixture.team2Score || 'N/A'}
                   </p>
                   <img
                     className="w-8 h-auto sm:w-12 sm:h-12 object-cover"
-                    src={fixture.team2.logo}
-                    alt={`${fixture.team2.name} logo`}
+                    src={fixture.team2Logo || '/default-logo.png'}
+                    alt={`${fixture.team2Name || 'Team 2'} logo`}
                   />
                 </div>
               </div>
             </div>
             <div className="text-center uppercase leading-tight font-semibold mb-2 sm:mb-8">
               <p className="text-xs sm:text-sm opacity-80">
-                {fixture.matchResult}
+                {fixture.matchResult || 'Result not available'}
               </p>
             </div>
             <div className="flex flex-col text-center my-2 sm:my-5">

@@ -121,7 +121,6 @@ function PlayerOfMonth() {
           style={{
             backgroundImage: `url(${playerBg})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
           }}
         >
           <div className="flex flex-col md:flex-row h-full items-baseline text-white">
@@ -138,32 +137,42 @@ function PlayerOfMonth() {
                 }}
               />
             </div>
-            <div className="flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none animate-detail">
+            <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none animate-detail">
+              {window.innerWidth < 768 && (
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${playerBg})`,
+                    zIndex: -1, // Ensure it stays behind the content
+                    filter: "blur(2px)", // Apply blur effect
+                  }}
+                ></div>
+              )}
               <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail">
                 {bestBatsman?.runs}{" "}
                 <span className="text-zinc-700 text-xl md:text-lg">
                   Most Runs
                 </span>
               </h1>
-              <p className="text-3xl md:text-4xl md:text-zinc-800 text-zinc-50 font-montserrat font-bold capitalize animate-detail">
+              <p className="text-4xl md:text-4xl text-gray-800 font-montserrat font-bold capitalize animate-detail z-10">
                 {bestBatsman?.name}
               </p>
               <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail">
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+              <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBatsman?.matches}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Matches
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBatsman?.runs}{" "}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Runs
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBatsman?.bestScore}{" "}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Best Score
                   </span>
                 </p>
@@ -179,7 +188,6 @@ function PlayerOfMonth() {
           style={{
             backgroundImage: `url(${playerBg})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
           }}
         >
           <div className="flex flex-col md:flex-row h-full items-baseline text-white">
@@ -196,32 +204,44 @@ function PlayerOfMonth() {
                 }}
               />
             </div>
-            <div className="flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr from-slate-500 to-slate-800 bg-opacity-30 md:bg-none animate-detail">
-              <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail">
+            <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none animate-detail">
+              {window.innerWidth < 768 && (
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${playerBg})`,
+                    zIndex: -1, // Ensure it stays behind the content
+                    filter: "blur(2px)", // Apply blur effect
+                  }}
+                ></div>
+              )}
+
+              {/* Content */}
+              <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block animate-detail z-10">
                 {bestBowler?.wickets}{" "}
                 <span className="text-zinc-700 text-xl md:text-lg">
                   Most Wickets
                 </span>
               </h1>
-              <p className="text-3xl md:text-4xl md:text-zinc-800 text-zinc-50 font-montserrat font-bold capitalize animate-detail">
+              <p className="text-4xl md:text-4xl text-gray-800 font-montserrat font-bold capitalize animate-detail z-10">
                 {bestBowler?.name}
               </p>
-              <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail">
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+              <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4 animate-detail z-10">
+                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBowler?.matches}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Matches
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBowler?.wickets}{" "}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Wickets
                   </span>
                 </p>
-                <p className="bg-gradient-to-r from-orange-600 to-orange-500 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
+                <p className="bg-gradient-to-br from-amber-500 via-yellow-300 to-yellow-400 flex flex-col  py-1 rounded text-orange-50 font-black text-base md:text-2xl capitalize w-1/3 animate-detail">
                   {bestBowler?.bestScore}{" "}
-                  <span className="text-zinc-100 md:text-xs text-sm font-light">
+                  <span className="text-zinc-700 md:text-xs text-sm font-light">
                     Best Figure
                   </span>
                 </p>

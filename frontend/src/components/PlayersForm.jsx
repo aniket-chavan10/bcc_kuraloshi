@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { addPlayerData } from "../services/api"; // Ensure this function handles the POST request
+import { useNavigate } from "react-router-dom";
+import { addPlayerData } from "../services/api";
+
+const roles = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"];
 
 const PlayersForm = () => {
+  const navigate = useNavigate();
   const initialFormData = {
     name: "",
     jerseyNo: "",
@@ -21,11 +25,8 @@ const PlayersForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const roles = ["Batsman", "Bowler", "All-rounder"]; // Define your roles here
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     if (name === "image") {
       const file = files[0];
       setFormData({ ...formData, image: file });
@@ -37,7 +38,6 @@ const PlayersForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const data = new FormData();
     for (const key in formData) {
       if (key === "image" && formData.image) {
@@ -46,14 +46,14 @@ const PlayersForm = () => {
         data.append(key, formData[key]);
       }
     }
-
     try {
-      const response = await addPlayerData(data); // Ensure this function handles the FormData properly
+      const response = await addPlayerData(data);
       console.log("Player added successfully:", response);
       setFormData(initialFormData);
       setImagePreview(null);
       setSuccess("Player added successfully!");
       setError("");
+      setTimeout(() => navigate(-1), 2000);
     } catch (error) {
       console.error("Failed to add player:", error);
       setError("Failed to add player. Please try again.");
@@ -61,9 +61,17 @@ const PlayersForm = () => {
     }
   };
 
+  const handleCancel = () => {
+    // Reset the form or close it based on your implementation
+    setFormData(initialFormData);
+    setImagePreview(null);
+    setError("");
+    setSuccess("");
+    setTimeout(() => navigate(-1),0);
+  };
+
   useEffect(() => {
     return () => {
-      // Cleanup for image preview
       if (imagePreview) {
         URL.revokeObjectURL(imagePreview);
       }
@@ -71,209 +79,199 @@ const PlayersForm = () => {
   }, [imagePreview]);
 
   return (
-    <div className="container mx-auto mt-12 p-8 bg-gradient-to-br from-orange-50 to-orange-200 rounded-lg shadow-md border border-orange-300 max-w-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-orange-700">
-        Add New Player
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Player Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-800">
-            Player Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          />
-        </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 overflow-auto max-h-screen">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">Add New Player</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Player Name */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="name" className="block text-gray-700">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Jersey Number */}
-        <div>
-          <label htmlFor="jerseyNo" className="block text-sm font-medium text-gray-800">
-            Jersey Number
-          </label>
-          <input
-            type="number"
-            id="jerseyNo"
-            name="jerseyNo"
-            value={formData.jerseyNo}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none appearance-none"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-          />
-        </div>
+            {/* Jersey Number */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="jerseyNo" className="block text-gray-700">Jersey Number:</label>
+              <input
+                type="number"
+                id="jerseyNo"
+                name="jerseyNo"
+                value={formData.jerseyNo}
+                onChange={handleChange}
+                placeholder="Jersey Number"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Matches */}
-        <div>
-          <label htmlFor="matches" className="block text-sm font-medium text-gray-800">
-            Matches
-          </label>
-          <input
-            type="number"
-            id="matches"
-            name="matches"
-            value={formData.matches}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none appearance-none"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-          />
-        </div>
+            {/* Matches */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="matches" className="block text-gray-700">Matches:</label>
+              <input
+                type="number"
+                id="matches"
+                name="matches"
+                value={formData.matches}
+                onChange={handleChange}
+                placeholder="Matches"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Runs */}
-        <div>
-          <label htmlFor="runs" className="block text-sm font-medium text-gray-800">
-            Runs
-          </label>
-          <input
-            type="number"
-            id="runs"
-            name="runs"
-            value={formData.runs}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none appearance-none"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-          />
-        </div>
+            {/* Runs */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="runs" className="block text-gray-700">Runs:</label>
+              <input
+                type="number"
+                id="runs"
+                name="runs"
+                value={formData.runs}
+                onChange={handleChange}
+                placeholder="Runs"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Wickets */}
-        <div>
-          <label htmlFor="wickets" className="block text-sm font-medium text-gray-800">
-            Wickets
-          </label>
-          <input
-            type="number"
-            id="wickets"
-            name="wickets"
-            value={formData.wickets}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none appearance-none"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-          />
-        </div>
+            {/* Wickets */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="wickets" className="block text-gray-700">Wickets:</label>
+              <input
+                type="number"
+                id="wickets"
+                name="wickets"
+                value={formData.wickets}
+                onChange={handleChange}
+                placeholder="Wickets"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Age */}
-        <div>
-          <label htmlFor="age" className="block text-sm font-medium text-gray-800">
-            Age
-          </label>
-          <input
-            type="number"
-            id="age"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none appearance-none"
-            style={{ WebkitAppearance: "none", MozAppearance: "textfield" }}
-          />
-        </div>
+            {/* Age */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="age" className="block text-gray-700">Age:</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                placeholder="Age"
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Image Upload */}
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-800">
-            Player Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          />
-          {imagePreview && (
-            <img src={imagePreview} alt="Image Preview" className="mt-2 max-w-full h-auto" />
-          )}
-        </div>
+            {/* Image Upload */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="image" className="block text-gray-700">Image:</label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded p-2 file:border-none file:bg-blue-500 file:text-white file:py-2 file:px-4 file:rounded"
+              />
+              {imagePreview && (
+                <img src={imagePreview} alt="Image Preview" className="mt-2 max-w-full h-auto" />
+              )}
+            </div>
 
-        {/* Role */}
-        <div>
-          <label htmlFor="role" className="block text-sm font-medium text-gray-800">
-            Role
-          </label>
-          <select
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          >
-            <option value="">Select Role</option>
-            {roles.map((role, index) => (
-              <option key={index} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </div>
+            {/* Role */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="role" className="block text-gray-700">Role:</label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              >
+                <option value="">Select Role</option>
+                {roles.map((role, index) => (
+                  <option key={index} value={role}>{role}</option>
+                ))}
+              </select>
+            </div>
 
-        {/* Subrole */}
-        <div>
-          <label htmlFor="subrole" className="block text-sm font-medium text-gray-800">
-            Subrole
-          </label>
-          <input
-            type="text"
-            id="subrole"
-            name="subrole"
-            value={formData.subrole}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          />
-        </div>
+            {/* Subrole */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="subrole" className="block text-gray-700">Subrole:</label>
+              <input
+                type="text"
+                id="subrole"
+                name="subrole"
+                value={formData.subrole}
+                onChange={handleChange}
+                placeholder="Subrole"
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Best Score */}
-        <div>
-          <label htmlFor="bestScore" className="block text-sm font-medium text-gray-800">
-            Best Score
-          </label>
-          <input
-            type="text"
-            id="bestScore"
-            name="bestScore"
-            value={formData.bestScore}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          />
-        </div>
+            {/* Best Score */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="bestScore" className="block text-gray-700">Best Score:</label>
+              <input
+                type="text"
+                id="bestScore"
+                name="bestScore"
+                value={formData.bestScore}
+                onChange={handleChange}
+                placeholder="Best Score"
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
 
-        {/* Insta URL */}
-        <div>
-          <label htmlFor="instaUrl" className="block text-sm font-medium text-gray-800">
-            Instagram URL
-          </label>
-          <input
-            type="url"
-            id="instaUrl"
-            name="instaUrl"
-            value={formData.instaUrl}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 transition duration-150 focus:outline-none"
-          />
-        </div>
+            {/* Instagram URL */}
+            <div className="p-4 rounded border border-gray-300">
+              <label htmlFor="instaUrl" className="block text-gray-700">Instagram URL:</label>
+              <input
+                type="url"
+                id="instaUrl"
+                name="instaUrl"
+                value={formData.instaUrl}
+                onChange={handleChange}
+                placeholder="Instagram URL"
+                className="w-full p-2 border border-gray-300 rounded outline-none"
+              />
+            </div>
+          </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="mt-4 w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition duration-150"
-        >
-          Add Player
-        </button>
+          <div className="flex justify-end space-x-4 mt-6">
+            <button
+              type="submit"
+              className="py-2 px-4 bg-orange-500 text-white rounded-lg shadow-md hover:bg-orange-600"
+            >
+              Add Player
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="py-2 px-4 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
 
-        {/* Error and Success Messages */}
-        {error && <p className="text-red-600 text-center mt-2">{error}</p>}
-        {success && <p className="text-green-600 text-center mt-2">{success}</p>}
-      </form>
+          {/* Error and Success Messages */}
+          {error && <p className="text-red-600 text-center mt-2">{error}</p>}
+          {success && <p className="text-green-600 text-center mt-2">{success}</p>}
+        </form>
+      </div>
     </div>
   );
 };

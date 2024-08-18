@@ -64,7 +64,10 @@ router.get('/', async (req, res) => {
   try {
     const players = await Player.find({});
     
-    // Map over players to replace file paths with full URLs
+    if (players.length === 0) {
+      console.log('No players found in the database.');
+    }
+
     const playersWithUrls = players.map(player => ({
       ...player.toObject(),
       image: player.image // Already a signed URL
@@ -76,6 +79,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 // PUT endpoint for updating a player
 router.put("/:id/profile", upload.single("image"), async (req, res) => {
@@ -128,7 +132,10 @@ router.put("/:id/stats", async (req, res) => {
       return res.status(404).json({ message: "Player not found" });
     }
 
-    const currentMonth = moment().format('YYYY-MM');
+    // Use native JavaScript Date methods
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
     let existingMonth = player.monthlyStats.find(stat => stat.month === currentMonth);
 
     if (existingMonth) {
@@ -149,6 +156,7 @@ router.put("/:id/stats", async (req, res) => {
     });
   }
 });
+
 
 
 
