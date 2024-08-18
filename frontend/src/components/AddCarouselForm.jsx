@@ -31,7 +31,7 @@ const AddCarouselForm = () => {
       // Navigate after a delay
       setTimeout(() => {
         navigate('/admin-dashboard');
-      }, 2000);
+      }, 0);
     } catch (error) {
       console.error('Error adding carousel data:', error);
       setError('Failed to add carousel item. Please try again.');

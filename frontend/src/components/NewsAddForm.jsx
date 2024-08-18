@@ -23,8 +23,15 @@ const NewsAddForm = () => {
     formData.append('description', description);
     if (image) formData.append('image', image);
 
+    console.log('Submitting form data:', {
+      title,
+      description,
+      image: image ? image.name : 'No image'
+    });
+
     try {
-      await addNewsData(formData);
+      const result = await addNewsData(formData);
+      console.log('API Response:', result);
       setSuccessMessage('News item added successfully!');
       setErrorMessage('');
       // Clear form fields
@@ -35,8 +42,9 @@ const NewsAddForm = () => {
       // Navigate after a delay
       setTimeout(() => {
         navigate(-1);
-      }, 2000);
+      }, 1000);
     } catch (error) {
+      console.error('Error adding news item:', error);
       setSuccessMessage('');
       setErrorMessage('Failed to add news item. Please try again.');
     }
@@ -50,10 +58,8 @@ const NewsAddForm = () => {
     setErrorMessage('');
     setSuccessMessage('');
 
-    // Navigate after a delay
-    setTimeout(() => {
-      navigate(-1);
-    }, 0);
+    // Navigate immediately
+    navigate(-1);
   };
 
   return (

@@ -48,7 +48,7 @@ const AddGalleryForm = () => {
       // Navigate after a delay
       setTimeout(() => {
         navigate(-1);
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setSuccessMessage('');
       setErrorMessage('Failed to add gallery item. Please try again.');

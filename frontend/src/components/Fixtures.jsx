@@ -71,7 +71,7 @@ const Fixtures = () => {
             });
 
             // Determine background color based on matchStatus
-            const cardBgColor = fixture.matchStatus === 'completed' ? 'bg-green-100' : 'bg-white';
+            const cardBgColor = fixture.matchStatus === 'completed' ? 'bg-gray-100' : 'bg-white';
 
             return (
               <li
