@@ -10,7 +10,7 @@ function Players() {
   const [playersData, setPlayersData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
-  const [isLoaded, setIsLoaded] = useState(false); // New loading state
+  const [isLoaded, setIsLoaded] = useState(false);
   const cardsRef = useRef([]);
 
   const playersPerPage = isSmallScreen ? 1 : 4;
@@ -19,11 +19,19 @@ function Players() {
     async function fetchData() {
       try {
         const data = await fetchPlayersData();
-        setPlayersData(data);
-        setIsLoaded(true); // Set to true when data is loaded
+
+        // Ensure "Captain" is at the first index
+        const sortedData = data.sort((a, b) => {
+          if (a.subrole === "Captain") return -1;
+          if (b.subrole === "Captain") return 1;
+          return 0;
+        });
+
+        setPlayersData(sortedData);
+        setIsLoaded(true);
       } catch (error) {
         console.error("Error fetching player data:", error);
-        setIsLoaded(true); // Ensure component is marked as loaded even if there's an error
+        setIsLoaded(true);
       }
     }
     fetchData();
@@ -73,7 +81,6 @@ function Players() {
     }
   };
 
-  // Function to get subrole abbreviation
   const getSubroleAbbreviation = (subrole) => {
     switch (subrole) {
       case "Captain":
@@ -90,7 +97,7 @@ function Players() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <p>Loading...</p> {/* You can replace this with a more sophisticated loader */}
+        <p>Loading...</p>
       </div>
     );
   }
@@ -125,7 +132,7 @@ function Players() {
                   alt={player.name}
                   className="object-cover max-h-full max-w-full"
                   onError={(e) => {
-                    e.target.src = "/default-image.jpg"; // Fallback to default image if there's an error
+                    e.target.src = "/default-image.jpg";
                   }}
                 />
               </div>
