@@ -108,12 +108,14 @@ function PlayerOfMonth() {
 
   useEffect(() => {
     if (bestBatsman && bestBowler) {
+      const isSmallScreen = window.innerWidth < 768;
+
       // Animation for both players
       gsap.fromTo(
         [batsmanRef.current, bowlerRef.current],
         {
           opacity: 0,
-          y: 50,
+          y: isSmallScreen ? 30 : 50, // Adjust y value for small screens
         },
         {
           opacity: 1,
@@ -135,7 +137,7 @@ function PlayerOfMonth() {
         ".player-card-stats",
         {
           opacity: 0,
-          y: 50,
+          y: isSmallScreen ? 30 : 50, // Adjust y value for small screens
         },
         {
           opacity: 1,
