@@ -7,6 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const InstaFeed = () => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchInstagramPosts = async () => {
@@ -19,8 +21,11 @@ const InstaFeed = () => {
           (post) => post.media_type === "IMAGE"
         );
         setPosts(imagePosts);
+        setLoading(false); // Set loading to false once posts are fetched
       } catch (error) {
         console.error("Error fetching Instagram posts:", error);
+        setError("Failed to load posts");
+        setLoading(false); // Set loading to false in case of error
       }
     };
 
@@ -28,24 +33,42 @@ const InstaFeed = () => {
   }, []);
 
   useEffect(() => {
-    // GSAP animation
-    gsap.fromTo(
-      ".insta-feed-item",
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: ".insta-feed-item",
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
+    if (posts.length > 0) {
+      // GSAP animation
+      gsap.fromTo(
+        ".insta-feed-item",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.out",
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: ".insta-feed-item",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
   }, [posts]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader">Loading...</div> {/* Simple loader */}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-10 mt-3 md:px-0">
