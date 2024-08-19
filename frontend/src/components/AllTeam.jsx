@@ -131,9 +131,9 @@ function AllTeam() {
           </div>
         )}
         <div className="absolute bottom-0 left-0 w-full bg-gray-900 bg-opacity-80 text-white px-2 py-1 rounded-t-lg transform translate-y-28 sm:translate-y-28 group-hover:translate-y-0 transition-transform duration-300 ease-in-out">
-          <h3 className="text-2xl sm:text-2xl font-semibold text-orange-600 capitalize">
+          <h3 className="text-2xl sm:text-2xl font-semibold text-orange-500 capitalize">
             {player.name}
-            {isJunior && <span className="text-white text-sm"> (Jr)</span>}
+            {isJunior && <span className="text-white text-sm font-extralight "> (Jr)</span>}
           </h3>
           <hr className="border-t border-gray-50 opacity-40" />
           <p className="text-gray-50 text-md sm:text-base inline items-center">
@@ -141,7 +141,7 @@ function AllTeam() {
             <span className="border-l border-white mx-3 h-4 opacity-40"></span>
             Kuraloshi
             <span className="border-l border-white mx-3 h-4 opacity-40"></span>
-            Age:{player.age}
+            {player.age}'y
           </p>
           <hr className="border-1 border-white opacity-40" />
           <div className="flex justify-between">
