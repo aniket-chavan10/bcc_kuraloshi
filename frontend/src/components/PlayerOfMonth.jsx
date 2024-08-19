@@ -84,39 +84,43 @@ function PlayerOfMonth() {
 
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        const players = await fetchPlayersData(); // Fetch data from backend
+// Inside useEffect where data is fetched
+useEffect(() => {
+  async function getData() {
+    try {
+      const players = await fetchPlayersData(); // Fetch data from backend
 
-        if (players.length === 0) {
-          setError("No players data found");
-          setLoading(false);
-          return;
-        }
+      console.log(players); // Log the data structure to check the key names
 
-        // Calculate best batsman
-        const batsman = players.reduce((best, player) =>
-          player.runs > (best.runs || 0) ? player : best
-        );
-
-        // Calculate best bowler
-        const bowler = players.reduce((best, player) =>
-          player.wickets > (best.wickets || 0) ? player : best
-        );
-
-        setBestBatsman(batsman);
-        setBestBowler(bowler);
+      if (players.length === 0) {
+        setError("No players data found");
         setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch player data:", error);
-        setError("Failed to fetch player data");
-        setLoading(false);
+        return;
       }
-    }
 
-    getData();
-  }, []);
+      // Calculate best batsman
+      const batsman = players.reduce((best, player) =>
+        player.runs > (best.runs || 0) ? player : best
+      );
+
+      // Calculate best bowler
+      const bowler = players.reduce((best, player) =>
+        player.wickets > (best.wickets || 0) ? player : best
+      );
+
+      setBestBatsman(batsman);
+      setBestBowler(bowler);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch player data:", error);
+      setError("Failed to fetch player data");
+      setLoading(false);
+    }
+  }
+
+  getData();
+}, []);
+
 
   useEffect(() => {
     if (bestBatsman && bestBowler) {
