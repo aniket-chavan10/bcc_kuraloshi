@@ -126,7 +126,7 @@ function AllTeam() {
           <ImageWithLoader src={player.image} alt={player.name} />
         </div>
         {subroleAbbreviation && (
-          <div className="absolute top-0 right-0 m-2 text-white bg-gradient-to-br from-orange-500 via-yellow-400 to-yellow-500 text-xs font-bold px-2 py-1 rounded-full">
+          <div className="absolute top-0 right-0 m-2 text-white bg-gray-500 text-xs font-bold px-2 py-1 rounded-full">
             {subroleAbbreviation}
           </div>
         )}
