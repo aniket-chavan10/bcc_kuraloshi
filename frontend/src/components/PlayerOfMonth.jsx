@@ -34,7 +34,7 @@ function PlayerCard({ player, title, stats, imageRef, label }) {
         </div>
         <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none">
           {window.innerWidth < 768 && (
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-amber-500 to-orange-500 bg-opacity-45"></div>
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-amber-600 to-orange-600 bg-opacity-45"></div>
           )}
           <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block z-10">
             {stats[0].value}{" "}
@@ -47,11 +47,11 @@ function PlayerCard({ player, title, stats, imageRef, label }) {
             {stats.map((stat) => (
               <p
                 key={stat.label}
-                className="player-card-stats bg-white md:bg-black bg-opacity-20 md:bg-opacity-60 flex flex-col py-1 rounded text-orange-600 font-black text-md md:text-lg capitalize w-1/3 shadow-lg"
-                style={{ minWidth: '100px' }} // Adjusting width for smaller size
+                className="player-card-stats bg-yellow-400 md:bg-black bg-opacity-80 md:bg-opacity-60 flex flex-col py-1 rounded text-orange-600 font-bold text-xl  capitalize w-1/3 shadow-lg"
+                style={{ minWidth: '80px' }} // Adjusting width for smaller size
               >
                 {stat.value}{" "}
-                <span className="text-zinc-50 md:text-xs text-sm font-light">
+                <span className="text-zinc-50 md:text-xs text-sm font-thin">
                   {stat.label}
                 </span>
               </p>
