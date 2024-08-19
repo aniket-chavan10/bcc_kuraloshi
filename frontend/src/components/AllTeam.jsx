@@ -140,12 +140,16 @@ function AllTeam() {
             {player.role}
             <span className="border-l border-white mx-3 h-4 opacity-40"></span>
             Kuraloshi
+            <span className="border-l border-white mx-3 h-4 opacity-40"></span>
+            Age:{player.age}
           </p>
           <hr className="border-1 border-white opacity-40" />
           <div className="flex justify-between">
             <div className="flex items-center pt-1">
               <div className="text-center flex flex-col bg-yellow-200 rounded bg-opacity-20 w-20 sm:w-16">
-                <span className="block text-lg font-bold">{player.matches}</span>
+                <span className="block text-lg font-bold">
+                  {player.matches}
+                </span>
                 <span className="text-sm sm:text-sm">Matches</span>
               </div>
               <div className="border-l border-white mx-3 h-8 opacity-40"></div>
