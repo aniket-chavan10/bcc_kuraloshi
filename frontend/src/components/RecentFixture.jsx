@@ -23,7 +23,7 @@ const RecentFixture = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p></p>;
   }
 
   if (error) {

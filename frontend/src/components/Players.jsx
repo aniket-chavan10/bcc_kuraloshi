@@ -73,6 +73,20 @@ function Players() {
     }
   };
 
+  // Function to get subrole abbreviation
+  const getSubroleAbbreviation = (subrole) => {
+    switch (subrole) {
+      case "Captain":
+        return "C";
+      case "Vice Captain":
+        return "Vc";
+      case "Wicketkeeper":
+        return "Wk";
+      default:
+        return null;
+    }
+  };
+
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -94,11 +108,16 @@ function Players() {
           <div
             ref={(el) => (cardsRef.current[index] = el)}
             key={index}
-            className={`bg-zinc-50 ${
+            className={`relative bg-zinc-50 ${
               isSmallScreen ? "w-full" : "w-1/4"
             } flex-shrink-0 px-2`}
             style={{ flex: isSmallScreen ? "0 0 100%" : "0 0 25%" }}
           >
+            {getSubroleAbbreviation(player.subrole) && (
+              <div className="absolute top-2 right-8 bg-gray-500 text-zinc-50 text-xs font-bold px-2 py-1 rounded-full">
+                {getSubroleAbbreviation(player.subrole)}
+              </div>
+            )}
             <div className="bg-gradient-to-b from-slate-50 to-slate-200 mb-5 flex flex-col items-center justify-center">
               <div className="relative h-72 w-full md:w-64 overflow-hidden flex justify-center items-center">
                 <img
@@ -125,24 +144,24 @@ function Players() {
       </div>
       <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-3 items-center px-4 mb-4">
         <button
-          className={`bg-gray-950 text-orange-500 p-1 rounded-full ${
-            currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
+          className={`bg-gradient-to-tr from-orange-500 to-orange-400 text-white p-1 rounded-full shadow-lg ${
+            currentPage === 0 ? "opacity-70 cursor-not-allowed" : ""
           }`}
           onClick={prevPage}
           disabled={currentPage === 0}
         >
-          <ChevronLeftIcon className="w-6 h-6" />
+          <ChevronLeftIcon className="w-4 h-4" />
         </button>
         <button
-          className={`bg-gray-950 text-orange-500 text-center p-1 rounded-full ${
+          className={`bg-gradient-to-tr from-orange-500 to-orange-400 text-white p-1 rounded-full shadow-lg ${
             currentPage + playersPerPage >= playersData.length
-              ? "opacity-50 cursor-not-allowed"
+              ? "opacity-70 cursor-not-allowed"
               : ""
           }`}
           onClick={nextPage}
           disabled={currentPage + playersPerPage >= playersData.length}
         >
-          <ChevronRightIcon className="w-6 h-6" />
+          <ChevronRightIcon className="w-4 h-4" />
         </button>
       </div>
     </div>

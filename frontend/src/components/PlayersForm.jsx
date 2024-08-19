@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { addPlayerData } from "../services/api";
 
 const roles = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"];
+const subroles = ["Captain", "Wicketkeeper", "Vice Captain", "Tail-Ender", "Middle-Order", "Opener", "Junior"];
 
 const PlayersForm = () => {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const PlayersForm = () => {
     setImagePreview(null);
     setError("");
     setSuccess("");
-    setTimeout(() => navigate(-1),0);
+    setTimeout(() => navigate(-1), 0);
   };
 
   useEffect(() => {
@@ -211,15 +212,18 @@ const PlayersForm = () => {
             {/* Subrole */}
             <div className="p-4 rounded border border-gray-300">
               <label htmlFor="subrole" className="block text-gray-700">Subrole:</label>
-              <input
-                type="text"
+              <select
                 id="subrole"
                 name="subrole"
                 value={formData.subrole}
                 onChange={handleChange}
-                placeholder="Subrole"
                 className="w-full p-2 border border-gray-300 rounded outline-none"
-              />
+              >
+                <option value="">Select Subrole</option>
+                {subroles.map((subrole, index) => (
+                  <option key={index} value={subrole}>{subrole}</option>
+                ))}
+              </select>
             </div>
 
             {/* Best Score */}

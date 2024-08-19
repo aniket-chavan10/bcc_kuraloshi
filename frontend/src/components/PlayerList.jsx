@@ -21,8 +21,6 @@ const PlayersList = () => {
   
     fetchData();
   }, []);
-  
-  
 
   const handleEditClick = (player, type) => {
     setSelectedPlayer(player);
@@ -57,8 +55,8 @@ const PlayersList = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8 p-4 bg-gray-50 rounded-lg shadow-lg max-w-screen-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-700">
+    <div className="container mx-auto mt-8 p-4 bg-gray-100 rounded-lg shadow-lg max-w-screen-lg">
+      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
         Manage Players
       </h2>
       {playersData.length === 0 ? (
@@ -68,29 +66,27 @@ const PlayersList = () => {
           {playersData.map((player) => (
             <div
               key={player._id}
-              className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
+              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center p-4"
             >
               <img
                 src={player.image || "path/to/placeholder-image.jpg"}
                 alt={player.name}
-                className="rounded-t-lg w-full h-44 object-cover"
+                className="rounded-full w-24 h-24 object-contain border-4 border-gray-200 mb-4"
               />
-              <div className="flex flex-col items-center justify-center p-4">
-                <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => handleEditClick(player, "profile")}
-                    className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
-                  >
-                    Edit Profile
-                  </button>
-                  <button
-                    onClick={() => handleEditClick(player, "stats")}
-                    className="px-4 py-1 text-orange-600 text-sm border border-orange-600 rounded hover:bg-orange-100"
-                  >
-                    Edit Stats
-                  </button>
-                </div>
+              <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
+              <div className="flex flex-col space-y-2">
+                <button
+                  onClick={() => handleEditClick(player, "profile")}
+                  className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+                >
+                  Edit Profile
+                </button>
+                <button
+                  onClick={() => handleEditClick(player, "stats")}
+                  className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 transition-colors"
+                >
+                  Edit Stats
+                </button>
               </div>
             </div>
           ))}
@@ -112,8 +108,6 @@ const PlayersList = () => {
       )}
     </div>
   );
-  
-  
 };
 
 export default PlayersList;

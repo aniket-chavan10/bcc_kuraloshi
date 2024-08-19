@@ -17,10 +17,10 @@ import Navbar from "../components/Navbar";
 function Home() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
+  const [showNavbar, setShowNavbar] = useState(false);
   const mainRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to the top whenever the component is mounted or location changes
     window.scrollTo(0, 0);
 
     // Create a list of promises for all lazy-loaded components
@@ -39,10 +39,16 @@ function Home() {
       setIsLoading(false);
     });
 
+    // Set a timeout to ensure loading state does not persist indefinitely
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 30000); // 30 seconds
+
+    return () => clearTimeout(timeout);
+
   }, [location]);
 
   useEffect(() => {
-    // GSAP animation setup for loaded components
     if (!isLoading && mainRef.current) {
       gsap.fromTo(
         mainRef.current.children,
@@ -52,16 +58,23 @@ function Home() {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      setShowNavbar(true);
+    }
+  }, [isLoading]);
+
   const Loader = () => (
-    <div className="flex items-center justify-center w-full h-full">
-      <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+    <div className="flex flex-col items-center justify-center w-full h-full bg-white">
+      <div className="spinner-border animate-spin w-12 h-12 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      <p className="mt-4 text-gray-700">Loading, please wait...</p>
     </div>
   );
 
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
-        <Navbar /> {/* Always render Navbar */}
+      <div className="flex flex-col min-h-screen">
+        {showNavbar && <Navbar />} {/* Render Navbar after loading completes */}
         <div className="flex-grow flex items-center justify-center">
           <Loader />
         </div>
@@ -71,7 +84,7 @@ function Home() {
 
   return (
     <div className="relative">
-      <Navbar /> {/* Always render Navbar */}
+      <Navbar /> {/* Render Navbar */}
       <Suspense fallback={<Loader />}>
         <div ref={mainRef}> {/* Only animate components inside mainRef */}
           <MainLayout />

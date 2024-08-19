@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { updatePlayerProfile } from "../services/api";
 
 const roles = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"];
+const subroles = ["Captain", "Vice Captain", "Wicketkeeper", "Tail-Ender", "Middle-Order", "Opener", "Junior"];
 
 const PlayerProfileForm = ({ player, onSave, onCancel }) => {
   const [profileData, setProfileData] = useState({
@@ -119,15 +120,18 @@ const PlayerProfileForm = ({ player, onSave, onCancel }) => {
             </div>
             <div className="p-4 rounded border border-gray-300">
               <label htmlFor="subrole" className="block text-gray-700">Subrole:</label>
-              <input
-                type="text"
+              <select
                 id="subrole"
                 name="subrole"
                 value={profileData.subrole}
                 onChange={handleChange}
-                placeholder="Subrole"
                 className="w-full p-2 border border-gray-300 rounded outline-none"
-              />
+              >
+                <option value="">Select Subrole</option>
+                {subroles.map((subrole) => (
+                  <option key={subrole} value={subrole}>{subrole}</option>
+                ))}
+              </select>
             </div>
             <div className="p-4 rounded border border-gray-300">
               <label htmlFor="bestScore" className="block text-gray-700">Best Score:</label>
