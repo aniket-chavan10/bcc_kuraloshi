@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://bcc-backend-nue7.onrender.com/api';
  // Replace with your backend base URL
 
 export async function fetchCarouselItems() {
