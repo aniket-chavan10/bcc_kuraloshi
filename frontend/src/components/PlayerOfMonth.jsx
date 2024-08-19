@@ -14,10 +14,11 @@ function PlayerCard({ player, title, stat1, stat2, stat3, imageRef, label }) {
       className="w-full md:w-1/2 relative overflow-hidden shadow-xl transform-gpu"
       style={{
         backgroundImage: `url(${playerBg})`,
-        backgroundSize: "cover",
+        backgroundSize: "cover ",
+        backgroundPosition:"md:center",
       }}
     >
-      <div className="absolute top-0 right-2 py-1 px-2 bg-gradient-to-br  from-amber-500 via-yellow-300 to-yellow-400  text-gray-50 font-bold text-sm rounded-b-xl shadow shadow-gray-400 z-20">
+      <div className="absolute top-0 right-2 py-1 px-2 bg-gray-500 text-gray-50 font-montserrat  text-sm rounded-b-lg shadow-md z-20">
         {label}
       </div>
       <div className="flex flex-col md:flex-row h-full items-baseline text-white">
@@ -90,7 +91,6 @@ useEffect(() => {
     try {
       const players = await fetchPlayersData(); // Fetch data from backend
 
-      console.log(players); // Log the data structure to check the key names
 
       if (players.length === 0) {
         setError("No players data found");
