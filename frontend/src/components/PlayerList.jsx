@@ -74,16 +74,16 @@ const PlayersList = () => {
                 className="rounded-full w-24 h-24 object-contain border-4 border-gray-200 mb-4"
               />
               <h3 className="text-lg font-semibold mb-2">{player.name}</h3>
-              <div className="flex flex-col space-y-2">
+              <div className="flex gap-2 ">
                 <button
                   onClick={() => handleEditClick(player, "profile")}
-                  className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+                  className="px-2 py-1 text-white text-sm bg-blue-600 rounded hover:bg-blue-700 transition-colors"
                 >
                   Edit Profile
                 </button>
                 <button
                   onClick={() => handleEditClick(player, "stats")}
-                  className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 transition-colors"
+                  className="px-2 py-1 text-white text-sm bg-green-600 rounded hover:bg-green-700 transition-colors"
                 >
                   Edit Stats
                 </button>

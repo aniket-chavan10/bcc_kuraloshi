@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const { bucket } = require('../firebase'); // Import Firebase bucket
-const { v4: uuidv4 } = require('uuid');
-const Player = require('../models/players'); // Import Player model
+const multer = require("multer");
+const { bucket } = require("../firebase"); // Import Firebase bucket
+const { v4: uuidv4 } = require("uuid");
+const Player = require("../models/players"); // Import Player model
 
 // Configure Multer for in-memory file handling
 const storage = multer.memoryStorage();
@@ -17,8 +17,8 @@ const uploadFileToFirebase = async (file) => {
 
   // Generate a signed URL for the uploaded file
   const [url] = await fileRef.getSignedUrl({
-    action: 'read',
-    expires: '03-01-2500', // Adjust expiry date as needed
+    action: "read",
+    expires: "03-01-2500", // Adjust expiry date as needed
   });
 
   return url; // Return the signed URL
@@ -27,7 +27,7 @@ const uploadFileToFirebase = async (file) => {
 // POST endpoint for adding a new player
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    let imageUrl = '';
+    let imageUrl = "";
     if (req.file) {
       imageUrl = await uploadFileToFirebase(req.file); // Upload file and get signed URL
     }
@@ -43,16 +43,20 @@ router.post("/", upload.single("image"), async (req, res) => {
       role: req.body.role,
       subrole: req.body.subrole,
       bestScore: req.body.bestScore,
-      instaUrl: req.body.instaUrl
+      instaUrl: req.body.instaUrl,
     });
 
     const validationErrors = newPlayer.validateSync();
     if (validationErrors) {
-      return res.status(400).json({ message: "Validation error", errors: validationErrors });
+      return res
+        .status(400)
+        .json({ message: "Validation error", errors: validationErrors });
     }
 
     await newPlayer.save();
-    res.status(201).json({ message: "Player added successfully", player: newPlayer });
+    res
+      .status(201)
+      .json({ message: "Player added successfully", player: newPlayer });
   } catch (error) {
     console.error("Error adding player:", error);
     res.status(500).json({ message: "Failed to add player", error });
@@ -60,26 +64,25 @@ router.post("/", upload.single("image"), async (req, res) => {
 });
 
 // GET endpoint to fetch all players
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const players = await Player.find({});
-    
+
     if (players.length === 0) {
-      console.log('No players found in the database.');
+      console.log("No players found in the database.");
     }
 
-    const playersWithUrls = players.map(player => ({
+    const playersWithUrls = players.map((player) => ({
       ...player.toObject(),
-      image: player.image // Already a signed URL
+      image: player.image, // Already a signed URL
     }));
 
     res.json(playersWithUrls);
   } catch (err) {
-    console.error('Error retrieving players:', err);
+    console.error("Error retrieving players:", err);
     res.status(500).json({ message: err.message });
   }
 });
-
 
 // PUT endpoint for updating a player
 router.put("/:id/profile", upload.single("image"), async (req, res) => {
@@ -102,10 +105,14 @@ router.put("/:id/profile", upload.single("image"), async (req, res) => {
       role: req.body.role,
       subrole: req.body.subrole,
       bestScore: req.body.bestScore,
-      instaUrl: req.body.instaUrl
+      instaUrl: req.body.instaUrl,
     };
 
-    const updatedPlayer = await Player.findByIdAndUpdate(playerId, updatedData, { new: true });
+    const updatedPlayer = await Player.findByIdAndUpdate(
+      playerId,
+      updatedData,
+      { new: true }
+    );
 
     if (!updatedPlayer) {
       return res.status(404).json({ message: "Player not found" });
@@ -118,47 +125,32 @@ router.put("/:id/profile", upload.single("image"), async (req, res) => {
   }
 });
 
+// Update player stats
 router.put("/:id/stats", async (req, res) => {
+  const { id } = req.params;
+  const { runs, wickets, monthlyStats, bestScore, matches } = req.body;
+
   try {
-    const playerId = req.params.id;
-    const { runs, wickets } = req.body;
+    console.log(`Received stats update: matches=${matches}, runs=${runs}, wickets=${wickets}`);
 
-    if (typeof runs !== 'number' || typeof wickets !== 'number') {
-      return res.status(400).json({ message: 'Invalid data types for runs or wickets' });
-    }
+    const player = await Player.findById(id);
+    if (!player) return res.status(404).json({ error: "Player not found" });
 
-    const player = await Player.findById(playerId);
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
-
-    // Use native JavaScript Date methods
-    const now = new Date();
-    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-
-    let existingMonth = player.monthlyStats.find(stat => stat.month === currentMonth);
-
-    if (existingMonth) {
-      existingMonth.runs += runs;
-      existingMonth.wickets += wickets;
-    } else {
-      player.monthlyStats.push({ month: currentMonth, runs, wickets });
-    }
+    player.matches = matches;
+    player.runs = runs;
+    player.wickets = wickets;
+    player.monthlyStats = monthlyStats;
+    player.bestScore = bestScore;
 
     await player.save();
-    res.json({ message: "Player stats updated successfully", player });
+
+    console.log(`Stats updated for player ${player.name}: matches=${player.matches}`);
+    res.json(player);
   } catch (error) {
     console.error("Error updating player stats:", error);
-    res.status(500).json({
-      message: "Failed to update player stats",
-      error: error.message, // Include error message for debugging
-      stack: error.stack // Include stack trace for more context
-    });
+    res.status(500).json({ error: "Failed to update player stats" });
   }
 });
-
-
-
 
 
 module.exports = router;
