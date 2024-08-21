@@ -20,7 +20,8 @@ import CricketLoader from "../components/CricketLoader";
 function Home() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const [showNavbar, setShowNavbar] = useState(false);
+  const [componentsLoaded, setComponentsLoaded] = useState(0);
+  const totalComponents = 7; // Update with the number of lazy-loaded components
   const mainRef = useRef(null);
 
   useEffect(() => {
@@ -37,8 +38,14 @@ function Home() {
       import("../components/MainLayout"),
     ];
 
-    // Wait for all components to load before setting isLoading to false
-    Promise.all(componentPromises).then(() => {
+    // Increment the componentsLoaded state each time a component is loaded
+    Promise.all(
+      componentPromises.map((promise) =>
+        promise.then(() => {
+          setComponentsLoaded((prev) => prev + 1);
+        })
+      )
+    ).then(() => {
       setIsLoading(false);
     });
 
@@ -61,16 +68,10 @@ function Home() {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setShowNavbar(true);
-    }
-  }, [isLoading]);
-
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen">
-        {showNavbar && <Navbar />} {/* Render Navbar after loading completes */}
+        <Navbar /> {/* Always show the Navbar */}
         <div className="flex-grow flex items-center justify-center">
           <CricketLoader /> {/* Use the CricketLoader */}
         </div>
@@ -81,7 +82,7 @@ function Home() {
   return (
     <div className="relative">
       <Navbar /> {/* Render Navbar */}
-      <Suspense fallback={<CricketLoader />}>
+      <Suspense fallback={<div />}>
         <div ref={mainRef}> {/* Only animate components inside mainRef */}
           <MainLayout />
           <LatestNews />
