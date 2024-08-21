@@ -3,6 +3,7 @@ import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Loader from "../components/Loader";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,14 +11,13 @@ const Gallery = () => {
   const [galleryData, setGalleryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleItemCount, setVisibleItemCount] = useState(8); // Adjust as per your design
+  const [visibleItemCount, setVisibleItemCount] = useState(8);
   const galleryItemRefs = useRef([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchGalleryData();
-        // Ensure response is sorted by createdAt in descending order
         const sortedGallery = response.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
@@ -64,46 +64,69 @@ const Gallery = () => {
   };
 
   const handleLoadMore = () => {
-    setVisibleItemCount((prevCount) => prevCount + 8); // Increase by 8 items
+    setVisibleItemCount((prevCount) => prevCount + 8);
+  };
+
+  const ImageWithLoader = ({ src, alt }) => {
+    const [loading, setLoading] = useState(true);
+
+    return (
+      <div className="relative w-full h-64">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader /> {/* Show Loader while loading */}
+          </div>
+        )}
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setLoading(false)}
+          style={{ display: loading ? "none" : "block" }}
+          className="w-full h-64 object-cover hover:scale-110 transition duration-1000 ease-in-out"
+        />
+      </div>
+    );
   };
 
   return (
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <h2 className="text-2xl font-bold mb-4">Gallery</h2>
       {error && <p>Error fetching gallery: {error.message}</p>}
-      {galleryData.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {galleryData.slice(0, visibleItemCount).map((item, index) => (
-            <div
-              key={index}
-              ref={(el) => (galleryItemRefs.current[index] = el)}
-              className="shadow-md overflow-hidden"
-            >
-              <div className="w-full h-64 bg-black">
-                <img
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader />
+        </div>
+      ) : (
+        galleryData.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {galleryData.slice(0, visibleItemCount).map((item, index) => (
+              <div
+                key={index}
+                ref={(el) => (galleryItemRefs.current[index] = el)}
+                className="shadow-md overflow-hidden"
+              >
+                <ImageWithLoader
                   src={item.thumbnailImageUrl}
                   alt={item.caption}
-                  className="w-full h-64 object-cover hover:scale-110 transition duration-1000 ease-in-out"
                 />
-              </div>
-
-              <div className="py-2 pr-10 relative">
-                <h3 className="text-sm font-bold mb-2">{item.caption}</h3>
-                <div className="flex justify-between items-center mt-2">
-                  <Link
-                    to={`/gallery/${item._id}`}
-                    className="inline-block mt-2 text-sm font-bold text-zinc-800 hover:text-orange-600 cursor-pointer"
-                  >
-                    View More
-                  </Link>
-                  <span className="text-sm font-bold text-black px-2 py-1">
-                    {formatDate(item.createdAt)}
-                  </span>
+                <div className="py-2 pr-10 relative">
+                  <h3 className="text-sm font-bold mb-2">{item.caption}</h3>
+                  <div className="flex justify-between items-center mt-2">
+                    <Link
+                      to={`/gallery/${item._id}`}
+                      className="inline-block mt-2 text-sm font-bold text-zinc-800 hover:text-orange-600 cursor-pointer"
+                    >
+                      View More
+                    </Link>
+                    <span className="text-sm font-bold text-black px-2 py-1">
+                      {formatDate(item.createdAt)}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )
       )}
 
       {/* Load More Button */}

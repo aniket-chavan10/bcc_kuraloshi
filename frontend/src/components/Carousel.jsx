@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchCarouselItems } from '../services/api';
 import gsap from 'gsap';
+import Loader from '../components/Loader'; // Import the loader
 
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
@@ -12,12 +13,15 @@ const Carousel = () => {
   useEffect(() => {
     const getCarouselItems = async () => {
       try {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 3000)); // 3-second delay
+
         const data = await fetchCarouselItems();
-        setCarouselItems(data.slice(-4));
+        setCarouselItems(data.slice(-4)); // Load the last 4 items
       } catch (error) {
         setError(error);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // Set loading to false after items are fetched
       }
     };
 
@@ -27,7 +31,7 @@ const Carousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
-    }, 10000);
+    }, 10000); // Change slide every 10 seconds
 
     return () => clearInterval(interval);
   }, [carouselItems.length]);
@@ -47,9 +51,7 @@ const Carousel = () => {
   };
 
   if (isLoading) {
-    return (
-      <p></p>
-    );
+    return <Loader />; // Show the square flipping loader while loading
   }
 
   if (error) {

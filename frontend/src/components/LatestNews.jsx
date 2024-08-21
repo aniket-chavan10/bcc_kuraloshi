@@ -3,6 +3,7 @@ import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Loader from '../components/Loader'; // Import your custom Loader
 
 const LatestNews = () => {
   const [newsData, setNewsData] = useState([]);
@@ -75,6 +76,7 @@ const LatestNews = () => {
 
     return (
       <div className="relative w-full h-80">
+        {loading && <Loader />} {/* Show Loader while loading */}
         <img
           src={src}
           alt={alt}
@@ -89,7 +91,7 @@ const LatestNews = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <div className="spinner-border animate-spin w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        <Loader /> {/* Show Loader for the whole page */}
       </div>
     );
   }
