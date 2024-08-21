@@ -300,7 +300,7 @@ const Navbar = () => {
             }`}
           >
             <div
-              className={`fixed top-0 right-0 w-3/4 max-w-xs bg-white text-black h-full transform ${
+              className={`fixed top-0 right-0 w-3/4 max-w-xs bg-gradient-to-r from-orange-600 to-orange-500 text-white h-full transform ${
                 isOpen ? "translate-x-0" : "translate-x-full"
               } transition-transform`}
             >
@@ -320,7 +320,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -336,7 +336,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -352,7 +352,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -368,7 +368,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -384,7 +384,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -400,7 +400,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
@@ -416,7 +416,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-yellow-300 font-montserrat font-semibold"
-                        : "text-black font-montserrat font-semibold"
+                        : "text-white font-montserrat font-semibold"
                     }
                     onClick={() => {
                       closeMenu();
