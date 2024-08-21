@@ -3,26 +3,36 @@ import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Loader from "./Loader"; // Import your custom Loader component
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ImageWithLoader = ({ src, alt, onLoad }) => {
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = onLoad;
-  }, [src, onLoad]);
+const ImageWithLoader = ({ src, alt }) => {
+  const [loading, setLoading] = useState(true);
 
-  return <img src={src} alt={alt} className="w-full h-full object-contain" />;
+  return (
+    <div className="relative w-full h-full">
+      {loading && (
+        <div className="absolute inset-10 flex items-center justify-center bg-white">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoading(false)}
+        style={{ display: loading ? "none" : "block" }}
+        className="w-full h-full object-contain"
+      />
+    </div>
+  );
 };
 
 function AllTeam() {
   const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const cardRefs = useRef([]);
-  const [cardLoading, setCardLoading] = useState({});
 
   useEffect(() => {
     async function getData() {
@@ -34,15 +44,13 @@ function AllTeam() {
           setError("No players data found");
         } else {
           setPlayers(data);
-          const initialLoadingState = data.reduce((acc, player) => {
-            acc[player._id] = true; // Mark each card as loading initially
-            return acc;
-          }, {});
-          setCardLoading(initialLoadingState);
         }
+
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch player data:", error);
         setError("Failed to fetch player data");
+        setLoading(false);
       }
     }
 
@@ -71,13 +79,12 @@ function AllTeam() {
     }
   }, [players]);
 
-  const handleImageLoad = (id) => {
-    setCardLoading((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
-  };
-
+  if (loading)
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      </div>
+    );
   if (error)
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
@@ -92,6 +99,7 @@ function AllTeam() {
   );
 
   const Card = ({ player, index }) => {
+    // Determine the subrole abbreviation for the top-right corner
     const getSubroleAbbreviation = (subrole) => {
       switch (subrole) {
         case "Captain":
@@ -111,21 +119,11 @@ function AllTeam() {
     return (
       <div
         ref={(el) => (cardRefs.current[index] = el)}
-        className={`relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64 transition-opacity duration-300 ease-in-out ${cardLoading[player._id] ? 'opacity-50' : 'opacity-100'}`}
+        className="relative overflow-hidden rounded-lg shadow-lg group w-full max-w-xs mx-auto h-96 md:h-80 md:w-64"
         style={{ backgroundImage: `url(${playerBg})` }}
       >
-        <div
-          className={`absolute inset-0 flex items-center justify-center bg-white transition-opacity duration-300 ease-in-out ${cardLoading[player._id] ? 'opacity-100' : 'opacity-0'}`}
-          style={{ zIndex: 10 }}
-        >
-          <Loader /> {/* Loader for each individual card */}
-        </div>
-        <div className={`h-full ${cardLoading[player._id] ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 ease-in-out`}>
-          <ImageWithLoader
-            src={player.image}
-            alt={player.name}
-            onLoad={() => handleImageLoad(player._id)}
-          />
+        <div className="h-full">
+          <ImageWithLoader src={player.image} alt={player.name} />
         </div>
         {subroleAbbreviation && (
           <div className="absolute top-0 right-0 m-2 text-white bg-gray-500 text-xs font-bold px-2 py-1 rounded-full">
@@ -208,13 +206,17 @@ function AllTeam() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allRounders.map((player, index) => (
-              <Card key={player._id} player={player} index={index} />
+              <Card
+                key={player._id}
+                player={player}
+                index={index + batsmen.length}
+              />
             ))}
           </div>
         </div>
       )}
       {bowlers.length > 0 && (
-        <div className="mb-8">
+        <div>
           <div className="text-center relative mb-6">
             <hr className="styled-hr absolute left-0 right-0 mx-auto top-3 border-1 border-orange-400 -z-10" />
             <h3 className="font-bold inline-block bg-orange-600 text-white px-3 rounded-2xl text-base sm:text-lg capitalize">
@@ -223,7 +225,11 @@ function AllTeam() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {bowlers.map((player, index) => (
-              <Card key={player._id} player={player} index={index} />
+              <Card
+                key={player._id}
+                player={player}
+                index={index + batsmen.length + allRounders.length}
+              />
             ))}
           </div>
         </div>
