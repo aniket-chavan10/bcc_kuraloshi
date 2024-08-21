@@ -14,6 +14,9 @@ const MainLayout = React.lazy(() => import("../components/MainLayout"));
 // Import Navbar directly (not lazy-loaded)
 import Navbar from "../components/Navbar";
 
+// Import the CricketLoader
+import CricketLoader from "../components/CricketLoader";
+
 function Home() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
@@ -64,19 +67,12 @@ function Home() {
     }
   }, [isLoading]);
 
-  const Loader = () => (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-white">
-      <div className="spinner-border animate-spin w-12 h-12 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
-      <p className="mt-4 text-gray-700">Loading, please wait...</p>
-    </div>
-  );
-
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen">
         {showNavbar && <Navbar />} {/* Render Navbar after loading completes */}
         <div className="flex-grow flex items-center justify-center">
-          <Loader />
+          <CricketLoader /> {/* Use the CricketLoader */}
         </div>
       </div>
     );
@@ -85,7 +81,7 @@ function Home() {
   return (
     <div className="relative">
       <Navbar /> {/* Render Navbar */}
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<CricketLoader />}>
         <div ref={mainRef}> {/* Only animate components inside mainRef */}
           <MainLayout />
           <LatestNews />
