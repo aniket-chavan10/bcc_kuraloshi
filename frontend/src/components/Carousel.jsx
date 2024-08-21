@@ -5,8 +5,8 @@ import gsap from 'gsap';
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [loadedImages, setLoadedImages] = useState(0);
   const captionRef = useRef(null);
 
   useEffect(() => {
@@ -16,6 +16,8 @@ const Carousel = () => {
         setCarouselItems(data.slice(-4));
       } catch (error) {
         setError(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -31,22 +33,24 @@ const Carousel = () => {
   }, [carouselItems.length]);
 
   useEffect(() => {
-    if (captionRef.current && loadedImages === carouselItems.length) {
+    if (captionRef.current) {
       gsap.fromTo(
         captionRef.current,
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
       );
     }
-  }, [currentIndex, loadedImages, carouselItems.length]);
-
-  const handleImageLoad = () => {
-    setLoadedImages((prevCount) => prevCount + 1);
-  };
+  }, [currentIndex]);
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
   };
+
+  if (isLoading) {
+    return (
+      <p></p>
+    );
+  }
 
   if (error) {
     return <p>Error loading carousel items: {error.message}</p>;
@@ -67,7 +71,15 @@ const Carousel = () => {
                     src={item.imageUrl}
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
-                    onLoad={handleImageLoad}
+                    onLoad={() => {
+                      if (currentIndex === index) {
+                        gsap.fromTo(
+                          captionRef.current,
+                          { opacity: 0, y: 50 },
+                          { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+                        );
+                      }
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-200">
@@ -76,9 +88,7 @@ const Carousel = () => {
                 )}
               </div>
               <div
-                className={`absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full px-1 md:bg-transparent ${
-                  loadedImages === carouselItems.length ? '' : 'hidden'
-                }`}
+                className="absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full px-1 md:bg-transparent"
                 ref={captionRef}
               >
                 {item.caption.split('\n').map((line, i) => (

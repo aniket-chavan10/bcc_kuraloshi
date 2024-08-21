@@ -3,7 +3,6 @@ import { fetchPlayersData } from "../services/api";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CricketLoader from "./CricketLoader";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -98,7 +97,7 @@ function Players() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <CricketLoader/>
+        <p></p>
       </div>
     );
   }

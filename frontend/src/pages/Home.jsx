@@ -14,14 +14,10 @@ const MainLayout = React.lazy(() => import("../components/MainLayout"));
 // Import Navbar directly (not lazy-loaded)
 import Navbar from "../components/Navbar";
 
-// Import the CricketLoader
-import CricketLoader from "../components/CricketLoader";
-
 function Home() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const [componentsLoaded, setComponentsLoaded] = useState(0);
-  const totalComponents = 7; // Update with the number of lazy-loaded components
+  const [showNavbar, setShowNavbar] = useState(false);
   const mainRef = useRef(null);
 
   useEffect(() => {
@@ -38,14 +34,8 @@ function Home() {
       import("../components/MainLayout"),
     ];
 
-    // Increment the componentsLoaded state each time a component is loaded
-    Promise.all(
-      componentPromises.map((promise) =>
-        promise.then(() => {
-          setComponentsLoaded((prev) => prev + 1);
-        })
-      )
-    ).then(() => {
+    // Wait for all components to load before setting isLoading to false
+    Promise.all(componentPromises).then(() => {
       setIsLoading(false);
     });
 
@@ -68,12 +58,25 @@ function Home() {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      setShowNavbar(true);
+    }
+  }, [isLoading]);
+
+  const Loader = () => (
+    <div className="flex flex-col items-center justify-center w-full h-full bg-white">
+      <div className="spinner-border animate-spin w-12 h-12 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+      <p className="mt-4 text-gray-700">Loading, please wait...</p>
+    </div>
+  );
+
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen">
-        <Navbar /> {/* Always show the Navbar */}
+        {showNavbar && <Navbar />} {/* Render Navbar after loading completes */}
         <div className="flex-grow flex items-center justify-center">
-          <CricketLoader /> {/* Use the CricketLoader */}
+          <Loader />
         </div>
       </div>
     );
@@ -82,7 +85,7 @@ function Home() {
   return (
     <div className="relative">
       <Navbar /> {/* Render Navbar */}
-      <Suspense fallback={<div />}>
+      <Suspense fallback={<Loader />}>
         <div ref={mainRef}> {/* Only animate components inside mainRef */}
           <MainLayout />
           <LatestNews />

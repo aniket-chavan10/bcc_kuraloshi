@@ -4,9 +4,6 @@ import { fetchNewsItemById } from "../services/api";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { gsap } from "gsap";
 
-// Import the CricketLoader
-import CricketLoader from "../components/CricketLoader";
-
 const NewsDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -86,12 +83,7 @@ const NewsDetails = () => {
   };
 
   if (isLoading)
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <CricketLoader />
-      </div>
-    );
-
+    return <p className="text-center py-4 text-gray-500">Loading...</p>;
   if (error)
     return (
       <p className="text-center py-4 text-red-600">
