@@ -281,120 +281,154 @@ const Navbar = () => {
                   )}
                 </div>
 
-                <div className="md:hidden">
+                <div className="md:hidden flex items-center ml-auto">
                   <button
-                    className="text-white focus:outline-none"
                     onClick={handleMenuClick}
+                    className="text-3xl focus:outline-none"
                   >
                     {isOpen ? <FaTimes /> : <FaBars />}
                   </button>
                 </div>
+                <div className="absolute top-0 bottom-0 left-0 border-l-2 border-white"></div>
               </div>
             </div>
           </div>
 
-          {isOpen && (
-            <div className="md:hidden flex flex-col space-y-2 py-4 px-6 bg-gradient-to-r from-orange-600 to-orange-500">
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Home
-              </NavLink>
-              <NavLink
-                to="/team"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Team
-              </NavLink>
-              <NavLink
-                to="/schedule"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Schedule
-              </NavLink>
-              <NavLink
-                to="/rankings"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Rankings
-              </NavLink>
-              <NavLink
-                to="/gallery"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-bold"
-                    : "text-white font-montserrat font-bold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Gallery
-              </NavLink>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                About
-              </NavLink>
-              <NavLink
-                to="/contact-us"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
-              >
-                Contact
-              </NavLink>
+          <div
+            className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${
+              isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+          >
+            <div
+              className={`fixed top-0 right-0 w-3/4 max-w-xs bg-white text-black h-full transform ${
+                isOpen ? "translate-x-0" : "translate-x-full"
+              } transition-transform`}
+            >
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-xl font-semibold">Menu</h2>
+                <button
+                  onClick={handleMenuClick}
+                  className="text-2xl"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+              <ul className="mt-4 space-y-4 p-4">
+                <li>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Home
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/team"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Team
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/schedule"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Schedule
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/rankings"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Rankings
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/gallery"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Gallery
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    About
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/contact-us"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-yellow-300 font-montserrat font-semibold"
+                        : "text-black font-montserrat font-semibold"
+                    }
+                    onClick={() => {
+                      closeMenu();
+                      scrollToTop();
+                    }}
+                  >
+                    Contact
+                  </NavLink>
+                </li>
+              </ul>
             </div>
-          )}
+          </div>
         </nav>
       )}
     </>
