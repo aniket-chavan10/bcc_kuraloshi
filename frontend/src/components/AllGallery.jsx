@@ -3,6 +3,7 @@ import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Loader from "../components/Loader"; // Import your custom Loader component
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +35,8 @@ const AllGallery = () => {
   useEffect(() => {
     // Scroll to the top whenever the component is mounted or location changes
     window.scrollTo(0, 0);
-  }, [location]);
+  }, []);
+
   useEffect(() => {
     if (galleryData.length > 0) {
       gsap.fromTo(
@@ -73,9 +75,11 @@ const AllGallery = () => {
 
   return (
     <div className="container mx-auto py-10 mt-3 md:mt-16 px-4 md:px-0">
-      {isLoading &&  <div className="absolute inset-0 flex items-center justify-center bg-white">
-            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
-          </div>}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white">
+          <Loader /> {/* Use your custom Loader here */}
+        </div>
+      )}
       {error && <p>Error fetching gallery: {error.message}</p>}
       {galleryData.length > 0 && (
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">

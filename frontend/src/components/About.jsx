@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchLatestInfo } from "../services/api";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Loader from '../components/Loader'; // Import your custom Loader component
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +18,7 @@ const ImageWithLoader = ({ src, alt, onImageLoad }) => {
     <div className="relative w-full h-auto">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="spinner-border animate-spin inline-block w-10 h-10 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+          <Loader /> {/* Use your custom Loader here */}
         </div>
       )}
       <img
@@ -97,7 +98,7 @@ const About = () => {
   if (loading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center top-60">
-        <div className="spinner-border animate-spin inline-block w-10 h-10 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        <Loader /> {/* Use your custom Loader here */}
       </div>
     );
   }
