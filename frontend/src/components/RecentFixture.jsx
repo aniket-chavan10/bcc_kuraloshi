@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchFixtures } from "../services/api";
 import { FaInstagram, FaYoutube } from "react-icons/fa";
+import Loader from "../components/Loader";  // Import your Loader component
 
 const RecentFixture = () => {
   const [fixtures, setFixtures] = useState([]);
@@ -23,7 +24,7 @@ const RecentFixture = () => {
   }, []);
 
   if (loading) {
-    return <p></p>;
+    return <Loader />;  // Replace with Loader component
   }
 
   if (error) {
