@@ -10,6 +10,7 @@ const LatestNews = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleNewsCount, setVisibleNewsCount] = useState(7);
+  const [loadingImages, setLoadingImages] = useState({});
 
   const newsContainerRef = useRef(null);
 
@@ -71,21 +72,13 @@ const LatestNews = () => {
     setVisibleNewsCount((prevCount) => prevCount + 3);
   };
 
-  const ImageWithLoader = ({ src, alt }) => {
-    const [loading, setLoading] = useState(true);
-
-    return (
-      <div className="relative w-full h-80">
-        {loading && <Loader />} {/* Show Loader while loading */}
-        <img
-          src={src}
-          alt={alt}
-          onLoad={() => setLoading(false)}
-          style={{ display: loading ? "none" : "block" }}
-          className="w-full h-full object-cover"
-        />
-      </div>
-    );
+  const handleImageLoad = (index) => {
+    setTimeout(() => {
+      setLoadingImages((prevState) => ({
+        ...prevState,
+        [index]: false,
+      }));
+    }, 500); // 500ms delay before hiding the loader
   };
 
   if (isLoading) {
@@ -103,10 +96,18 @@ const LatestNews = () => {
       {newsData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
           {/* Large news item */}
-          <div className="md:col-span-2 shadow-md overflow-hidden news-item news-item-0">
-            <ImageWithLoader
-              src={newsData[0].imageUrl} // Direct URL to the image
+          <div className="md:col-span-2 shadow-md overflow-hidden news-item news-item-0 relative">
+            {loadingImages[0] !== false && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader />
+              </div>
+            )}
+            <img
+              src={newsData[0].imageUrl}
               alt={newsData[0].title}
+              onLoad={() => handleImageLoad(0)}
+              className="w-full h-80 object-cover"
+              style={{ display: loadingImages[0] !== false ? "none" : "block" }}
             />
             <div className="py-2 relative">
               <h3 className="text-lg font-bold mb-2">{newsData[0].title}</h3>
@@ -129,11 +130,19 @@ const LatestNews = () => {
           {newsData.slice(1, visibleNewsCount).map((newsItem, index) => (
             <div
               key={newsItem._id}
-              className={`shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item news-item-${index + 1}`}
+              className={`shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item news-item-${index + 1} relative`}
             >
-              <ImageWithLoader
-                src={newsItem.imageUrl} // Direct URL to the image
+              {loadingImages[index + 1] !== false && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader />
+                </div>
+              )}
+              <img
+                src={newsItem.imageUrl}
                 alt={newsItem.title}
+                onLoad={() => handleImageLoad(index + 1)}
+                className="w-full h-80 object-cover"
+                style={{ display: loadingImages[index + 1] !== false ? "none" : "block" }}
               />
               <div className="py-2 relative flex flex-col">
                 <h3 className="text-sm font-bold mb-2">{newsItem.title}</h3>
