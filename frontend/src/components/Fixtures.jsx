@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { fetchFixtures } from "../services/api";
 import { gsap } from "gsap";
+import Loader from "../components/Loader"; // Adjust the path as needed
 
 const defaultLogo = "/default-image.jpg"; // Path to your default image
 
@@ -45,7 +46,7 @@ const Fixtures = () => {
   if (loading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        <Loader /> {/* Using your custom Loader component */}
       </div>
     );
   }
@@ -71,13 +72,14 @@ const Fixtures = () => {
             });
 
             // Determine background color based on matchStatus
-            const cardBgColor = fixture.matchStatus === 'completed' ? 'bg-gray-100' : 'bg-white';
+            const cardBgColor =
+              fixture.matchStatus === "completed" ? "bg-gray-100" : "bg-white";
 
             return (
               <li
                 key={fixture._id}
                 ref={(el) => (fixtureRefs.current[index] = el)}
-                className={`mb-4  p-4 rounded-lg shadow-md`} // Applied background color to card
+                className={`mb-4 p-4 rounded-lg shadow-md`}
               >
                 <div className="w-full h-10 bg-orange-500 flex items-center px-4 py-1">
                   <span className="text-white font-bold">

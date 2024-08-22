@@ -26,6 +26,7 @@ export default {
       fontFamily: {
         sans: ['Noto Sans TC', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+        josefin: ['Josefin Sans', 'sans-serif'], // Add Josefin Sans here
       },
     },
   },

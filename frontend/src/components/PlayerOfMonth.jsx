@@ -3,7 +3,7 @@ import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-
+import Loader from '../components/Loader';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,8 +14,8 @@ function PlayerCard({ player, title, stats, imageRef, label }) {
       className="w-full md:w-1/2 relative overflow-hidden shadow-md shadow-gray-400 transform-gpu rounded-b-xl"
       style={{
         backgroundImage: `url(${playerBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: "contain md:cover ",
+        backgroundPosition: "md:center",
       }}
     >
       <div className="absolute top-0 right-2 py-1 px-2 bg-gray-500 text-gray-50 font-montserrat text-sm shadow-md rounded-b-lg z-20">
@@ -34,24 +34,24 @@ function PlayerCard({ player, title, stats, imageRef, label }) {
         </div>
         <div className="relative flex flex-col md:mt-auto py-3 px-1 w-full md:w-auto bg-gradient-to-tr md:bg-none">
           {window.innerWidth < 768 && (
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-amber-600 to-orange-600 bg-opacity-45"></div>
+            <div className="absolute inset-0 z-0 bg-orange-600 "></div>
           )}
           <h1 className="text-orange-500 text-5xl md:text-7xl font-bold font-montserrat hidden md:block z-10">
             {stats[0].value}{" "}
             <span className="text-zinc-700 text-xl md:text-lg">{title}</span>
           </h1>
-          <p className="text-4xl md:text-4xl text-white md:text-gray-800 font-montserrat font-bold capitalize z-10">
+          <p className="text-4xl md:text-4xl text-white md:text-gray-800 font-josefin font-bold capitalize z-10">
             {player?.name}
           </p>
           <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4">
             {stats.map((stat) => (
               <p
                 key={stat.label}
-                className="player-card-stats bg-yellow-400 md:bg-black bg-opacity-80 md:bg-opacity-60 flex flex-col py-1 rounded text-orange-600 font-bold text-xl  capitalize w-1/3 shadow-lg"
+                className="player-card-stats bg-yellow-50 md:bg-yellow-500  bg-opacity-80 md:bg-opacity-100 flex flex-col py-1 rounded text-orange-600 font-bold text-xl  capitalize w-1/3 shadow-lg"
                 style={{ minWidth: '80px' }} // Adjusting width for smaller size
               >
                 {stat.value}{" "}
-                <span className="text-zinc-50 md:text-xs text-sm font-thin">
+                <span className="text-zinc-800 md:text-xs text-sm font-thin">
                   {stat.label}
                 </span>
               </p>
@@ -156,7 +156,14 @@ function PlayerOfMonth() {
     }
   }, [bestBatsman, bestBowler]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <Loader /> {/* Using your custom Loader component */}
+      </div>
+    );
+  }
+
   if (error)
     return (
       <div className="flex justify-center items-center h-screen text-red-500">

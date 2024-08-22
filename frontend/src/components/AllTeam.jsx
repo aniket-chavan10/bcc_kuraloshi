@@ -3,6 +3,7 @@ import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Loader from "../components/Loader"; // Import your custom Loader component
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,8 +13,8 @@ const ImageWithLoader = ({ src, alt }) => {
   return (
     <div className="relative w-full h-full">
       {loading && (
-        <div className="absolute inset-10 flex items-center justify-center bg-white">
-          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        <div className="absolute inset-0 flex items-center justify-center bg-white">
+          <Loader /> {/* Use your custom Loader component here */}
         </div>
       )}
       <img
@@ -82,7 +83,7 @@ function AllTeam() {
   if (loading)
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
+        <Loader /> {/* Use your custom Loader component here */}
       </div>
     );
   if (error)
@@ -216,7 +217,7 @@ function AllTeam() {
         </div>
       )}
       {bowlers.length > 0 && (
-        <div>
+        <div className="mb-8">
           <div className="text-center relative mb-6">
             <hr className="styled-hr absolute left-0 right-0 mx-auto top-3 border-1 border-orange-400 -z-10" />
             <h3 className="font-bold inline-block bg-orange-600 text-white px-3 rounded-2xl text-base sm:text-lg capitalize">

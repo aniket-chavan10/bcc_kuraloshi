@@ -3,7 +3,7 @@ import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Loader from '../components/Loader'; // Import your custom Loader
+import Loader from '../components/Loader';
 
 const LatestNews = () => {
   const [newsData, setNewsData] = useState([]);
@@ -40,19 +40,19 @@ const LatestNews = () => {
         const newsItemRef = newsContainerRef.current.querySelector(
           `.news-item-${index}`
         );
-        
+
         gsap.fromTo(
           newsItemRef,
-          { opacity: 0, y: 50 },
+          { opacity: 0, y: 20 }, // Start with opacity 0 and slightly offset vertically
           {
             opacity: 1,
-            y: 0,
-            duration: 1,
+            y: 0, // Move to original position
+            duration: 0.8, // Slightly longer duration for smoothness
             ease: "power3.out",
             scrollTrigger: {
               trigger: newsItemRef,
-              start: "top 80%",
-              end: "bottom 100%",
+              start: "top 90%", // Trigger when 90% of the item is in view
+              end: "bottom 10%", // Consider animation finished when 10% of the item is left in view
               toggleActions: "play none none reset",
             },
           }
@@ -84,7 +84,7 @@ const LatestNews = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
-        <Loader /> {/* Show Loader for the whole page */}
+        <Loader />
       </div>
     );
   }

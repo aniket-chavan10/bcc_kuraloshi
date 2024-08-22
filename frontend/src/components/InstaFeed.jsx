@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Loader from "../components/Loader";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,8 +57,8 @@ const InstaFeed = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="loader">Loading...</div> {/* Simple loader */}
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <Loader /> {/* Using your custom Loader component */}
       </div>
     );
   }
