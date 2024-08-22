@@ -90,8 +90,11 @@ const Gallery = () => {
 
   return (
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
-      <h2 className="text-2xl font-bold mb-4">Gallery</h2>
+      {/* Conditionally render the title based on loading state */}
+      {!isLoading && <h2 className="text-2xl font-bold mb-4">Gallery</h2>}
+      
       {error && <p>Error fetching gallery: {error.message}</p>}
+      
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <Loader />
