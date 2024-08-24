@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { fetchFixtures } from "../services/api";
 import { FaInstagram, FaYoutube } from "react-icons/fa";
+import Loader from "../components/Loader";  // Import your Loader component
 
 const RecentFixture = () => {
   const [fixtures, setFixtures] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -11,13 +13,19 @@ const RecentFixture = () => {
       try {
         const data = await fetchFixtures();
         setFixtures(data.reverse());
+        setLoading(false);
       } catch (error) {
         setError(error);
+        setLoading(false);
       }
     };
 
     getFixtures();
   }, []);
+
+  if (loading) {
+    return <Loader />;  // Replace with Loader component
+  }
 
   if (error) {
     return <div>Error: {error.message}</div>;

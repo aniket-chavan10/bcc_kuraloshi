@@ -1,20 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchCarouselItems } from '../services/api';
 import gsap from 'gsap';
+import Loader from '../components/Loader'; // Import the loader
 
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const captionRef = useRef(null);
 
   useEffect(() => {
     const getCarouselItems = async () => {
       try {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 3000)); // 3-second delay
+
         const data = await fetchCarouselItems();
         setCarouselItems(data.slice(-4)); // Load the last 4 items
       } catch (error) {
         setError(error);
+      } finally {
+        setIsLoading(false); // Set loading to false after items are fetched
       }
     };
 
@@ -43,6 +50,15 @@ const Carousel = () => {
     setCurrentIndex(index);
   };
 
+  if (isLoading) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <Loader /> {/* Using your custom Loader component */}
+      </div>
+    );
+  }
+
+
   if (error) {
     return <p>Error loading carousel items: {error.message}</p>;
   }
@@ -62,6 +78,15 @@ const Carousel = () => {
                     src={item.imageUrl}
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
+                    onLoad={() => {
+                      if (currentIndex === index) {
+                        gsap.fromTo(
+                          captionRef.current,
+                          { opacity: 0, y: 50 },
+                          { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+                        );
+                      }
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-200">
