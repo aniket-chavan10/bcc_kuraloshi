@@ -3,26 +3,32 @@ import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import Loader from '../components/Loader';
-// Register ScrollTrigger plugin
+import Loader from "../components/Loader";
+
 gsap.registerPlugin(ScrollTrigger);
 
-function PlayerCard({ player, title, stats, imageRef, label }) {
+function PlayerCard({ player, title, stats, imageRef, label, labelRef }) {
   return (
     <div
       ref={imageRef}
       className="w-full md:w-1/2 relative overflow-hidden shadow-md shadow-gray-400 transform-gpu rounded-b-xl"
       style={{
         backgroundImage: `url(${playerBg})`,
-        backgroundSize: "contain md:cover ",
+        backgroundSize: "contain md:cover",
         backgroundPosition: "md:center",
       }}
     >
-      <div className="absolute top-0 right-2 py-1 px-2 bg-gray-500 text-gray-50 font-montserrat text-sm shadow-md rounded-b-lg z-20">
+      <div
+        ref={labelRef}
+        className="absolute top-0 right-2 py-1 px-2 bg-orange-600 text-gray-50 font-montserrat text-sm shadow-md rounded-b-lg z-20"
+      >
         {label}
       </div>
       <div className="flex flex-col md:flex-row h-full items-baseline text-white">
-        <div className="w-full md:w-1/3 relative" style={{ aspectRatio: "3 / 4" }}>
+        <div
+          className="w-full md:w-1/3 relative"
+          style={{ aspectRatio: "3 / 4" }}
+        >
           <img
             src={player?.image}
             alt={player?.name || "Default Image"}
@@ -44,11 +50,11 @@ function PlayerCard({ player, title, stats, imageRef, label }) {
             {player?.name}
           </p>
           <div className="flex flex-grow justify-center md:justify-start text-center py-2 gap-2 md:gap-4">
-            {stats.map((stat) => (
+            {stats.map((stat, index) => (
               <p
                 key={stat.label}
-                className="player-card-stats bg-yellow-50 md:bg-yellow-500  bg-opacity-80 md:bg-opacity-100 flex flex-col py-1 rounded text-orange-600 font-bold text-xl  capitalize w-1/3 shadow-lg"
-                style={{ minWidth: '80px' }} // Adjusting width for smaller size
+                className="player-card-stats bg-yellow-50 md:bg-yellow-500 flex flex-col py-1 rounded text-orange-600 font-bold text-xl capitalize w-1/3 shadow-lg"
+                style={{ minWidth: "80px" }} // Adjusting width for smaller size
               >
                 {stat.value}{" "}
                 <span className="text-zinc-800 md:text-xs text-sm font-thin">
@@ -71,6 +77,10 @@ function PlayerOfMonth() {
 
   const batsmanRef = useRef(null);
   const bowlerRef = useRef(null);
+  const batsmanLabelRef = useRef(null);
+  const bowlerLabelRef = useRef(null);
+  const batsmanStatsRefs = useRef([]);
+  const bowlerStatsRefs = useRef([]);
 
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
@@ -109,52 +119,82 @@ function PlayerOfMonth() {
   useEffect(() => {
     if (bestBatsman && bestBowler) {
       const isSmallScreen = window.innerWidth < 768;
-
+  
       // Animation for both players
       gsap.fromTo(
         [batsmanRef.current, bowlerRef.current],
         {
           opacity: 0,
-          y: isSmallScreen ? 30 : 50, // Adjust y value for small screens
+          y: isSmallScreen ? 50 : 70,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 1.5,
           ease: "power2.out",
-          stagger: 0.1,
           scrollTrigger: {
             trigger: [batsmanRef.current, bowlerRef.current],
-            start: "top 80%",
-            end: "top 60%",
+            start: "top 90%",
+            end: "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
-
-      // Animation for Stats of both players
+  
+      // Simultaneous animation for all stats
       gsap.fromTo(
         ".player-card-stats",
         {
           opacity: 0,
-          y: isSmallScreen ? 30 : 50, // Adjust y value for small screens
+          scale: 0.9, // Slightly smaller
+          y: 20, // Slide-in effect from below
         },
         {
           opacity: 1,
+          scale: 1, // End at original size
           y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          stagger: 0.1,
+          duration: 1.5,
+          ease: "power3.out",
+          stagger: {
+            amount: 0.5, // Adjust to create a subtle delay effect
+            grid: "auto",
+            from: "start",
+          },
           scrollTrigger: {
-            trigger: batsmanRef.current,
-            start: "top 70%",
-            end: "top 50%",
+            trigger: ".player-card-stats",
+            start: "top 85%",
+            end: "top 65%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+  
+      // Animation for the corner labels with pulse effect
+      gsap.fromTo(
+        [batsmanLabelRef.current, bowlerLabelRef.current],
+        {
+          opacity: 1,
+          scale: 1,
+        },
+        {
+          opacity: 1,
+          scale: 1.1,
+          duration: 0.5,
+          ease: "power.inOut",
+          repeat: -1,
+          yoyo: true,
+          scrollTrigger: {
+            trigger: [batsmanLabelRef.current, bowlerLabelRef.current],
+            start: "top 90%",
+            end: "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
     }
   }, [bestBatsman, bestBowler]);
+  
+  
 
   if (loading) {
     return (
@@ -189,6 +229,7 @@ function PlayerOfMonth() {
             { value: bestBatsman?.bestScore, label: "Best Score" },
           ]}
           imageRef={batsmanRef}
+          labelRef={batsmanLabelRef}
           label="Best Batsman"
         />
 
@@ -202,6 +243,7 @@ function PlayerOfMonth() {
             { value: bestBowler?.bestScore, label: "Best Figure" },
           ]}
           imageRef={bowlerRef}
+          labelRef={bowlerLabelRef}
           label="Best Bowler"
         />
       </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchCarouselItems } from '../services/api';
-import gsap from 'gsap';
-import Loader from '../components/Loader'; // Import the loader
+import Loader from '../components/Loader'; // Import the Loader component
 
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
@@ -38,11 +37,14 @@ const Carousel = () => {
 
   useEffect(() => {
     if (captionRef.current) {
-      gsap.fromTo(
-        captionRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
-      );
+      captionRef.current.style.opacity = '0';
+      captionRef.current.style.transform = 'translateY(50px)';
+
+      setTimeout(() => {
+        captionRef.current.style.opacity = '1';
+        captionRef.current.style.transform = 'translateY(0)';
+        captionRef.current.style.transition = 'opacity 1s ease, transform 1s ease';
+      }, 50); // Slight delay to trigger transition
     }
   }, [currentIndex]);
 
@@ -51,13 +53,8 @@ const Carousel = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <Loader /> {/* Using your custom Loader component */}
-      </div>
-    );
+    return <Loader />;  // Show the Loader component while loading
   }
-
 
   if (error) {
     return <p>Error loading carousel items: {error.message}</p>;
@@ -79,12 +76,10 @@ const Carousel = () => {
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
                     onLoad={() => {
-                      if (currentIndex === index) {
-                        gsap.fromTo(
-                          captionRef.current,
-                          { opacity: 0, y: 50 },
-                          { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
-                        );
+                      if (currentIndex === index && captionRef.current) {
+                        captionRef.current.style.opacity = '1';
+                        captionRef.current.style.transform = 'translateY(0)';
+                        captionRef.current.style.transition = 'opacity 1s ease, transform 1s ease';
                       }
                     }}
                   />

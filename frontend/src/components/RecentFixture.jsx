@@ -13,9 +13,9 @@ const RecentFixture = () => {
       try {
         const data = await fetchFixtures();
         setFixtures(data.reverse());
-        setLoading(false);
       } catch (error) {
         setError(error);
+      } finally {
         setLoading(false);
       }
     };
@@ -23,14 +23,17 @@ const RecentFixture = () => {
     getFixtures();
   }, []);
 
+  // Ensure that only the loader is shown while loading is true
   if (loading) {
-    return <Loader />;  // Replace with Loader component
+    return <Loader color="red" />;  // Only the Loader component is shown while loading
   }
 
+  // Show an error message if there's an error
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
+  // Render the content after the loading is complete
   return (
     <div className="bg-gray-950 text-orange-500 p-3 sm:p-4 min-h-full flex flex-col">
       {fixtures.slice(0, 1).map((fixture) => {

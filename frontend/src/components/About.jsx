@@ -6,32 +6,6 @@ import Loader from '../components/Loader'; // Import your custom Loader componen
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ImageWithLoader = ({ src, alt, onImageLoad }) => {
-  const [loading, setLoading] = useState(true);
-
-  const handleImageLoad = () => {
-    setLoading(false);
-    onImageLoad(); // Trigger the GSAP animation once the image is loaded
-  };
-
-  return (
-    <div className="relative w-full h-auto">
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Loader /> {/* Use your custom Loader here */}
-        </div>
-      )}
-      <img
-        src={src}
-        alt={alt}
-        onLoad={handleImageLoad}
-        style={{ display: loading ? 'none' : 'block' }}
-        className="w-full h-full object-cover"
-      />
-    </div>
-  );
-};
-
 const About = () => {
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +44,7 @@ const About = () => {
         opacity: 0,
         y: 30,
         duration: 1,
-        stagger: 0.3,
+        stagger: 0.2,
         ease: "power3.out",
         scrollTrigger: {
           trigger: ".about-text",
@@ -80,7 +54,7 @@ const About = () => {
 
       gsap.from(".about-image", {
         opacity: 0,
-        scale: 0.95,
+        scale: 0.9,
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {
@@ -97,62 +71,51 @@ const About = () => {
 
   if (loading) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center top-60">
+      <div className="flex items-center justify-center h-screen">
         <Loader /> {/* Use your custom Loader here */}
       </div>
     );
   }
 
   if (error) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Error: {error.message}</div>;
+    return <div className="flex justify-center items-center h-screen text-red-600 font-semibold">Error: {error.message}</div>;
   }
 
   return (
-    <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
-      <div className="mb-10 about-image">
-        <div className="relative">
-          <ImageWithLoader
+    <div className="container mx-auto px-4 py-10 md:px-8 lg:px-16">
+      <div className="mb-12 text-center">
+        <div className="relative mb-6">
+          <img
             src={info.teamImg}
-            alt="Bhairavnath Cricket Club"
-            onImageLoad={handleImageLoad}
+            alt={`${info.clubName} Image`}
+            onLoad={handleImageLoad}
+            className="w-full h-auto object-cover rounded-lg shadow-lg about-image" // Enhanced styling
           />
         </div>
-      </div>
-      {imageLoaded && (
-        <div className="text-gray-800 space-y-12">
-          <div>
-            <h2 className="text-4xl font-bold mb-6 about-heading">
+        {imageLoaded && (
+          <div className="text-gray-900 space-y-6 md:space-y-10">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 about-heading">
               About {info.clubName}
             </h2>
-            <p className="mb-6 text-lg about-text">{info.description}</p>
-            <p className="mb-6 text-lg italic about-text">{info.tagline}</p>
-            <div className="flex flex-col md:flex-row md:space-x-4 text-lg about-text">
+            <p className="text-base text-left md:text-lg leading-relaxed about-text">{info.description}</p>
+            <p className="text-base md:text-lg italic about-text">{info.tagline}</p>
+            <div className="flex flex-col md:flex-row md:space-x-6 text-base md:text-lg about-text">
               <p>Email: <span className="font-semibold">{info.email}</span></p>
               <p>Contact Number: <span className="font-semibold">{info.contactNumber}</span></p>
             </div>
           </div>
-          <div>
-            <h2 className="text-4xl font-bold mb-6 about-heading">
-              About Jaoli Cricket Association
-            </h2>
-            <p className="mb-6 text-lg about-text">
-              The Jaoli Cricket Association provides a platform for teams like ours. 
-              They organize matches in Mumbai and villages to provide opportunities for players and cricket enthusiasts 
-              who are located in Mumbai for work purposes and those in villages.
-            </p>
-            <p className="mb-6 text-lg about-text">
-              The association plays a crucial role in the development of cricket in our region. 
-              By hosting tournaments and training camps, they ensure that players have the resources and support needed to excel in the sport.
-              Their efforts have led to the discovery of many talented cricketers who have gone on to represent higher leagues and teams.
-            </p>
-            <p className="text-lg about-text">
-              Additionally, the Jaoli Cricket Association fosters a sense of community among cricket lovers. 
-              They bring together players, coaches, and fans, creating a vibrant and supportive cricketing environment.
-              Their initiatives not only promote physical fitness but also encourage a love for the game among the youth.
-            </p>
-          </div>
+        )}
+      </div>
+      <div className="mt-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 about-heading">
+          About Jaoli Cricket Association
+        </h2>
+        <div className="space-y-6 text-base md:text-lg leading-relaxed about-text">
+          <p>The Jaoli Cricket Association provides a platform for teams like ours. They organize matches in Mumbai and surrounding villages, creating opportunities for players and enthusiasts located in both urban and rural areas.</p>
+          <p>The association plays a crucial role in the development of cricket in our region. By hosting tournaments and training camps, they ensure that players have the resources and support needed to excel in the sport. Their efforts have led to the discovery of many talented cricketers who have gone on to represent higher leagues and teams.</p>
+          <p>Additionally, the Jaoli Cricket Association fosters a sense of community among cricket lovers. They bring together players, coaches, and fans, creating a vibrant and supportive cricketing environment. Their initiatives not only promote physical fitness but also encourage a love for the game among the youth.</p>
         </div>
-      )}
+      </div>
     </div>
   );
 };
