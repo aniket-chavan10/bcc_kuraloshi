@@ -130,13 +130,13 @@ function PlayerOfMonth() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: batsmanRef.current,
-            start: "top 90%",
-            end: "top 70%",
+            start: window.innerWidth < 768 ? "top 85%" : "top 90%",
+            end: window.innerWidth < 768 ? "top 65%" : "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
-
+  
       // Bowler Card Animation
       gsap.fromTo(
         bowlerRef.current,
@@ -151,13 +151,13 @@ function PlayerOfMonth() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: bowlerRef.current,
-            start: "top 90%",
-            end: "top 70%",
+            start: window.innerWidth < 768 ? "top 85%" : "top 90%",
+            end: window.innerWidth < 768 ? "top 65%" : "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
-
+  
       // Stats Animation for Batsman
       gsap.fromTo(
         ".player-card-stats",
@@ -179,13 +179,13 @@ function PlayerOfMonth() {
           },
           scrollTrigger: {
             trigger: batsmanRef.current,
-            start: "top 85%",
-            end: "top 65%",
+            start: window.innerWidth < 768 ? "top 80%" : "top 85%",
+            end: window.innerWidth < 768 ? "top 60%" : "top 65%",
             toggleActions: "play none none none",
           },
         }
       );
-
+  
       // Stats Animation for Bowler
       gsap.fromTo(
         ".player-card-stats",
@@ -207,13 +207,13 @@ function PlayerOfMonth() {
           },
           scrollTrigger: {
             trigger: bowlerRef.current,
-            start: "top 85%",
-            end: "top 65%",
+            start: window.innerWidth < 768 ? "top 80%" : "top 85%",
+            end: window.innerWidth < 768 ? "top 60%" : "top 65%",
             toggleActions: "play none none none",
           },
         }
       );
-
+  
       // Animation for Corner Labels
       gsap.fromTo(
         [batsmanLabelRef.current, bowlerLabelRef.current],
@@ -230,14 +230,15 @@ function PlayerOfMonth() {
           yoyo: true,
           scrollTrigger: {
             trigger: [batsmanLabelRef.current, bowlerLabelRef.current],
-            start: "top 90%",
-            end: "top 70%",
+            start: window.innerWidth < 768 ? "top 85%" : "top 90%",
+            end: window.innerWidth < 768 ? "top 65%" : "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
     }
   }, [bestBatsman, bestBowler]);
+  
 
   if (loading) {
     return (

@@ -46,7 +46,7 @@ const Carousel = () => {
         captionRef.current.style.opacity = '1';
         captionRef.current.style.transform = 'translateY(0)';
         captionRef.current.style.transition = 'opacity 1s ease, transform 1s ease';
-      }, 50); // Slight delay to trigger transition
+      }, 0); // Slight delay to trigger transition
     }
   }, [currentIndex]);
 

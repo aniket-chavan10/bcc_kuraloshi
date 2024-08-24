@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import gsap from "gsap";
-
+import Loader from '../components/Loader'
 // Lazy load components
 const LatestNews = React.lazy(() => import("../components/LatestNews"));
 const Gallery = React.lazy(() => import("../components/Gallery"));
@@ -64,12 +64,7 @@ function Home() {
     }
   }, [isLoading]);
 
-  const Loader = () => (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-white">
-      <div className="spinner-border animate-spin w-12 h-12 border-4 border-gray-300 border-t-4 border-t-orange-600 rounded-full"></div>
-      <p className="mt-4 text-gray-700">Loading, please wait...</p>
-    </div>
-  );
+
 
   if (isLoading) {
     return (
