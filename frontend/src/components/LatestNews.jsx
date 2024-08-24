@@ -43,17 +43,18 @@ const LatestNews = () => {
 
         gsap.fromTo(
           newsItemRef,
-          { opacity: 0, y: 20 }, // Start with opacity 0 and slightly offset vertically
+          { opacity: 0, y: 20 },
           {
             opacity: 1,
-            y: 0, // Move to original position
-            duration: 0.8, // Slightly longer duration for smoothness
-            ease: "power3.out",
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
             scrollTrigger: {
               trigger: newsItemRef,
-              start: "top 90%", // Trigger when 90% of the item is in view
-              end: "bottom 10%", // Consider animation finished when 10% of the item is left in view
+              start: "top 80%",
+              end: "bottom 20%",
               toggleActions: "play none none reset",
+              markers: false, // Set to true for debugging
             },
           }
         );
@@ -78,7 +79,7 @@ const LatestNews = () => {
         ...prevState,
         [index]: false,
       }));
-    }, 500); // 500ms delay before hiding the loader
+    }, 500);
   };
 
   if (isLoading) {
