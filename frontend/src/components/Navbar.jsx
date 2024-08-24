@@ -299,7 +299,7 @@ const Navbar = () => {
               isOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <div className="p-4 flex justify-end">
+            <div className="p-4 flex ">
               <button onClick={handleMenuClick} className="text-3xl">
                 <FaTimes />
               </button>
@@ -309,8 +309,8 @@ const Navbar = () => {
                 to="/"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -323,8 +323,8 @@ const Navbar = () => {
                 to="/team"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -337,8 +337,8 @@ const Navbar = () => {
                 to="/schedule"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -351,8 +351,8 @@ const Navbar = () => {
                 to="/rankings"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -365,8 +365,8 @@ const Navbar = () => {
                 to="/gallery"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-bold"
-                    : "text-white font-montserrat font-bold"
+                    ? "text-yellow-300 font-montserrat font-bold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-bold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -379,8 +379,8 @@ const Navbar = () => {
                 to="/about"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -393,8 +393,8 @@ const Navbar = () => {
                 to="/contact-us"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
                 }
                 onClick={() => {
                   closeMenu();
@@ -403,6 +403,52 @@ const Navbar = () => {
               >
                 Contact
               </NavLink>
+
+              <div className="flex flex-col items-center pt-16">
+                <h1 className="text-xl font-bold font-josefin underline underline-offset-8">FOLLOW US ON</h1>
+                <div className="mt-4 flex flex-row space-x-4 text-white ">
+                  {socialLinks.facebook && (
+                    <a
+                      href={socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1 "
+                    >
+                      <FaFacebookF />
+                    </a>
+                  )}
+                  {socialLinks.instagram && (
+                    <a
+                      href={socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaInstagram />
+                    </a>
+                  )}
+                  {socialLinks.youtube && (
+                    <a
+                      href={socialLinks.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaYoutube />
+                    </a>
+                  )}
+                  {socialLinks.whatsapp && (
+                    <a
+                      href={socialLinks.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaWhatsapp />
+                    </a>
+                  )}
+                </div>
+              </div>
             </nav>
           </div>
         </nav>
