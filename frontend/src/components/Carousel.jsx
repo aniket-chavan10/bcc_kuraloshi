@@ -52,11 +52,12 @@ const Carousel = () => {
 
   if (isLoading) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <Loader /> {/* Using your custom Loader component */}
+      <div className="absolute inset-0 flex items-center justify-center bg-white z-50">
+        <Loader /> {/* Your custom Loader */}
       </div>
     );
   }
+  
 
 
   if (error) {

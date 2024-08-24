@@ -24,8 +24,13 @@ const RecentFixture = () => {
   }, []);
 
   if (loading) {
-    return <Loader />;  // Replace with Loader component
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-white z-50">
+        <Loader /> {/* Your custom Loader */}
+      </div>
+    );
   }
+  
 
   if (error) {
     return <div>Error: {error.message}</div>;
