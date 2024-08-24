@@ -14,7 +14,7 @@ function PlayerCard({ player, title, stats, imageRef, label, labelRef }) {
       className="w-full md:w-1/2 relative overflow-hidden shadow-md shadow-gray-400 transform-gpu rounded-b-xl"
       style={{
         backgroundImage: `url(${playerBg})`,
-        backgroundSize: "contain md:cover",
+        backgroundSize: "cover",
         backgroundPosition: "md:center",
       }}
     >
