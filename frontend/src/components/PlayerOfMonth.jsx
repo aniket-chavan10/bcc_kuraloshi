@@ -53,7 +53,7 @@ function PlayerCard({ player, title, stats, imageRef, label, labelRef }) {
             {stats.map((stat, index) => (
               <p
                 key={stat.label}
-                className="player-card-stats bg-yellow-50 md:bg-yellow-500 flex flex-col py-1 rounded text-orange-600 font-bold text-xl capitalize w-1/3 shadow-lg"
+                className="player-card-stats bg-white md:bg-yellow-500 flex flex-col py-1 rounded text-orange-600 font-bold text-xl capitalize w-1/3 shadow-lg"
                 style={{ minWidth: "80px" }} // Adjusting width for smaller size
               >
                 {stat.value}{" "}
