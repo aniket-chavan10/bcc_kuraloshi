@@ -52,14 +52,12 @@ const Carousel = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
-        <div className="relative">
-          {/* Loader with responsive positioning */}
-          <Loader className="absolute top-1/2 -translate-y-1/2 sm:top-1/5 sm:-translate-y-1/4" />
-        </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-white">
+        <Loader /> {/* Using your custom Loader component */}
       </div>
     );
   }
+
 
   if (error) {
     return <p>Error loading carousel items: {error.message}</p>;
