@@ -28,12 +28,14 @@ const Carousel = () => {
   }, []);
 
   useEffect(() => {
+    if (carouselItems.length === 0) return;
+
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
+      setCurrentIndex(prevIndex => (prevIndex + 1) % carouselItems.length);
     }, 10000); // Change slide every 10 seconds
 
     return () => clearInterval(interval);
-  }, [carouselItems.length]);
+  }, [carouselItems]);
 
   useEffect(() => {
     if (captionRef.current) {

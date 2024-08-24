@@ -79,8 +79,6 @@ function PlayerOfMonth() {
   const bowlerRef = useRef(null);
   const batsmanLabelRef = useRef(null);
   const bowlerLabelRef = useRef(null);
-  const batsmanStatsRefs = useRef([]);
-  const bowlerStatsRefs = useRef([]);
 
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
 
@@ -118,14 +116,12 @@ function PlayerOfMonth() {
 
   useEffect(() => {
     if (bestBatsman && bestBowler) {
-      const isSmallScreen = window.innerWidth < 768;
-  
-      // Animation for both players
+      // Batsman Card Animation
       gsap.fromTo(
-        [batsmanRef.current, bowlerRef.current],
+        batsmanRef.current,
         {
           opacity: 0,
-          y: isSmallScreen ? 50 : 70,
+          y: window.innerWidth < 768 ? 50 : 70,
         },
         {
           opacity: 1,
@@ -133,43 +129,92 @@ function PlayerOfMonth() {
           duration: 1.5,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: [batsmanRef.current, bowlerRef.current],
+            trigger: batsmanRef.current,
             start: "top 90%",
             end: "top 70%",
             toggleActions: "play none none none",
           },
         }
       );
-  
-      // Simultaneous animation for all stats
+
+      // Bowler Card Animation
+      gsap.fromTo(
+        bowlerRef.current,
+        {
+          opacity: 0,
+          y: window.innerWidth < 768 ? 50 : 70,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: bowlerRef.current,
+            start: "top 90%",
+            end: "top 70%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Stats Animation for Batsman
       gsap.fromTo(
         ".player-card-stats",
         {
           opacity: 0,
-          scale: 0.9, // Slightly smaller
-          y: 20, // Slide-in effect from below
+          scale: 0.9,
+          y: 20,
         },
         {
           opacity: 1,
-          scale: 1, // End at original size
+          scale: 1,
           y: 0,
           duration: 1.5,
           ease: "power3.out",
           stagger: {
-            amount: 0.5, // Adjust to create a subtle delay effect
+            amount: 0.5,
             grid: "auto",
             from: "start",
           },
           scrollTrigger: {
-            trigger: ".player-card-stats",
+            trigger: batsmanRef.current,
             start: "top 85%",
             end: "top 65%",
             toggleActions: "play none none none",
           },
         }
       );
-  
-      // Animation for the corner labels with pulse effect
+
+      // Stats Animation for Bowler
+      gsap.fromTo(
+        ".player-card-stats",
+        {
+          opacity: 0,
+          scale: 0.9,
+          y: 20,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power3.out",
+          stagger: {
+            amount: 0.5,
+            grid: "auto",
+            from: "start",
+          },
+          scrollTrigger: {
+            trigger: bowlerRef.current,
+            start: "top 85%",
+            end: "top 65%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Animation for Corner Labels
       gsap.fromTo(
         [batsmanLabelRef.current, bowlerLabelRef.current],
         {
@@ -193,8 +238,6 @@ function PlayerOfMonth() {
       );
     }
   }, [bestBatsman, bestBowler]);
-  
-  
 
   if (loading) {
     return (

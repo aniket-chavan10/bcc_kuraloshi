@@ -51,7 +51,7 @@ const LatestNews = () => {
             ease: "power2.out",
             scrollTrigger: {
               trigger: newsItemRef,
-              start: "top 80%",
+              start: "top 100%",
               end: "bottom 20%",
               toggleActions: "play none none reset",
               markers: false, // Set to true for debugging

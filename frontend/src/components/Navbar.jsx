@@ -10,7 +10,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { fetchLatestInfo, fetchNewsData } from "../services/api";
-import logo from "../assets/images/logo.png"; // Import static logo
+import logo from "../assets/images/logo.png"; // Import static logo image
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,6 @@ const Navbar = () => {
     const fetchData = async () => {
       try {
         const clubResponse = await fetchLatestInfo();
-        console.log("Fetched Club Response:", clubResponse);
         if (clubResponse) {
           setClubInfo(clubResponse);
         } else {
@@ -32,7 +31,6 @@ const Navbar = () => {
         }
 
         const newsData = await fetchNewsData();
-        console.log("Fetched News Data:", newsData);
         if (Array.isArray(newsData)) {
           const titles = newsData.map((news) => ({
             id: news._id,
@@ -49,7 +47,6 @@ const Navbar = () => {
 
     fetchData();
 
-    // Set a timeout to force display the navbar after 3 seconds
     const timeoutId = setTimeout(() => {
       setForceShowNavbar(true);
     }, 0);
@@ -83,7 +80,7 @@ const Navbar = () => {
             {/* Logo */}
             <div className="flex-shrink-0 w-20 md:w-28 h-full flex items-center md:border-r px-3">
               <img
-                src={logo} // Use static logo image
+                src={logo}
                 alt="Logo"
                 className="h-auto w-auto object-cover p-1 md:-mb-6 -mb-4"
                 onLoad={() => setIsLogoLoaded(true)}
@@ -120,7 +117,7 @@ const Navbar = () => {
                       href={socialLinks.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
+                      className="cursor-pointer text-xl border-2 border-white rounded-full p-1"
                     >
                       <FaFacebookF />
                     </a>
@@ -130,7 +127,7 @@ const Navbar = () => {
                       href={socialLinks.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
+                      className="cursor-pointer text-xl border-2 border-white rounded-full p-1"
                     >
                       <FaInstagram />
                     </a>
@@ -140,7 +137,7 @@ const Navbar = () => {
                       href={socialLinks.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
+                      className="cursor-pointer text-xl border-2 border-white rounded-full p-1"
                     >
                       <FaYoutube />
                     </a>
@@ -152,7 +149,6 @@ const Navbar = () => {
                     Login
                   </button>
                 </div>
-                {/* Horizontal Line */}
                 <div className="absolute bottom-0 left-0 right-0 border-t border-white"></div>
               </div>
 
@@ -266,7 +262,7 @@ const Navbar = () => {
                       href={socialLinks.whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
+                      className="cursor-pointer text-xl border-2 border-white rounded-full p-1"
                     >
                       <FaWhatsapp />
                     </a>
@@ -281,7 +277,6 @@ const Navbar = () => {
                     <FaBars />
                   </button>
                 </div>
-                {/* Vertical Line */}
                 <div className="absolute top-0 bottom-0 left-0 border-l-2 border-white"></div>
               </div>
             </div>
@@ -295,115 +290,111 @@ const Navbar = () => {
             onClick={closeMenu}
           />
           <div
-            className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-r from-orange-600 to-orange-500 transform transition-transform ${
+            className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-r from-orange-600 to-orange-500 text-white transform transition-transform ${
               isOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <div className="p-4 flex justify-end">
-              <button onClick={handleMenuClick} className="text-3xl">
-                <FaTimes />
+            <div className="flex p-4">
+              <button onClick={closeMenu}>
+                <FaTimes className="text-3xl" />
               </button>
             </div>
-            <nav className="flex flex-col p-4 space-y-4">
+            <div className="flex flex-col p-2 space-y-4 mt-8">
               <NavLink
                 to="/"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Home
               </NavLink>
               <NavLink
                 to="/team"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Team
               </NavLink>
               <NavLink
                 to="/schedule"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Schedule
               </NavLink>
               <NavLink
                 to="/rankings"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Rankings
               </NavLink>
               <NavLink
                 to="/gallery"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-bold"
-                    : "text-white font-montserrat font-bold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Gallery
               </NavLink>
               <NavLink
                 to="/about"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 About
               </NavLink>
               <NavLink
                 to="/contact-us"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold"
-                    : "text-white font-montserrat font-semibold"
-                }
-                onClick={() => {
-                  closeMenu();
-                  scrollToTop();
-                }}
+                className="text-white text-lg"
+                onClick={closeMenu}
               >
                 Contact
               </NavLink>
-            </nav>
+            </div>
+            <div className="flex flex-col items-center space-y-4 mt-8">
+              <h2 className="text-lg font-semibold mb-4">FOLLOW US ON</h2>
+              <div className="flex space-x-4">
+                {socialLinks.facebook && (
+                  <a
+                    href={socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl border-2 border-white rounded-full p-2"
+                  >
+                    <FaFacebookF />
+                  </a>
+                )}
+                {socialLinks.instagram && (
+                  <a
+                    href={socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl border-2 border-white rounded-full p-2"
+                  >
+                    <FaInstagram />
+                  </a>
+                )}
+                {socialLinks.youtube && (
+                  <a
+                    href={socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl border-2 border-white rounded-full p-2"
+                  >
+                    <FaYoutube />
+                  </a>
+                )}
+                {socialLinks.whatsapp && (
+                  <a
+                    href={socialLinks.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl border-2 border-white rounded-full p-2"
+                  >
+                    <FaWhatsapp />
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </nav>
       )}
