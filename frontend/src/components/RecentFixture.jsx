@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchFixtures } from "../services/api";
 import { FaInstagram, FaYoutube } from "react-icons/fa";
-import Loader from "../components/Loader";  // Import your Loader component
+import Loader from '../components/Loader';
 
 const RecentFixture = () => {
   const [fixtures, setFixtures] = useState([]);
@@ -25,7 +25,11 @@ const RecentFixture = () => {
 
   // Ensure that only the loader is shown while loading is true
   if (loading) {
-    return <Loader color="red" />;  // Only the Loader component is shown while loading
+    return (
+      <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-0">
+      <Loader/>
+    </div>
+    );  // Only the Loader component is shown while loading
   }
 
   // Show an error message if there's an error

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { fetchCarouselItems } from '../services/api';
-import Loader from '../components/Loader'; // Import the Loader component
+import React, { useState, useEffect, useRef } from "react";
+import { fetchCarouselItems } from "../services/api";
+import gsap from "gsap";
+import Loader from '../components/Loader';
 
 const Carousel = () => {
   const [carouselItems, setCarouselItems] = useState([]);
@@ -12,15 +13,22 @@ const Carousel = () => {
   useEffect(() => {
     const getCarouselItems = async () => {
       try {
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 3000)); // 3-second delay
+        const MINIMUM_LOADING_TIME = 3000; // Minimum skeleton display time (3 seconds)
+        const start = Date.now();
 
         const data = await fetchCarouselItems();
         setCarouselItems(data.slice(-4)); // Load the last 4 items
+
+        const elapsed = Date.now() - start;
+        const remainingTime = MINIMUM_LOADING_TIME - elapsed;
+
+        if (remainingTime > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remainingTime));
+        }
       } catch (error) {
         setError(error);
       } finally {
-        setIsLoading(false); // Set loading to false after items are fetched
+        setIsLoading(false); // Set loading to false after the minimum time has passed
       }
     };
 
@@ -28,25 +36,20 @@ const Carousel = () => {
   }, []);
 
   useEffect(() => {
-    if (carouselItems.length === 0) return;
-
     const interval = setInterval(() => {
-      setCurrentIndex(prevIndex => (prevIndex + 1) % carouselItems.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
     }, 10000); // Change slide every 10 seconds
 
     return () => clearInterval(interval);
-  }, [carouselItems]);
+  }, [carouselItems.length]);
 
   useEffect(() => {
     if (captionRef.current) {
-      captionRef.current.style.opacity = '0';
-      captionRef.current.style.transform = 'translateY(50px)';
-
-      setTimeout(() => {
-        captionRef.current.style.opacity = '1';
-        captionRef.current.style.transform = 'translateY(0)';
-        captionRef.current.style.transition = 'opacity 1s ease, transform 1s ease';
-      }, 0); // Slight delay to trigger transition
+      gsap.fromTo(
+        captionRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+      );
     }
   }, [currentIndex]);
 
@@ -55,7 +58,11 @@ const Carousel = () => {
   };
 
   if (isLoading) {
-    return <Loader />;  // Show the Loader component while loading
+    return (
+      <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-0">
+        <Loader/>
+      </div>
+    );
   }
 
   if (error) {
@@ -78,10 +85,12 @@ const Carousel = () => {
                     alt={`Slide ${index}`}
                     className="absolute inset-0 w-full h-full object-cover"
                     onLoad={() => {
-                      if (currentIndex === index && captionRef.current) {
-                        captionRef.current.style.opacity = '1';
-                        captionRef.current.style.transform = 'translateY(0)';
-                        captionRef.current.style.transition = 'opacity 1s ease, transform 1s ease';
+                      if (currentIndex === index) {
+                        gsap.fromTo(
+                          captionRef.current,
+                          { opacity: 0, y: 50 },
+                          { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+                        );
                       }
                     }}
                   />
@@ -95,11 +104,11 @@ const Carousel = () => {
                 className="absolute bottom-0 md:bottom-8 mb-1 left-2/4 transform -translate-x-1/2 w-full px-1 md:bg-transparent"
                 ref={captionRef}
               >
-                {item.caption.split('\n').map((line, i) => (
+                {item.caption.split("\n").map((line, i) => (
                   <span
                     key={i}
                     className="bg-zinc-950 p-1 text-orange-500 font-bold font-montserrat text-wrap uppercase text-xs md:text-sm lg:text-base"
-                    style={{ display: 'inline', lineHeight: '1.7' }}
+                    style={{ display: "inline", lineHeight: "1.7" }}
                   >
                     {line}
                   </span>
@@ -115,7 +124,7 @@ const Carousel = () => {
             key={index}
             onClick={() => handleDotClick(index)}
             className={`md:w-3 md:h-3 w-2 h-2 rounded-full bg-gray-50 hover:bg-gradient-to-r from-orange-600 to-orange-500 transition-colors duration-300 ${
-              index === currentIndex ? 'bg-orange-600' : ''
+              index === currentIndex ? "bg-orange-600" : ""
             }`}
           />
         ))}

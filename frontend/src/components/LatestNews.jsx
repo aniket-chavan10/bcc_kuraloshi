@@ -3,7 +3,7 @@ import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 
 const LatestNews = () => {
   const [newsData, setNewsData] = useState([]);
@@ -99,7 +99,7 @@ const LatestNews = () => {
           {/* Large news item */}
           <div className="md:col-span-2 shadow-md overflow-hidden news-item news-item-0 relative">
             {loadingImages[0] !== false && (
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center z-10">
                 <Loader />
               </div>
             )}
@@ -110,7 +110,7 @@ const LatestNews = () => {
               className="w-full h-80 object-cover"
               style={{ display: loadingImages[0] !== false ? "none" : "block" }}
             />
-            <div className="py-2 relative">
+            <div className="py-2 relative z-0">
               <h3 className="text-lg font-bold mb-2">{newsData[0].title}</h3>
               <p className="text-gray-700 truncate overflow-hidden">{newsData[0].description}</p>
               <div className="flex justify-between items-center mt-2">
@@ -134,7 +134,7 @@ const LatestNews = () => {
               className={`shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item news-item-${index + 1} relative`}
             >
               {loadingImages[index + 1] !== false && (
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center z-10">
                   <Loader />
                 </div>
               )}
@@ -145,7 +145,7 @@ const LatestNews = () => {
                 className="w-full h-80 object-cover"
                 style={{ display: loadingImages[index + 1] !== false ? "none" : "block" }}
               />
-              <div className="py-2 relative flex flex-col">
+              <div className="py-2 relative z-0 flex flex-col">
                 <h3 className="text-sm font-bold mb-2">{newsItem.title}</h3>
                 <p className="text-gray-700 truncate overflow-hidden text-xs">{newsItem.description}</p>
                 <div className="flex justify-between items-center mt-2">
