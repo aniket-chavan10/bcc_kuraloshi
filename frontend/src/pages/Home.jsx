@@ -26,7 +26,6 @@ function Home() {
       <div className="flex flex-col min-h-screen">
         <Navbar /> {/* Render Navbar */}
         <div className="flex-grow flex items-center justify-center">
-          {/* You can replace the loader with a placeholder or leave it empty */}
           <div>Loading...</div>
         </div>
       </div>
