@@ -8,6 +8,7 @@ const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadingImages, setLoadingImages] = useState(true);
   const captionRef = useRef(null);
 
   useEffect(() => {
@@ -57,10 +58,14 @@ const Carousel = () => {
     setCurrentIndex(index);
   };
 
+  const handleImageLoad = () => {
+    setLoadingImages(false);
+  };
+
   if (isLoading) {
     return (
       <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-0">
-        <Loader/>
+        <Loader />
       </div>
     );
   }
@@ -79,12 +84,18 @@ const Carousel = () => {
           {carouselItems.map((item, index) => (
             <div key={index} className="inline-block w-full relative">
               <div className="relative pb-[56.25%] overflow-hidden">
+                {loadingImages && currentIndex === index && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Loader />
+                  </div>
+                )}
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
                     alt={`Slide ${index}`}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${loadingImages ? 'opacity-0' : 'opacity-100'}`}
                     onLoad={() => {
+                      handleImageLoad();
                       if (currentIndex === index) {
                         gsap.fromTo(
                           captionRef.current,
@@ -93,6 +104,7 @@ const Carousel = () => {
                         );
                       }
                     }}
+                    onError={handleImageLoad} // Handle image load error case
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-200">
