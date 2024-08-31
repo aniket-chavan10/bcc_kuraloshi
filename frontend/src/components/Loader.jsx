@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center">
       <div className="w-8 h-8 bg-orange-600 animate-flip"></div>
       <style jsx>{`
         .animate-flip {

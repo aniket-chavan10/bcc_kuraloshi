@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import Loader from "../components/Loader";
 
 const LatestNews = () => {
@@ -15,8 +14,6 @@ const LatestNews = () => {
   const newsContainerRef = useRef(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     const fetchData = async () => {
       try {
         const response = await fetchNewsData();
@@ -36,31 +33,28 @@ const LatestNews = () => {
 
   useEffect(() => {
     if (newsData.length > 0) {
-      newsData.forEach((_, index) => {
-        const newsItemRef = newsContainerRef.current.querySelector(
-          `.news-item-${index}`
-        );
-
-        gsap.fromTo(
-          newsItemRef,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: newsItemRef,
-              start: "top 100%",
-              end: "bottom 20%",
-              toggleActions: "play none none reset",
-              markers: false, // Set to true for debugging
-            },
-          }
-        );
-      });
+      const newsItems = newsContainerRef.current.querySelectorAll(".news-item");
+      
+      gsap.fromTo(
+        newsItems,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.1, // Simple stagger for better effect
+          scrollTrigger: {
+            trigger: newsContainerRef.current,
+            start: "top 80%", // Trigger when container comes into view
+            end: "bottom 20%",
+            toggleActions: "play none none none",
+            markers: false,
+          },
+        }
+      );
     }
-  }, [newsData, visibleNewsCount]);
+  }, [newsData]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -74,12 +68,10 @@ const LatestNews = () => {
   };
 
   const handleImageLoad = (index) => {
-    setTimeout(() => {
-      setLoadingImages((prevState) => ({
-        ...prevState,
-        [index]: false,
-      }));
-    }, 500);
+    setLoadingImages((prevState) => ({
+      ...prevState,
+      [index]: false,
+    }));
   };
 
   if (isLoading) {
@@ -97,7 +89,7 @@ const LatestNews = () => {
       {newsData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
           {/* Large news item */}
-          <div className="md:col-span-2 shadow-md overflow-hidden news-item news-item-0 relative">
+          <div className="md:col-span-2 shadow-md overflow-hidden news-item relative">
             {loadingImages[0] !== false && (
               <div className="absolute inset-0 flex items-center justify-center z-10">
                 <Loader />
@@ -112,7 +104,9 @@ const LatestNews = () => {
             />
             <div className="py-2 relative z-0">
               <h3 className="text-lg font-bold mb-2">{newsData[0].title}</h3>
-              <p className="text-gray-700 truncate overflow-hidden">{newsData[0].description}</p>
+              <p className="text-gray-700 truncate overflow-hidden">
+                {newsData[0].description}
+              </p>
               <div className="flex justify-between items-center mt-2">
                 <Link
                   to={`/news/${newsData[0]._id}`}
@@ -131,7 +125,7 @@ const LatestNews = () => {
           {newsData.slice(1, visibleNewsCount).map((newsItem, index) => (
             <div
               key={newsItem._id}
-              className={`shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item news-item-${index + 1} relative`}
+              className="shadow-md overflow-hidden md:col-span-1 col-span-full flex flex-col news-item relative"
             >
               {loadingImages[index + 1] !== false && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -147,7 +141,9 @@ const LatestNews = () => {
               />
               <div className="py-2 relative z-0 flex flex-col">
                 <h3 className="text-sm font-bold mb-2">{newsItem.title}</h3>
-                <p className="text-gray-700 truncate overflow-hidden text-xs">{newsItem.description}</p>
+                <p className="text-gray-700 truncate overflow-hidden text-xs">
+                  {newsItem.description}
+                </p>
                 <div className="flex justify-between items-center mt-2">
                   <Link
                     to={`/news/${newsItem._id}`}

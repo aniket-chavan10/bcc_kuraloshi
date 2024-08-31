@@ -44,7 +44,7 @@ const PlayerRanking = () => {
   return (
     <div className="container mx-auto md:py-28 mb-5 md:mt-6 mt-16 px-4 md:px-0 max-w-7xl flex flex-col md:flex-row">
       {loading ? (
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="absolute inset-0 flex items-center justify-center bg-white">
           <Loader /> {/* Centered Loader */}
         </div>
       ) : (

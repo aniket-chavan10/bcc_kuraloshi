@@ -64,8 +64,10 @@ const Carousel = () => {
 
   if (isLoading) {
     return (
-      <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-0">
-        <Loader />
+      <div className="relative w-full h-[300px] max-w-full mx-auto overflow-hidden bg-gray-50">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Loader />
+        </div>
       </div>
     );
   }
@@ -75,7 +77,7 @@ const Carousel = () => {
   }
 
   return (
-    <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-2">
+    <div className="relative w-full max-w-full mx-auto overflow-hidden">
       <div className="relative w-full">
         <div
           className="whitespace-nowrap transition-transform duration-1000 ease-in-out"
@@ -85,7 +87,7 @@ const Carousel = () => {
             <div key={index} className="inline-block w-full relative">
               <div className="relative pb-[56.25%] overflow-hidden">
                 {loadingImages && currentIndex === index && (
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
                     <Loader />
                   </div>
                 )}

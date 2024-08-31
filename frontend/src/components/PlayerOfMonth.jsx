@@ -53,7 +53,7 @@ function PlayerCard({ player, title, stats, imageRef, label, labelRef }) {
             {stats.map((stat, index) => (
               <p
                 key={stat.label}
-                className="player-card-stats bg-white md:bg-yellow-500 flex flex-col py-1 rounded text-orange-600 font-bold text-xl capitalize w-1/3 shadow-lg"
+                className="player-card-stats bg-white md:bg-zinc-400 md:bg-opacity-70  flex flex-col py-1 rounded text-orange-600 font-bold text-xl capitalize w-1/3 shadow-lg"
                 style={{ minWidth: "80px" }} // Adjusting width for smaller size
               >
                 {stat.value}{" "}
@@ -126,7 +126,7 @@ function PlayerOfMonth() {
         {
           opacity: 1,
           y: 0,
-          duration: 1.5,
+          duration: 1.2,
           ease: "power2.out",
           scrollTrigger: {
             trigger: batsmanRef.current,
@@ -136,7 +136,7 @@ function PlayerOfMonth() {
           },
         }
       );
-  
+
       // Bowler Card Animation
       gsap.fromTo(
         bowlerRef.current,
@@ -147,7 +147,7 @@ function PlayerOfMonth() {
         {
           opacity: 1,
           y: 0,
-          duration: 1.5,
+          duration: 1.2,
           ease: "power2.out",
           scrollTrigger: {
             trigger: bowlerRef.current,
@@ -157,63 +157,36 @@ function PlayerOfMonth() {
           },
         }
       );
-  
-      // Stats Animation for Batsman
-      gsap.fromTo(
-        ".player-card-stats",
-        {
-          opacity: 0,
-          scale: 0.9,
-          y: 20,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 1.5,
-          ease: "power3.out",
-          stagger: {
-            amount: 0.5,
-            grid: "auto",
-            from: "start",
+
+      // Stats Animation for Batsman and Bowler
+      const animateStats = (triggerElement) => {
+        gsap.fromTo(
+          triggerElement.querySelectorAll(".player-card-stats"),
+          {
+            opacity: 0,
+            y: 30,
           },
-          scrollTrigger: {
-            trigger: batsmanRef.current,
-            start: window.innerWidth < 768 ? "top 80%" : "top 85%",
-            end: window.innerWidth < 768 ? "top 60%" : "top 65%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-  
-      // Stats Animation for Bowler
-      gsap.fromTo(
-        ".player-card-stats",
-        {
-          opacity: 0,
-          scale: 0.9,
-          y: 20,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 1.5,
-          ease: "power3.out",
-          stagger: {
-            amount: 0.5,
-            grid: "auto",
-            from: "start",
-          },
-          scrollTrigger: {
-            trigger: bowlerRef.current,
-            start: window.innerWidth < 768 ? "top 80%" : "top 85%",
-            end: window.innerWidth < 768 ? "top 60%" : "top 65%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-  
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: {
+              amount: 0.3,
+            },
+            scrollTrigger: {
+              trigger: triggerElement,
+              start: window.innerWidth < 768 ? "top 80%" : "top 85%",
+              end: window.innerWidth < 768 ? "top 60%" : "top 65%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      };
+
+      animateStats(batsmanRef.current);
+      animateStats(bowlerRef.current);
+
       // Animation for Corner Labels
       gsap.fromTo(
         [batsmanLabelRef.current, bowlerLabelRef.current],
@@ -223,7 +196,7 @@ function PlayerOfMonth() {
         },
         {
           opacity: 1,
-          scale: 1.1,
+          scale: 1.05,
           duration: 0.5,
           ease: "power.inOut",
           repeat: -1,
@@ -238,7 +211,6 @@ function PlayerOfMonth() {
       );
     }
   }, [bestBatsman, bestBowler]);
-  
 
   if (loading) {
     return (
