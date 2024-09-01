@@ -80,7 +80,13 @@ function PlayerOfMonth() {
   const batsmanLabelRef = useRef(null);
   const bowlerLabelRef = useRef(null);
 
-  const currentMonth = new Date().toLocaleString("default", { month: "long" });
+  // Calculate the previous month
+  const currentDate = new Date();
+  const previousMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+
+  // Extract full month name
+  const previousMonthName = previousMonthDate.toLocaleString("default", { month: "long" });
+  const previousMonthString = previousMonthDate.toISOString().substring(0, 7); // "YYYY-MM"
 
   useEffect(() => {
     async function getData() {
@@ -93,12 +99,27 @@ function PlayerOfMonth() {
           return;
         }
 
-        const batsman = players.reduce((best, player) =>
-          player.runs > (best.runs || 0) ? player : best
+        // Filter players data to only include stats from the previous month
+        const previousMonthPlayers = players.map(player => {
+          const monthlyStats = player.monthlyStats.find(stat => stat.month === previousMonthString);
+          return {
+            ...player,
+            monthlyStats,
+          };
+        }).filter(player => player.monthlyStats); // Filter out players with no data for the previous month
+
+        if (previousMonthPlayers.length === 0) {
+          setError(`No player data found for ${previousMonthName}`);
+          setLoading(false);
+          return;
+        }
+
+        const batsman = previousMonthPlayers.reduce((best, player) =>
+          player.monthlyStats.runs > (best.monthlyStats?.runs || 0) ? player : best
         );
 
-        const bowler = players.reduce((best, player) =>
-          player.wickets > (best.wickets || 0) ? player : best
+        const bowler = previousMonthPlayers.reduce((best, player) =>
+          player.monthlyStats.wickets > (best.monthlyStats?.wickets || 0) ? player : best
         );
 
         setBestBatsman(batsman);
@@ -215,7 +236,7 @@ function PlayerOfMonth() {
   if (loading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <Loader /> {/* Using your custom Loader component */}
+        <Loader />
       </div>
     );
   }
@@ -231,7 +252,7 @@ function PlayerOfMonth() {
     <div className="container mx-auto py-10 mt-3 px-4 md:px-0">
       <h2 className="text-xl font-bold">
         Player Of The Month:{" "}
-        <span className="text-orange-600">"{currentMonth}"</span>
+        <span className="text-orange-600">{previousMonthName}</span>
       </h2>
 
       <div className="flex flex-col md:flex-row gap-8 justify-center items-center p-2">
@@ -240,7 +261,7 @@ function PlayerOfMonth() {
           player={bestBatsman}
           title="Most Runs"
           stats={[
-            { value: bestBatsman?.runs, label: "Runs" },
+            { value: bestBatsman?.monthlyStats?.runs, label: "Runs" },
             { value: bestBatsman?.matches, label: "Matches" },
             { value: bestBatsman?.bestScore, label: "Best Score" },
           ]}
@@ -254,7 +275,7 @@ function PlayerOfMonth() {
           player={bestBowler}
           title="Most Wickets"
           stats={[
-            { value: bestBowler?.wickets, label: "Wickets" },
+            { value: bestBowler?.monthlyStats?.wickets, label: "Wickets" },
             { value: bestBowler?.matches, label: "Matches" },
             { value: bestBowler?.bestScore, label: "Best Figure" },
           ]}

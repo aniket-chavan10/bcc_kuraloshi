@@ -113,7 +113,9 @@ const PlayerRanking = () => {
                       className="player-card flex justify-between items-center py-1 px-6 border-b last:border-b-0 shadow-md"
                     >
                       <div className="flex items-center">
-                        <div className="text-gray-950 font-bold text-xl">
+                        <div
+                          className="font-bold text-xl w-8 text-right" // Setting a fixed width and text alignment
+                        >
                           {index + 2}
                         </div>
                         <img
@@ -130,6 +132,7 @@ const PlayerRanking = () => {
                           </div>
                         </div>
                       </div>
+
                       <div className="text-center">
                         <div className="text-orange-500 font-bold md:text-xl text-lg">
                           {activeTab === "runs" ? player.runs : player.wickets}
