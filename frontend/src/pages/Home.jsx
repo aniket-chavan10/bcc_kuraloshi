@@ -23,21 +23,42 @@ const loadingText = [
   "Loading... slower than a Test match's first innings!"
 ];
 
+const LOADER_DURATION = 3000; // Duration in milliseconds (e.g., 3000ms = 3 seconds)
+
 function Home() {
   const location = useLocation();
   const mainRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [componentsLoaded, setComponentsLoaded] = useState({
+    mainLayout: false,
+    latestNews: false,
+    players: false,
+    gallery: false,
+    playerOfMonth: false,
+    instaFeed: false,
+    footer: false,
+  });
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
-    setIsLoading(true);
 
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Simulate a delay for loading components
+    }, LOADER_DURATION);
 
     return () => clearTimeout(timer);
-  }, [location]);
+  }, []);
+
+  useLayoutEffect(() => {
+    const allLoaded = Object.values(componentsLoaded).every(Boolean);
+    if (allLoaded) {
+      setIsLoading(false);
+    }
+  }, [componentsLoaded]);
+
+  const handleComponentLoaded = (component) => {
+    setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
+  };
 
   const randomText = loadingText[Math.floor(Math.random() * loadingText.length)];
 
@@ -51,13 +72,13 @@ function Home() {
         </div>
       ) : (
         <div ref={mainRef}>
-          <MainLayout />
-          <LatestNews />
-          <Players />
-          <Gallery />
-          <PlayerOfMonth />
-          <InstaFeed />
-          <Footer />
+          <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
+          <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
+          <Players onLoad={() => handleComponentLoaded("players")} />
+          <Gallery onLoad={() => handleComponentLoaded("gallery")} />
+          <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
+          <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
+          <Footer onLoad={() => handleComponentLoaded("footer")} />
         </div>
       )}
     </div>
