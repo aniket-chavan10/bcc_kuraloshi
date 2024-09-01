@@ -71,23 +71,23 @@ const Fixtures = () => {
               weekday: "long",
             });
 
-            // Determine background color based on matchStatus
-            const cardBgColor =
-              fixture.matchStatus === "completed" ? "bg-zinc-200 " : "bg-white";
+            // Determine the color for the header based on matchStatus
+            const headerBgColor =
+              fixture.matchStatus === "completed" ? "bg-zinc-600" : "bg-orange-500";
 
             return (
               <li
                 key={fixture._id}
                 ref={(el) => (fixtureRefs.current[index] = el)}
-                className={`mb-4 p-4 rounded-lg shadow-md`}
+                className={`mb-4 p-4 rounded-lg shadow-md bg-white`}
               >
-                <div className="w-full h-10 bg-orange-500 flex items-center px-4 py-1">
+                <div className={`w-full h-10 ${headerBgColor} flex items-center px-4 py-1`}>
                   <span className="text-white font-bold">
                     {formattedDate} |{" "}
                     <span className="font-thin">{formattedDay}</span>
                   </span>
                 </div>
-                <div className={`shadow-lg p-3 ${cardBgColor}`}>
+                <div className="shadow-lg p-3 bg-white">
                   <div className="flex flex-col md:flex-row mb-4 md:items-center md:space-x-4">
                     <div className="flex flex-col items-center mb-4 md:mb-0 flex-wrap">
                       <h1 className="font-black text-zinc-900 text-xl md:text-2xl">
