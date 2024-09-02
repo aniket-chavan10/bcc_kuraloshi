@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import LatestNews from "../components/LatestNews";
 import Gallery from "../components/Gallery";
@@ -45,12 +45,14 @@ function Home() {
 
     if (!hasLoadedBefore) {
       const timer = setTimeout(() => {
+        // Remove loader after the timeout
         setIsLoading(false);
         sessionStorage.setItem("hasLoadedHome", "true");
       }, LOADER_DURATION);
 
       return () => clearTimeout(timer);
     } else {
+      // If the user has visited before, set loading to false immediately
       setIsLoading(false);
     }
   }, []);
