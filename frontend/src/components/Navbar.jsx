@@ -254,27 +254,31 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Side Drawer Menu */}
-          <div
+           {/* Side Drawer Menu */}
+           <div
             className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${
               isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             onClick={closeMenu}
-          ></div>
+          />
           <div
-            className={`fixed top-0 right-0 w-64 bg-orange-600 text-white h-full transform ${
+            className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-r from-orange-600 to-orange-500 transform transition-transform ${
               isOpen ? "translate-x-0" : "translate-x-full"
-            } transition-transform duration-300 ease-in-out`}
+            }`}
           >
-            <div className="flex justify-between p-4">
-              <button onClick={closeMenu} className="text-2xl">
+            <div className="p-4 flex ">
+              <button onClick={handleMenuClick} className="text-3xl">
                 <FaTimes />
               </button>
             </div>
-            <nav className="flex flex-col space-y-4 px-6 mt-4">
+            <nav className="flex flex-col p-4 space-y-4">
               <NavLink
                 to="/"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -284,7 +288,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/team"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -294,7 +302,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/schedule"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -304,7 +316,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/rankings"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -314,7 +330,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/gallery"
-                className="font-bold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-bold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-bold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -324,7 +344,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/about"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -334,7 +358,11 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/contact-us"
-                className="font-semibold"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
+                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
+                }
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -342,12 +370,52 @@ const Navbar = () => {
               >
                 Contact
               </NavLink>
-              <button
-                className="mt-auto py-2 px-4 bg-white text-orange-600 font-semibold rounded"
-                onClick={handleLoginClick}
-              >
-                Login
-              </button>
+
+              <div className="flex flex-col items-center pt-16">
+                <h1 className="text-xl font-bold font-josefin underline underline-offset-8">FOLLOW US ON</h1>
+                <div className="mt-4 flex flex-row space-x-4 text-white ">
+                  {socialLinks.facebook && (
+                    <a
+                      href={socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1 "
+                    >
+                      <FaFacebookF />
+                    </a>
+                  )}
+                  {socialLinks.instagram && (
+                    <a
+                      href={socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaInstagram />
+                    </a>
+                  )}
+                  {socialLinks.youtube && (
+                    <a
+                      href={socialLinks.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaYoutube />
+                    </a>
+                  )}
+                  {socialLinks.whatsapp && (
+                    <a
+                      href={socialLinks.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xl rounded-full border p-1"
+                    >
+                      <FaWhatsapp />
+                    </a>
+                  )}
+                </div>
+              </div>
             </nav>
           </div>
         </nav>
@@ -357,3 +425,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
