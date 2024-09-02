@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Loader from "../components/Loader"; // Import your custom Loader component
+import Loader from "../components/Loader";
+import AppContext from "../context/AppContext"; // Adjust the path to where your AppContext is defined
 
 gsap.registerPlugin(ScrollTrigger);
 
 const AllGallery = () => {
-  const [galleryData, setGalleryData] = useState([]);
+  const { galleryData, setGalleryData } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleItemCount, setVisibleItemCount] = useState(8);
@@ -16,21 +17,26 @@ const AllGallery = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetchGalleryData();
-        const sortedGallery = response.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setGalleryData(sortedGallery);
-      } catch (error) {
-        setError(error);
-      } finally {
+      if (galleryData.length === 0) {
+        // Fetch only if it's not already populated
+        try {
+          const response = await fetchGalleryData();
+          const sortedGallery = response.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setGalleryData(sortedGallery);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [galleryData, setGalleryData]);
 
   useEffect(() => {
     // Scroll to the top whenever the component is mounted or location changes
@@ -72,12 +78,11 @@ const AllGallery = () => {
   const handleLoadMore = () => {
     setVisibleItemCount((prevCount) => prevCount + 8);
   };
-
   return (
     <div className="container mx-auto py-10 mt-3 md:mt-16 px-4 md:px-0">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white">
-          <Loader /> {/* Use your custom Loader here */}
+          <Loader />
         </div>
       )}
       {error && <p>Error fetching gallery: {error.message}</p>}
@@ -110,8 +115,6 @@ const AllGallery = () => {
           ))}
         </div>
       )}
-
-      {/* Load More Button */}
       {galleryData.length > visibleItemCount && (
         <button
           onClick={handleLoadMore}

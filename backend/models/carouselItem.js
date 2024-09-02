@@ -7,5 +7,6 @@ const carouselItemSchema = new mongoose.Schema(
   },
   { timestamps: true } // Ensure this option is included
 );
+carouselItemSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model("CarouselItem", carouselItemSchema);

@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { fetchNewsData } from "../services/api";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import Loader from "../components/Loader";
+import AppContext from "../context/AppContext"; // Import context
 
 const LatestNews = () => {
-  const [newsData, setNewsData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { newsData, setNewsData } = useContext(AppContext); // Use context for news data
+  const [isLoading, setIsLoading] = useState(!newsData.length);
   const [error, setError] = useState(null);
   const [visibleNewsCount, setVisibleNewsCount] = useState(7);
   const [loadingImages, setLoadingImages] = useState({});
@@ -14,22 +15,26 @@ const LatestNews = () => {
   const newsContainerRef = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchNewsData();
-        const sortedNews = response.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setNewsData(sortedNews);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (!newsData.length) {
+      const fetchData = async () => {
+        try {
+          const response = await fetchNewsData();
+          const sortedNews = response.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setNewsData(sortedNews); // Store data in context
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [newsData, setNewsData]);
 
   useEffect(() => {
     if (newsData.length > 0) {
@@ -43,10 +48,10 @@ const LatestNews = () => {
           y: 0,
           duration: 0.6,
           ease: "power2.out",
-          stagger: 0.1, // Simple stagger for better effect
+          stagger: 0.1,
           scrollTrigger: {
             trigger: newsContainerRef.current,
-            start: "top 80%", // Trigger when container comes into view
+            start: "top 80%",
             end: "bottom 20%",
             toggleActions: "play none none none",
             markers: false,
@@ -88,7 +93,6 @@ const LatestNews = () => {
       {error && <p>Error fetching news: {error.message}</p>}
       {newsData.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4" ref={newsContainerRef}>
-          {/* Large news item */}
           <div className="md:col-span-2 shadow-md overflow-hidden news-item relative">
             {loadingImages[0] !== false && (
               <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -121,7 +125,6 @@ const LatestNews = () => {
             </div>
           </div>
 
-          {/* Smaller news items */}
           {newsData.slice(1, visibleNewsCount).map((newsItem, index) => (
             <div
               key={newsItem._id}
@@ -161,7 +164,6 @@ const LatestNews = () => {
         </div>
       )}
 
-      {/* Load More Button */}
       {newsData.length > visibleNewsCount && (
         <button
           onClick={handleLoadMore}

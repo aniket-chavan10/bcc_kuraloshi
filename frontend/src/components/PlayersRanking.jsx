@@ -1,32 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { fetchPlayersData } from "../services/api";
+import React, { useContext, useEffect, useState } from "react";
 import gsap from "gsap";
 import Loader from "../components/Loader"; // Adjust the import path according to your project structure
+import AppContext from "../context/AppContext";
 
 const PlayerRanking = () => {
-  const [players, setPlayers] = useState([]);
+  const { playersData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("runs");
 
   useEffect(() => {
-    const getPlayers = async () => {
-      try {
-        const data = await fetchPlayersData();
-        setPlayers(data);
-        setLoading(false); // Stop the loader once data is fetched
-        gsap.fromTo(
-          ".player-card",
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 }
-        );
-      } catch (error) {
-        console.error("Error fetching players:", error);
-        setLoading(false); // Stop the loader in case of an error
-      }
-    };
-
-    getPlayers();
-  }, []);
+    if (playersData.length > 0) {
+      setLoading(false); // Stop the loader once data is fetched
+      gsap.fromTo(
+        ".player-card",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 }
+      );
+    }
+  }, [playersData]);
 
   useEffect(() => {
     gsap.fromTo(
@@ -38,8 +29,8 @@ const PlayerRanking = () => {
 
   const sortedPlayers =
     activeTab === "runs"
-      ? [...players].sort((a, b) => b.runs - a.runs)
-      : [...players].sort((a, b) => b.wickets - a.wickets);
+      ? [...playersData].sort((a, b) => b.runs - a.runs)
+      : [...playersData].sort((a, b) => b.wickets - a.wickets);
 
   return (
     <div className="container mx-auto md:py-28 mb-5 md:mt-6 mt-16 px-4 md:px-0 max-w-7xl flex flex-col md:flex-row">

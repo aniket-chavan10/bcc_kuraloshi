@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -14,6 +15,7 @@ import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import PlayersRanking from './pages/PlayersRanking';
 import FullPageLoader from './components/FullPageLoader';
+import { AppProvider } from './context/AppContext';  // Import the provider
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +45,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <AppProvider>  {/* Wrap your application with the context provider */}
       {isLoading ? (
         <FullPageLoader />
       ) : (
@@ -69,7 +71,7 @@ function App() {
           </Routes>
         </Router>
       )}
-    </>
+    </AppProvider>
   );
 }
 

@@ -1,40 +1,45 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { fetchCarouselItems } from "../services/api";
 import gsap from "gsap";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
+import AppContext from "../context/AppContext"; // Import the context
 
 const Carousel = () => {
-  const [carouselItems, setCarouselItems] = useState([]);
+  const { carouselItems, setCarouselItems } = useContext(AppContext); // Use context
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!carouselItems.length); // Set initial loading based on context
   const [error, setError] = useState(null);
   const [loadingImages, setLoadingImages] = useState(true);
   const captionRef = useRef(null);
 
   useEffect(() => {
     const getCarouselItems = async () => {
-      try {
-        const MINIMUM_LOADING_TIME = 3000; // Minimum skeleton display time (3 seconds)
-        const start = Date.now();
+      if (carouselItems.length === 0) { // Only fetch if there are no items in context
+        try {
+          const MINIMUM_LOADING_TIME = 3000; // Minimum skeleton display time (3 seconds)
+          const start = Date.now();
 
-        const data = await fetchCarouselItems();
-        setCarouselItems(data.slice(-4)); // Load the last 4 items
+          const data = await fetchCarouselItems();
+          setCarouselItems(data.slice(-4)); // Load the last 4 items
 
-        const elapsed = Date.now() - start;
-        const remainingTime = MINIMUM_LOADING_TIME - elapsed;
+          const elapsed = Date.now() - start;
+          const remainingTime = MINIMUM_LOADING_TIME - elapsed;
 
-        if (remainingTime > 0) {
-          await new Promise((resolve) => setTimeout(resolve, remainingTime));
+          if (remainingTime > 0) {
+            await new Promise((resolve) => setTimeout(resolve, remainingTime));
+          }
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false); // Set loading to false after the minimum time has passed
         }
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false); // Set loading to false after the minimum time has passed
+      } else {
+        setIsLoading(false); // If items are already in context, skip loading
       }
     };
 
     getCarouselItems();
-  }, []);
+  }, [carouselItems.length, setCarouselItems]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -95,7 +100,7 @@ const Carousel = () => {
                   <img
                     src={item.imageUrl}
                     alt={`Slide ${index}`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${loadingImages ? 'opacity-0' : 'opacity-100'}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${loadingImages ? "opacity-0" : "opacity-100"}`}
                     onLoad={() => {
                       handleImageLoad();
                       if (currentIndex === index) {

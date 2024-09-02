@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "../components/Loader"; // Import your custom Loader component
+import AppContext from "../context/AppContext"; // Import your AppContext
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ImageWithLoader = ({ src, alt }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = React.useState(true);
 
   return (
     <div className="relative w-full h-full">
@@ -29,9 +30,9 @@ const ImageWithLoader = ({ src, alt }) => {
 };
 
 function AllTeam() {
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { playersData, setPlayersData } = useContext(AppContext); // Use context values
+  const [loading, setLoading] = React.useState(!playersData.length); // Set loading state based on context
+  const [error, setError] = React.useState(null);
 
   const cardRefs = useRef([]);
 
@@ -44,7 +45,7 @@ function AllTeam() {
         if (data.length === 0) {
           setError("No players data found");
         } else {
-          setPlayers(data);
+          setPlayersData(data); // Update context with fetched data
         }
 
         setLoading(false);
@@ -55,11 +56,15 @@ function AllTeam() {
       }
     }
 
-    getData();
-  }, []);
+    if (!playersData.length) {
+      getData();
+    } else {
+      setLoading(false);
+    }
+  }, [playersData, setPlayersData]);
 
   useEffect(() => {
-    if (players.length > 0) {
+    if (playersData.length > 0) {
       cardRefs.current.forEach((card, index) => {
         gsap.fromTo(
           card,
@@ -78,7 +83,7 @@ function AllTeam() {
         );
       });
     }
-  }, [players]);
+  }, [playersData]);
 
   if (loading)
     return (
@@ -93,9 +98,9 @@ function AllTeam() {
       </div>
     );
 
-  const batsmen = players.filter((player) => player.role === "Batsman");
-  const bowlers = players.filter((player) => player.role === "Bowler");
-  const allRounders = players.filter(
+  const batsmen = playersData.filter((player) => player.role === "Batsman");
+  const bowlers = playersData.filter((player) => player.role === "Bowler");
+  const allRounders = playersData.filter(
     (player) => player.role === "All-rounder"
   );
 

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { fetchFixtures } from "../services/api";
 import { FaInstagram, FaYoutube } from "react-icons/fa";
 import Loader from '../components/Loader';
+import AppContext from '../context/AppContext';
 
 const RecentFixture = () => {
-  const [fixtures, setFixtures] = useState([]);
+  const { fixtures, setFixtures } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,45 +21,36 @@ const RecentFixture = () => {
       }
     };
 
-    getFixtures();
-  }, []);
+    if (fixtures.length === 0) { // Fetch only if fixtures are not already available
+      getFixtures();
+    } else {
+      setLoading(false); // Skip loading if fixtures are already available
+    }
+  }, [fixtures, setFixtures]);
 
-  // Ensure that only the loader is shown while loading is true
   if (loading) {
     return (
       <div className="relative w-full max-w-full mx-auto overflow-hidden md:mt-0 mt-0">
-      <Loader/>
-    </div>
-    );  // Only the Loader component is shown while loading
+        <Loader />
+      </div>
+    );
   }
 
-  // Show an error message if there's an error
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
-  // Render the content after the loading is complete
   return (
     <div className="bg-gray-950 text-orange-500 p-3 sm:p-4 min-h-full flex flex-col">
       {fixtures.slice(0, 1).map((fixture) => {
         const date = new Date(fixture.date);
-        const formattedDate = `${date.getDate()} ${date.toLocaleString(
-          "default",
-          { month: "long" }
-        )}, ${date.getFullYear()}`;
-        const formattedDay = date.toLocaleDateString("en-US", {
-          weekday: "long",
-        });
+        const formattedDate = `${date.getDate()} ${date.toLocaleString("default", { month: "long" })}, ${date.getFullYear()}`;
+        const formattedDay = date.toLocaleDateString("en-US", { weekday: "long" });
 
         return (
-          <div
-            key={fixture._id}
-            className="flex flex-col items-center flex-grow"
-          >
+          <div key={fixture._id} className="flex flex-col items-center flex-grow">
             <div className="text-center mb-1 sm:mb-4">
-              <h3 className="text-xs sm:text-sm uppercase">
-                {formattedDate}
-              </h3>
+              <h3 className="text-xs sm:text-sm uppercase">{formattedDate}</h3>
               <p className="text-xs text-gray-400">{formattedDay}</p>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between mb-1 sm:mb-4 w-full">
@@ -89,23 +81,15 @@ const RecentFixture = () => {
               </div>
             </div>
             <div className="text-center uppercase leading-tight font-semibold mb-2 sm:mb-8">
-              <p className="text-xs sm:text-sm opacity-80">
-                {fixture.matchResult || 'Result not available'}
-              </p>
+              <p className="text-xs sm:text-sm opacity-80">{fixture.matchResult || 'Result not available'}</p>
             </div>
             <div className="flex flex-col text-center my-2 sm:my-5">
-              <h1 className="text-zinc-100 text-base sm:text-2xl font-medium">
-                STAY CONNECTED
-              </h1>
-              <h1 className="font-bold text-base sm:text-2xl">
-                WITH BCC KURALOSHI FAMILY
-              </h1>
+              <h1 className="text-zinc-100 text-base sm:text-2xl font-medium">STAY CONNECTED</h1>
+              <h1 className="font-bold text-base sm:text-2xl">WITH BCC KURALOSHI FAMILY</h1>
             </div>
 
             <div className="flex flex-col text-center mt-2 sm:mt-8">
-              <h1 className="text-xs sm:text-sm text-white uppercase mb-2">
-                Follow us on
-              </h1>
+              <h1 className="text-xs sm:text-sm text-white uppercase mb-2">Follow us on</h1>
               <div className="flex flex-row sm:flex-col justify-center items-center gap-1 sm:gap-4">
                 <a
                   href="https://www.instagram.com/"

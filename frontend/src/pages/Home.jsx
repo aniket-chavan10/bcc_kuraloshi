@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import LatestNews from "../components/LatestNews";
 import Gallery from "../components/Gallery";
@@ -39,7 +39,7 @@ function Home() {
     footer: false,
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
 
     const timer = setTimeout(() => {
@@ -48,13 +48,6 @@ function Home() {
 
     return () => clearTimeout(timer);
   }, []);
-
-  useLayoutEffect(() => {
-    const allLoaded = Object.values(componentsLoaded).every(Boolean);
-    if (allLoaded) {
-      setIsLoading(false);
-    }
-  }, [componentsLoaded]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -72,6 +65,7 @@ function Home() {
         </div>
       ) : (
         <div ref={mainRef}>
+          {/* Components start rendering as soon as isLoading is false */}
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
           <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
           <Players onLoad={() => handleComponentLoaded("players")} />

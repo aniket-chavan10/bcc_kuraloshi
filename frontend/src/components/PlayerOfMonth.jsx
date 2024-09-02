@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { fetchPlayersData } from "../services/api";
 import playerBg from "../assets/images/team_player_bg.jpg";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import Loader from "../components/Loader";
+import AppContext from "../context/AppContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -70,6 +71,7 @@ function PlayerCard({ player, title, stats, imageRef, label, labelRef }) {
 }
 
 function PlayerOfMonth() {
+  const { playersData, setPlayersData } = useContext(AppContext);
   const [bestBatsman, setBestBatsman] = useState(null);
   const [bestBowler, setBestBowler] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -83,57 +85,61 @@ function PlayerOfMonth() {
   // Calculate the previous month
   const currentDate = new Date();
   const previousMonthDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-
-  // Extract full month name
   const previousMonthName = previousMonthDate.toLocaleString("default", { month: "long" });
   const previousMonthString = previousMonthDate.toISOString().substring(0, 7); // "YYYY-MM"
 
   useEffect(() => {
     async function getData() {
-      try {
-        const players = await fetchPlayersData();
-
-        if (players.length === 0) {
-          setError("No players data found");
-          setLoading(false);
-          return;
+      if (playersData.length === 0) {
+        try {
+          const players = await fetchPlayersData();
+          setPlayersData(players);
+          processPlayersData(players);
+        } catch (error) {
+          console.error("Failed to fetch player data:", error);
+          setError("Failed to fetch player data");
         }
-
-        // Filter players data to only include stats from the previous month
-        const previousMonthPlayers = players.map(player => {
-          const monthlyStats = player.monthlyStats.find(stat => stat.month === previousMonthString);
-          return {
-            ...player,
-            monthlyStats,
-          };
-        }).filter(player => player.monthlyStats); // Filter out players with no data for the previous month
-
-        if (previousMonthPlayers.length === 0) {
-          setError(`No player data found for ${previousMonthName}`);
-          setLoading(false);
-          return;
-        }
-
-        const batsman = previousMonthPlayers.reduce((best, player) =>
-          player.monthlyStats.runs > (best.monthlyStats?.runs || 0) ? player : best
-        );
-
-        const bowler = previousMonthPlayers.reduce((best, player) =>
-          player.monthlyStats.wickets > (best.monthlyStats?.wickets || 0) ? player : best
-        );
-
-        setBestBatsman(batsman);
-        setBestBowler(bowler);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch player data:", error);
-        setError("Failed to fetch player data");
-        setLoading(false);
+      } else {
+        processPlayersData(playersData);
       }
     }
 
+    function processPlayersData(players) {
+      if (players.length === 0) {
+        setError("No players data found");
+        setLoading(false);
+        return;
+      }
+
+      const previousMonthPlayers = players.map(player => {
+        const monthlyStats = player.monthlyStats.find(stat => stat.month === previousMonthString);
+        return {
+          ...player,
+          monthlyStats,
+        };
+      }).filter(player => player.monthlyStats);
+
+      if (previousMonthPlayers.length === 0) {
+        setError(`No player data found for ${previousMonthName}`);
+        setLoading(false);
+        return;
+      }
+
+      const batsman = previousMonthPlayers.reduce((best, player) =>
+        player.monthlyStats.runs > (best.monthlyStats?.runs || 0) ? player : best
+      );
+
+      const bowler = previousMonthPlayers.reduce((best, player) =>
+        player.monthlyStats.wickets > (best.monthlyStats?.wickets || 0) ? player : best
+      );
+
+      setBestBatsman(batsman);
+      setBestBowler(bowler);
+      setLoading(false);
+    }
+
     getData();
-  }, []);
+  }, [playersData, setPlayersData]);
 
   useEffect(() => {
     if (bestBatsman && bestBowler) {
@@ -289,3 +295,4 @@ function PlayerOfMonth() {
 }
 
 export default PlayerOfMonth;
+

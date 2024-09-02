@@ -7,7 +7,9 @@ function NewsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen"> {/* Ensure the content takes up the full height */}
+      <div className="min-h-screen">
+        {" "}
+        {/* Ensure the content takes up the full height */}
         <NewsDetails />
       </div>
       <Footer />

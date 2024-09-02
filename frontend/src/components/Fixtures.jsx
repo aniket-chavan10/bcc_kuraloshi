@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { fetchFixtures } from "../services/api";
 import { gsap } from "gsap";
 import Loader from "../components/Loader"; // Adjust the path as needed
+import AppContext from "../context/AppContext"; // Import your AppContext
 
 const defaultLogo = "/default-image.jpg"; // Path to your default image
 
 const Fixtures = () => {
-  const [fixtures, setFixtures] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { fixtures, setFixtures } = useContext(AppContext); // Use context values
+  const [loading, setLoading] = useState(!fixtures.length); // Set loading state based on context
   const [error, setError] = useState(null);
   const fixtureRefs = useRef([]); // To hold refs for each fixture card
 
@@ -16,7 +17,7 @@ const Fixtures = () => {
       try {
         const data = await fetchFixtures();
         console.log("Data in Fixtures component:", data);
-        setFixtures(data.reverse());
+        setFixtures(data.reverse()); // Update context with fetched data
         setLoading(false);
       } catch (error) {
         console.error("Error in Fixtures component:", error);
@@ -24,8 +25,13 @@ const Fixtures = () => {
         setLoading(false);
       }
     };
-    getFixtures();
-  }, []);
+
+    if (!fixtures.length) {
+      getFixtures();
+    } else {
+      setLoading(false);
+    }
+  }, [fixtures, setFixtures]);
 
   useEffect(() => {
     if (fixtures.length > 0) {

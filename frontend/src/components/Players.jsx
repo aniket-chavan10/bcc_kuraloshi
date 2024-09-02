@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { fetchPlayersData } from "../services/api";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import AppContext from "../context/AppContext"; // Import the context
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Players() {
-  const [playersData, setPlayersData] = useState([]);
+  const { playersData, setPlayersData } = useContext(AppContext); // Use context for players data
   const [currentPage, setCurrentPage] = useState(0);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,8 +35,14 @@ function Players() {
         setIsLoaded(true);
       }
     }
-    fetchData();
-  }, []);
+
+    if (playersData.length === 0) {
+      // Only fetch if playersData is empty
+      fetchData();
+    } else {
+      setIsLoaded(true); // If data is already available, mark as loaded
+    }
+  }, [playersData, setPlayersData]);
 
   useEffect(() => {
     const handleResize = () => {

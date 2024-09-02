@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { fetchGalleryData } from "../services/api";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "../components/Loader";
+import AppContext from "../context/AppContext"; // Import your AppContext
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Gallery = () => {
-  const [galleryData, setGalleryData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { galleryData, setGalleryData } = useContext(AppContext); // Use context values
+  const [isLoading, setIsLoading] = useState(!galleryData.length); // Set loading state based on context
   const [error, setError] = useState(null);
   const [visibleItemCount, setVisibleItemCount] = useState(8);
   const galleryItemRefs = useRef([]);
@@ -21,7 +22,7 @@ const Gallery = () => {
         const sortedGallery = response.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setGalleryData(sortedGallery);
+        setGalleryData(sortedGallery); // Update context with fetched data
       } catch (error) {
         setError(error);
       } finally {
@@ -29,8 +30,12 @@ const Gallery = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (!galleryData.length) {
+      fetchData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [galleryData, setGalleryData]);
 
   useEffect(() => {
     galleryItemRefs.current.forEach((item, index) => {

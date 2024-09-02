@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaBars,
@@ -9,53 +9,14 @@ import {
   FaWhatsapp,
   FaTimes,
 } from "react-icons/fa";
-import { fetchLatestInfo, fetchNewsData } from "../services/api";
+import AppContext from "../context/AppContext";
 import logo from "../assets/images/logo.png"; // Import static logo
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [clubInfo, setClubInfo] = useState(null);
-  const [newsTitles, setNewsTitles] = useState([]);
   const [isLogoLoaded, setIsLogoLoaded] = useState(false);
-  const [forceShowNavbar, setForceShowNavbar] = useState(false);
+  const { clubInfo, newsTitles } = useContext(AppContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const clubResponse = await fetchLatestInfo();
-        console.log("Fetched Club Response:", clubResponse);
-        if (clubResponse) {
-          setClubInfo(clubResponse);
-        } else {
-          console.error("No data found in the fetched response");
-        }
-
-        const newsData = await fetchNewsData();
-        console.log("Fetched News Data:", newsData);
-        if (Array.isArray(newsData)) {
-          const titles = newsData.map((news) => ({
-            id: news._id,
-            title: news.title,
-          }));
-          setNewsTitles(titles);
-        } else {
-          console.error("Unexpected data format:", newsData);
-        }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    fetchData();
-
-    // Set a timeout to force display the navbar after 3 seconds
-    const timeoutId = setTimeout(() => {
-      setForceShowNavbar(true);
-    }, 0);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
 
   const handleMenuClick = () => {
     setIsOpen(!isOpen);
@@ -77,7 +38,7 @@ const Navbar = () => {
 
   return (
     <>
-      {(isLogoLoaded || forceShowNavbar) && (
+      {(isLogoLoaded || clubInfo) && (
         <nav className="fixed top-0 w-full z-10 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
           <div className="flex items-center">
             {/* Logo */}
@@ -115,7 +76,7 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="social-icons flex space-x-4">
-                  {socialLinks.facebook && (
+                  {socialLinks.facebook ? (
                     <a
                       href={socialLinks.facebook}
                       target="_blank"
@@ -124,8 +85,10 @@ const Navbar = () => {
                     >
                       <FaFacebookF />
                     </a>
+                  ) : (
+                    <FaFacebookF className="cursor-pointer text-xl opacity-50" />
                   )}
-                  {socialLinks.instagram && (
+                  {socialLinks.instagram ? (
                     <a
                       href={socialLinks.instagram}
                       target="_blank"
@@ -134,8 +97,10 @@ const Navbar = () => {
                     >
                       <FaInstagram />
                     </a>
+                  ) : (
+                    <FaInstagram className="cursor-pointer text-xl opacity-50" />
                   )}
-                  {socialLinks.youtube && (
+                  {socialLinks.youtube ? (
                     <a
                       href={socialLinks.youtube}
                       target="_blank"
@@ -144,6 +109,8 @@ const Navbar = () => {
                     >
                       <FaYoutube />
                     </a>
+                  ) : (
+                    <FaYoutube className="cursor-pointer text-xl opacity-50" />
                   )}
                   <button
                     className="login-btn font-semibold"
@@ -293,25 +260,21 @@ const Navbar = () => {
               isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             onClick={closeMenu}
-          />
+          ></div>
           <div
-            className={`fixed top-0 right-0 h-full w-64 bg-gradient-to-r from-orange-600 to-orange-500 transform transition-transform ${
+            className={`fixed top-0 right-0 w-64 bg-orange-600 text-white h-full transform ${
               isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            } transition-transform duration-300 ease-in-out`}
           >
-            <div className="p-4 flex ">
-              <button onClick={handleMenuClick} className="text-3xl">
+            <div className="flex justify-between p-4">
+              <button onClick={closeMenu} className="text-2xl">
                 <FaTimes />
               </button>
             </div>
-            <nav className="flex flex-col p-4 space-y-4">
+            <nav className="flex flex-col space-y-4 px-6 mt-4">
               <NavLink
                 to="/"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -321,11 +284,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/team"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -335,11 +294,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/schedule"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -349,11 +304,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/rankings"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -363,11 +314,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/gallery"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-bold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-bold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-bold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -377,11 +324,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/about"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -391,11 +334,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/contact-us"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-yellow-300 font-montserrat font-semibold border-b border-yellow-100 border-opacity-90 text-lg"
-                    : "text-white font-montserrat font-semibold border-b border-yellow-100 border-opacity-40 text-lg"
-                }
+                className="font-semibold"
                 onClick={() => {
                   closeMenu();
                   scrollToTop();
@@ -403,52 +342,12 @@ const Navbar = () => {
               >
                 Contact
               </NavLink>
-
-              <div className="flex flex-col items-center pt-16">
-                <h1 className="text-xl font-bold font-josefin underline underline-offset-8">FOLLOW US ON</h1>
-                <div className="mt-4 flex flex-row space-x-4 text-white ">
-                  {socialLinks.facebook && (
-                    <a
-                      href={socialLinks.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xl rounded-full border p-1 "
-                    >
-                      <FaFacebookF />
-                    </a>
-                  )}
-                  {socialLinks.instagram && (
-                    <a
-                      href={socialLinks.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xl rounded-full border p-1"
-                    >
-                      <FaInstagram />
-                    </a>
-                  )}
-                  {socialLinks.youtube && (
-                    <a
-                      href={socialLinks.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xl rounded-full border p-1"
-                    >
-                      <FaYoutube />
-                    </a>
-                  )}
-                  {socialLinks.whatsapp && (
-                    <a
-                      href={socialLinks.whatsapp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xl rounded-full border p-1"
-                    >
-                      <FaWhatsapp />
-                    </a>
-                  )}
-                </div>
-              </div>
+              <button
+                className="mt-auto py-2 px-4 bg-white text-orange-600 font-semibold rounded"
+                onClick={handleLoginClick}
+              >
+                Login
+              </button>
             </nav>
           </div>
         </nav>
