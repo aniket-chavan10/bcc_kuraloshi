@@ -57,9 +57,7 @@ const InstaFeed = () => {
 
   if (loading) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center bg-white">
-        <Loader /> {/* Using your custom Loader component */}
-      </div>
+      <p></p>
     );
   }
 

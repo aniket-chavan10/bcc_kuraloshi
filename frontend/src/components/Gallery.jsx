@@ -78,7 +78,7 @@ const Gallery = () => {
     return (
       <div className="relative w-full h-64">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center ">
             <Loader /> {/* Show Loader while loading */}
           </div>
         )}

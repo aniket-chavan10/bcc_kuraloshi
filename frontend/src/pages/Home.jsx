@@ -27,7 +27,6 @@ const LOADER_DURATION = 3000; // Duration in milliseconds (e.g., 3000ms = 3 seco
 
 function Home() {
   const location = useLocation();
-  const mainRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [componentsLoaded, setComponentsLoaded] = useState({
     mainLayout: false,
@@ -42,12 +41,27 @@ function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, LOADER_DURATION);
+    const hasLoadedBefore = sessionStorage.getItem("hasLoadedHome");
 
-    return () => clearTimeout(timer);
+    if (!hasLoadedBefore) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        sessionStorage.setItem("hasLoadedHome", "true");
+      }, LOADER_DURATION);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    // Check if all components are loaded
+    const allComponentsLoaded = Object.values(componentsLoaded).every(Boolean);
+    if (allComponentsLoaded) {
+      setIsLoading(false);
+    }
+  }, [componentsLoaded]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -64,8 +78,7 @@ function Home() {
           <p className="md:text-lg text-sm font-semibold text-gray-800">{randomText}</p>
         </div>
       ) : (
-        <div ref={mainRef}>
-          {/* Components start rendering as soon as isLoading is false */}
+        <div>
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
           <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
           <Players onLoad={() => handleComponentLoaded("players")} />
