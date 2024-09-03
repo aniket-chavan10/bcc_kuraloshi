@@ -3,18 +3,19 @@ import axios from "axios";
 import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Loader from "../components/Loader";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const InstaFeed = () => {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchInstagramPosts = async () => {
       try {
-        // Call your backend API to fetch Instagram posts
         const response = await axios.get(
           "https://bcc-backend-nue7.onrender.com/api/instafeed"
         );
@@ -22,11 +23,11 @@ const InstaFeed = () => {
           (post) => post.media_type === "IMAGE"
         );
         setPosts(imagePosts);
-        setLoading(false); // Set loading to false once posts are fetched
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching Instagram posts:", error);
         setError("Failed to load posts");
-        setLoading(false); // Set loading to false in case of error
+        setLoading(false);
       }
     };
 
@@ -35,7 +36,6 @@ const InstaFeed = () => {
 
   useEffect(() => {
     if (posts.length > 0) {
-      // GSAP animation
       gsap.fromTo(
         ".insta-feed-item",
         { opacity: 0, y: 50 },
@@ -56,9 +56,7 @@ const InstaFeed = () => {
   }, [posts]);
 
   if (loading) {
-    return (
-      <p></p>
-    );
+    return <Loader text="Fetching Instagram Feeds..." />;
   }
 
   if (error) {
@@ -84,10 +82,11 @@ const InstaFeed = () => {
                 className="insta-feed-item overflow-hidden block shadow-lg"
               >
                 <div className="bg-white p-1">
-                  <img
+                  <LazyLoadImage
                     src={post.media_url}
                     alt={post.caption}
-                    className="w-full h-auto object-cover transition-transform duration-1000 ease-in-out transform "
+                    className="w-full h-auto object-cover transition-transform duration-1000 ease-in-out transform"
+                    effect="blur"
                   />
                   <div className="p-4">
                     <p className="text-gray-700 font-semibold text-sm truncate leading-tight">
