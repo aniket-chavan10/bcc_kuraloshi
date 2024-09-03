@@ -20,10 +20,10 @@ const loadingText = [
   "Deploying... with the same speed as your internet!",
   "Optimizing... because free resources need extra love!",
   "This spinner is taking its time... hold tight!",
-  "Loading... slower than a Test match's first innings!"
+  "Loading... slower than a Test match's first innings!",
 ];
 
-const LOADER_DURATION = 3000; // Duration in milliseconds (e.g., 3000ms = 3 seconds)
+const LOADER_DURATION = 10000; // Duration in milliseconds (10 seconds)
 
 function Home() {
   const location = useLocation();
@@ -45,22 +45,19 @@ function Home() {
 
     if (!hasLoadedBefore) {
       const timer = setTimeout(() => {
-        // Remove loader after the timeout
         setIsLoading(false);
         sessionStorage.setItem("hasLoadedHome", "true");
       }, LOADER_DURATION);
 
       return () => clearTimeout(timer);
     } else {
-      // If the user has visited before, set loading to false immediately
       setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    // Check if all components are loaded
-    const allComponentsLoaded = Object.values(componentsLoaded).every(Boolean);
-    if (allComponentsLoaded) {
+    const someComponentsLoaded = Object.values(componentsLoaded).some(Boolean);
+    if (someComponentsLoaded) {
       setIsLoading(false);
     }
   }, [componentsLoaded]);
@@ -69,26 +66,33 @@ function Home() {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
   };
 
-  const randomText = loadingText[Math.floor(Math.random() * loadingText.length)];
+  const randomText =
+    loadingText[Math.floor(Math.random() * loadingText.length)];
 
   return (
     <div className="relative">
       <Navbar />
       {isLoading && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-50">
           <Loader />
-          <p className="md:text-lg text-sm font-semibold text-gray-800">{randomText}</p>
+          <p className="md:text-lg text-sm font-semibold text-gray-800 mt-4">
+            {randomText}
+          </p>
         </div>
       )}
-      <div>
-        <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
-        <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
-        <Players onLoad={() => handleComponentLoaded("players")} />
-        <Gallery onLoad={() => handleComponentLoaded("gallery")} />
-        <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
-        <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
-        <Footer onLoad={() => handleComponentLoaded("footer")} />
-      </div>
+      {!isLoading && (
+        <div>
+          <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
+          <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
+          <Players onLoad={() => handleComponentLoaded("players")} />
+          <Gallery onLoad={() => handleComponentLoaded("gallery")} />
+          <PlayerOfMonth
+            onLoad={() => handleComponentLoaded("playerOfMonth")}
+          />
+          <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
+          <Footer onLoad={() => handleComponentLoaded("footer")} />
+        </div>
+      )}
     </div>
   );
 }
