@@ -74,22 +74,21 @@ function Home() {
   return (
     <div className="relative">
       <Navbar />
-      {isLoading ? (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+      {isLoading && (
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
           <Loader />
           <p className="md:text-lg text-sm font-semibold text-gray-800">{randomText}</p>
         </div>
-      ) : (
-        <div>
-          <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
-          <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
-          <Players onLoad={() => handleComponentLoaded("players")} />
-          <Gallery onLoad={() => handleComponentLoaded("gallery")} />
-          <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
-          <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
-          <Footer onLoad={() => handleComponentLoaded("footer")} />
-        </div>
       )}
+      <div>
+        <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
+        <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
+        <Players onLoad={() => handleComponentLoaded("players")} />
+        <Gallery onLoad={() => handleComponentLoaded("gallery")} />
+        <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
+        <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
+        <Footer onLoad={() => handleComponentLoaded("footer")} />
+      </div>
     </div>
   );
 }
