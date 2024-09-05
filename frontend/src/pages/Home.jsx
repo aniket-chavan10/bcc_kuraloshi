@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 import LatestNews from "../components/LatestNews";
 import Gallery from "../components/Gallery";
-import InstaFeed from "../components/InstaFeed";
 import Players from "../components/Players";
 import PlayerOfMonth from "../components/PlayerOfMonth";
+import InstaFeed from "../components/InstaFeed";
 import Footer from "../components/Footer";
 import MainLayout from "../components/MainLayout";
 import Navbar from "../components/Navbar";
@@ -31,6 +31,11 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [componentsLoaded, setComponentsLoaded] = useState({
     mainLayout: false,
+    latestNews: false,
+    players: false,
+    gallery: false,
+    playerOfMonth: false,
+    footer: false,
   });
 
   useEffect(() => {
@@ -51,10 +56,11 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (componentsLoaded.mainLayout) {
+    const allComponentsLoaded = Object.values(componentsLoaded).every(Boolean);
+    if (allComponentsLoaded) {
       setIsLoading(false);
     }
-  }, [componentsLoaded.mainLayout]);
+  }, [componentsLoaded]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -66,7 +72,10 @@ function Home() {
   return (
     <div className="relative">
       <Helmet>
-        <title>Bhairavnath Cricket Club Kuraloshi - Latest News, Player Rankings & Gallery</title>
+        <title>
+          Bhairavnath Cricket Club Kuraloshi - Latest News, Player Rankings &
+          Gallery
+        </title>
         <meta
           name="description"
           content="Explore Bhairavnath Cricket Club Kuraloshi's official website. Stay updated with the latest cricket news, player rankings, exclusive gallery, and player of the month highlights. Follow live updates and join our cricketing community!"
@@ -75,8 +84,6 @@ function Home() {
           name="keywords"
           content="Bhairavnath Cricket Club, Kuraloshi, cricket news, player rankings, cricket gallery, player of the month, live updates, cricket community"
         />
-
-        {/* Open Graph Meta Tags */}
         <meta
           property="og:title"
           content="Bhairavnath Cricket Club Kuraloshi - Latest News & Player Rankings"
@@ -85,51 +92,9 @@ function Home() {
           property="og:description"
           content="Discover the latest updates from Bhairavnath Cricket Club Kuraloshi. Read the latest news, check player rankings, view our gallery, and see who's the player of the month. Join us for live cricket updates!"
         />
-        <meta
-          property="og:image"
-          content="URL_to_your_image" // Replace with the URL of an image that represents your site
-        />
-        <meta
-          property="og:url"
-          content="https://bcckuraloshi.netlify.app"
-        />
-
-        {/* Twitter Meta Tags */}
-        <meta
-          name="twitter:card"
-          content="summary_large_image"
-        />
-        <meta
-          name="twitter:title"
-          content="Bhairavnath Cricket Club Kuraloshi - Latest News & Player Rankings"
-        />
-        <meta
-          name="twitter:description"
-          content="Stay updated with Bhairavnath Cricket Club Kuraloshi's latest news, player rankings, gallery, and player of the month highlights. Follow us for live cricket updates!"
-        />
-        <meta
-          name="twitter:image"
-          content="URL_to_your_image" // Replace with the URL of an image that represents your site
-        />
-
-        {/* Canonical URL */}
+        <meta property="og:url" content="https://bcckuraloshi.netlify.app" />
+        <meta name="twitter:card" content="summary_large_image" />
         <link rel="canonical" href="https://bcckuraloshi.netlify.app" />
-
-        {/* Favicon */}
-        <link rel="icon" href="URL_to_favicon" />
-
-        {/* Structured Data */}
-        <script type="application/ld+json">
-          {`
-          {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Bhairavnath Cricket Club",
-            "url": "https://bcckuraloshi.netlify.app",
-            "logo": "URL_to_your_logo_image"
-          }
-          `}
-        </script>
       </Helmet>
 
       {/* Navbar is always visible */}
@@ -137,7 +102,7 @@ function Home() {
         <Navbar />
       </div>
 
-      {/* Show loader until MainLayout is loaded */}
+      {/* Show loader until all components (except InstaFeed) are loaded */}
       {isLoading && (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-30">
           <Loader />
@@ -147,16 +112,19 @@ function Home() {
         </div>
       )}
 
-      {/* Show main content once the loader finishes */}
+      {/* Show main content once loader finishes */}
       {!isLoading && (
         <div>
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
-          <LatestNews />
-          <Players />
-          <Gallery />
-          <PlayerOfMonth />
+          <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
+          <Players onLoad={() => handleComponentLoaded("players")} />
+          <Gallery onLoad={() => handleComponentLoaded("gallery")} />
+          <PlayerOfMonth
+            onLoad={() => handleComponentLoaded("playerOfMonth")}
+          />
           <InstaFeed />
-          <Footer />
+          <Footer onLoad={() => handleComponentLoaded("footer")} />
+          {/* InstaFeed will load independently and won't affect the loader */}
         </div>
       )}
     </div>
