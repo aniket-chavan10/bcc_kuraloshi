@@ -31,12 +31,6 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [componentsLoaded, setComponentsLoaded] = useState({
     mainLayout: false,
-    latestNews: false,
-    players: false,
-    gallery: false,
-    playerOfMonth: false,
-    instaFeed: false,
-    footer: false,
   });
 
   useEffect(() => {
@@ -57,11 +51,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const someComponentsLoaded = Object.values(componentsLoaded).some(Boolean);
-    if (someComponentsLoaded) {
+    if (componentsLoaded.mainLayout) {
       setIsLoading(false);
     }
-  }, [componentsLoaded]);
+  }, [componentsLoaded.mainLayout]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -116,7 +109,10 @@ function Home() {
         />
       </Helmet>
 
+      {/* Ensure Navbar is always visible */}
       <Navbar />
+
+      {/* Show loader until MainLayout is loaded */}
       {isLoading && (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-50">
           <Loader />
@@ -125,17 +121,17 @@ function Home() {
           </p>
         </div>
       )}
+
+      {/* Show main content once the loader finishes */}
       {!isLoading && (
         <div>
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
-          <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
-          <Players onLoad={() => handleComponentLoaded("players")} />
-          <Gallery onLoad={() => handleComponentLoaded("gallery")} />
-          <PlayerOfMonth
-            onLoad={() => handleComponentLoaded("playerOfMonth")}
-          />
-          <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
-          <Footer onLoad={() => handleComponentLoaded("footer")} />
+          <LatestNews />
+          <Players />
+          <Gallery />
+          <PlayerOfMonth />
+          <InstaFeed />
+          <Footer />
         </div>
       )}
     </div>
