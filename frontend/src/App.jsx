@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -15,6 +14,7 @@ import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import PlayersRanking from './pages/PlayersRanking';
 import FullPageLoader from './components/FullPageLoader';
+import PageNotFound from './pages/PageNotFound'; // Import the PageNotFound component
 import { AppProvider } from './context/AppContext';  // Import the provider
 
 function App() {
@@ -65,6 +65,9 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
             </Route>
+
+            {/* Wildcard route for unmatched paths */}
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
       )}

@@ -75,6 +75,8 @@ function Home() {
           name="keywords"
           content="Bhairavnath Cricket Club, Kuraloshi, cricket news, player rankings, cricket gallery, player of the month, live updates, cricket community"
         />
+
+        {/* Open Graph Meta Tags */}
         <meta
           property="og:title"
           content="Bhairavnath Cricket Club Kuraloshi - Latest News & Player Rankings"
@@ -91,6 +93,8 @@ function Home() {
           property="og:url"
           content="https://bcckuraloshi.netlify.app"
         />
+
+        {/* Twitter Meta Tags */}
         <meta
           name="twitter:card"
           content="summary_large_image"
@@ -107,14 +111,35 @@ function Home() {
           name="twitter:image"
           content="URL_to_your_image" // Replace with the URL of an image that represents your site
         />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://bcckuraloshi.netlify.app" />
+
+        {/* Favicon */}
+        <link rel="icon" href="URL_to_favicon" />
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {`
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Bhairavnath Cricket Club",
+            "url": "https://bcckuraloshi.netlify.app",
+            "logo": "URL_to_your_logo_image"
+          }
+          `}
+        </script>
       </Helmet>
 
-      {/* Ensure Navbar is always visible */}
-      <Navbar />
+      {/* Navbar is always visible */}
+      <div className="relative z-40">
+        <Navbar />
+      </div>
 
       {/* Show loader until MainLayout is loaded */}
       {isLoading && (
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-50">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-30">
           <Loader />
           <p className="md:text-lg text-sm font-semibold text-gray-800 mt-4">
             {randomText}
