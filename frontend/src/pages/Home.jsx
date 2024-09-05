@@ -38,6 +38,9 @@ function Home() {
     footer: false,
   });
 
+  // Check if all components are loaded
+  const allComponentsLoaded = Object.values(componentsLoaded).every(Boolean);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -56,11 +59,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const someComponentsLoaded = Object.values(componentsLoaded).some(Boolean);
-    if (someComponentsLoaded) {
+    if (allComponentsLoaded) {
       setIsLoading(false);
     }
-  }, [componentsLoaded]);
+  }, [allComponentsLoaded]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -71,7 +73,9 @@ function Home() {
 
   return (
     <div className="relative">
+      {/* Always show Navbar */}
       <Navbar />
+      
       {isLoading && (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-50">
           <Loader />
@@ -80,15 +84,15 @@ function Home() {
           </p>
         </div>
       )}
+
+      {/* Load content only when not loading */}
       {!isLoading && (
         <div>
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
           <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
           <Players onLoad={() => handleComponentLoaded("players")} />
           <Gallery onLoad={() => handleComponentLoaded("gallery")} />
-          <PlayerOfMonth
-            onLoad={() => handleComponentLoaded("playerOfMonth")}
-          />
+          <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
           <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
           <Footer onLoad={() => handleComponentLoaded("footer")} />
         </div>
