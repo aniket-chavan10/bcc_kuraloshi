@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 import LatestNews from "../components/LatestNews";
 import Gallery from "../components/Gallery";
 import InstaFeed from "../components/InstaFeed";
@@ -38,9 +39,6 @@ function Home() {
     footer: false,
   });
 
-  // Check if all components are loaded
-  const allComponentsLoaded = Object.values(componentsLoaded).every(Boolean);
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -59,10 +57,11 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (allComponentsLoaded) {
+    const someComponentsLoaded = Object.values(componentsLoaded).some(Boolean);
+    if (someComponentsLoaded) {
       setIsLoading(false);
     }
-  }, [allComponentsLoaded]);
+  }, [componentsLoaded]);
 
   const handleComponentLoaded = (component) => {
     setComponentsLoaded((prev) => ({ ...prev, [component]: true }));
@@ -73,9 +72,51 @@ function Home() {
 
   return (
     <div className="relative">
-      {/* Always show Navbar */}
+      <Helmet>
+        <title>Bhairavnath Cricket Club Kuraloshi - Latest News, Player Rankings & Gallery</title>
+        <meta
+          name="description"
+          content="Explore Bhairavnath Cricket Club Kuraloshi's official website. Stay updated with the latest cricket news, player rankings, exclusive gallery, and player of the month highlights. Follow live updates and join our cricketing community!"
+        />
+        <meta
+          name="keywords"
+          content="Bhairavnath Cricket Club, Kuraloshi, cricket news, player rankings, cricket gallery, player of the month, live updates, cricket community"
+        />
+        <meta
+          property="og:title"
+          content="Bhairavnath Cricket Club Kuraloshi - Latest News & Player Rankings"
+        />
+        <meta
+          property="og:description"
+          content="Discover the latest updates from Bhairavnath Cricket Club Kuraloshi. Read the latest news, check player rankings, view our gallery, and see who's the player of the month. Join us for live cricket updates!"
+        />
+        <meta
+          property="og:image"
+          content="URL_to_your_image" // Replace with the URL of an image that represents your site
+        />
+        <meta
+          property="og:url"
+          content="https://bcckuraloshi.netlify.app"
+        />
+        <meta
+          name="twitter:card"
+          content="summary_large_image"
+        />
+        <meta
+          name="twitter:title"
+          content="Bhairavnath Cricket Club Kuraloshi - Latest News & Player Rankings"
+        />
+        <meta
+          name="twitter:description"
+          content="Stay updated with Bhairavnath Cricket Club Kuraloshi's latest news, player rankings, gallery, and player of the month highlights. Follow us for live cricket updates!"
+        />
+        <meta
+          name="twitter:image"
+          content="URL_to_your_image" // Replace with the URL of an image that represents your site
+        />
+      </Helmet>
+
       <Navbar />
-      
       {isLoading && (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white z-50">
           <Loader />
@@ -84,15 +125,15 @@ function Home() {
           </p>
         </div>
       )}
-
-      {/* Load content only when not loading */}
       {!isLoading && (
         <div>
           <MainLayout onLoad={() => handleComponentLoaded("mainLayout")} />
           <LatestNews onLoad={() => handleComponentLoaded("latestNews")} />
           <Players onLoad={() => handleComponentLoaded("players")} />
           <Gallery onLoad={() => handleComponentLoaded("gallery")} />
-          <PlayerOfMonth onLoad={() => handleComponentLoaded("playerOfMonth")} />
+          <PlayerOfMonth
+            onLoad={() => handleComponentLoaded("playerOfMonth")}
+          />
           <InstaFeed onLoad={() => handleComponentLoaded("instaFeed")} />
           <Footer onLoad={() => handleComponentLoaded("footer")} />
         </div>
