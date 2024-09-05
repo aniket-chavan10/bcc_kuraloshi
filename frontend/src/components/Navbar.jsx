@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaBars,
@@ -9,13 +9,11 @@ import {
   FaWhatsapp,
   FaTimes,
 } from "react-icons/fa";
-import AppContext from "../context/AppContext";
-import logo from "../assets/images/logo.png"; // Import static logo
+import logo from "../assets/images/logo.png"; // Import static logo image
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoLoaded, setIsLogoLoaded] = useState(false);
-  const { clubInfo, newsTitles } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleMenuClick = () => {
@@ -34,11 +32,17 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  const socialLinks = clubInfo?.socialLinks || {};
+  // Hardcoded social links
+  const socialLinks = {
+    facebook: "https://www.instagram.com/bcc_kuruloshi/",
+    instagram: "https://www.instagram.com/bcc_kuruloshi/",
+    youtube: "https://youtube.com/@bcckuruloshi?si=xXprlQwXTdDpoDI8",
+    whatsapp: "https://wa.me/8975489506",
+  };
 
   return (
     <>
-      {(isLogoLoaded || clubInfo) && (
+      {(isLogoLoaded || true) && (
         <nav className="fixed top-0 w-full z-10 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
           <div className="flex items-center">
             {/* Logo */}
@@ -58,60 +62,38 @@ const Navbar = () => {
               <div className="hidden md:flex md:bg-gradient-to-r from-orange-600 to-orange-500 text-white py-2 text-sm justify-between items-center relative px-5">
                 <div className="ticker-container overflow-hidden whitespace-nowrap relative w-1/3 h-6 border-l border-zinc-300 border-opacity-60">
                   <div className="ticker-text absolute whitespace-nowrap will-change-transform animate-marquee text-white z-50">
-                    {newsTitles.length > 0 ? (
-                      <NavLink
-                        key={newsTitles[0].id}
-                        to={`/news/${newsTitles[0].id}`}
-                        className="inline-block mr-4"
-                        onClick={() => {
-                          closeMenu();
-                          scrollToTop();
-                        }}
-                      >
-                        {newsTitles[0].title}
-                      </NavLink>
-                    ) : (
-                      "Loading latest news..."
-                    )}
+                    <span className="inline-block mr-4">
+                      Bhairavnath Cricket Club Kuraloshi | Local Cricket
+                      Tournaments, Matches, and Player Rankings
+                    </span>
                   </div>
                 </div>
                 <div className="social-icons flex space-x-4">
-                  {socialLinks.facebook ? (
-                    <a
-                      href={socialLinks.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
-                    >
-                      <FaFacebookF />
-                    </a>
-                  ) : (
-                    <FaFacebookF className="cursor-pointer text-xl opacity-50" />
-                  )}
-                  {socialLinks.instagram ? (
-                    <a
-                      href={socialLinks.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
-                    >
-                      <FaInstagram />
-                    </a>
-                  ) : (
-                    <FaInstagram className="cursor-pointer text-xl opacity-50" />
-                  )}
-                  {socialLinks.youtube ? (
-                    <a
-                      href={socialLinks.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
-                    >
-                      <FaYoutube />
-                    </a>
-                  ) : (
-                    <FaYoutube className="cursor-pointer text-xl opacity-50" />
-                  )}
+                  <a
+                    href={socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl"
+                  >
+                    <FaFacebookF />
+                  </a>
+                  <a
+                    href={socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl"
+                  >
+                    <FaInstagram />
+                  </a>
+                  <a
+                    href={socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl"
+                  >
+                    <FaYoutube />
+                  </a>
+                 
                   <button
                     className="login-btn font-semibold"
                     onClick={handleLoginClick}
@@ -227,17 +209,15 @@ const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex items-center space-x-4">
+                <a
+                    href={socialLinks.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer text-xl"
+                  >
+                    <FaWhatsapp />
+                  </a>
                   <FaSearch className="cursor-pointer" />
-                  {socialLinks.whatsapp && (
-                    <a
-                      href={socialLinks.whatsapp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="cursor-pointer text-xl"
-                    >
-                      <FaWhatsapp />
-                    </a>
-                  )}
                 </div>
 
                 <div className="md:hidden flex items-center ml-auto">
@@ -254,8 +234,8 @@ const Navbar = () => {
             </div>
           </div>
 
-           {/* Side Drawer Menu */}
-           <div
+          {/* Side Drawer Menu */}
+          <div
             className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${
               isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
@@ -372,7 +352,9 @@ const Navbar = () => {
               </NavLink>
 
               <div className="flex flex-col items-center pt-16">
-                <h1 className="text-xl font-bold font-josefin underline underline-offset-8">FOLLOW US ON</h1>
+                <h1 className="text-xl font-bold font-josefin underline underline-offset-8">
+                  FOLLOW US ON
+                </h1>
                 <div className="mt-4 flex flex-row space-x-4 text-white ">
                   {socialLinks.facebook && (
                     <a
@@ -425,6 +407,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
