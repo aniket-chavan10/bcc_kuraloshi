@@ -66,7 +66,7 @@ const InstaFeed = () => {
       <h2 className="text-2xl font-bold mb-4 px-4">Instagram Posts</h2>
       <div className="container mx-auto py-10 p-5 md:p-16 bg-custom-gradient relative">
         {loading && (
-          <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-75 z-10">
+          <div className="absolute inset-0 flex justify-center items-center bg-white z-10">
             <Loader />
           </div>
         )}
